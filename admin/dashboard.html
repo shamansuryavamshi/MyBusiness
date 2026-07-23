@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sweet Sundays — Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+
+  <!-- ========== SIDEBAR ========== -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar__header">
+      <div class="sidebar__logo">SS</div>
+      <div class="sidebar__brand">
+        <span class="sidebar__name">Sweet Sundays</span>
+        <span class="sidebar__role">Admin</span>
+      </div>
+    </div>
+
+    <nav class="sidebar__nav">
+      <a href="#" class="sidebar__link active" data-page="dashboard">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>
+        <span>Dashboard</span>
+      </a>
+      <a href="#" class="sidebar__link" data-page="dessert">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a5 5 0 0 1 5 5c0 2-.8 3.8-2 5H9c-1.2-1.2-2-3-2-5a5 5 0 0 1 5-5z"/><path d="M7 12v6a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-6"/><line x1="12" y1="18" x2="12" y2="22"/></svg>
+        <span>Weekly Dessert</span>
+      </a>
+      <a href="#" class="sidebar__link" data-page="history">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <span>Dessert History</span>
+      </a>
+      <a href="#" class="sidebar__link" data-page="location">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        <span>Location</span>
+      </a>
+      <a href="#" class="sidebar__link" data-page="gallery">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+        <span>Gallery</span>
+      </a>
+      <a href="#" class="sidebar__link" data-page="reviews">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <span>Reviews</span>
+      </a>
+      <a href="#" class="sidebar__link" data-page="announcements">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        <span>Announcements</span>
+      </a>
+
+      <div class="sidebar__divider"></div>
+
+      <a href="#" class="sidebar__link" data-page="website">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        <span>Website Settings</span>
+      </a>
+      <a href="#" class="sidebar__link" data-page="business">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        <span>Business Settings</span>
+      </a>
+    </nav>
+
+    <div class="sidebar__footer">
+      <button class="sidebar__logout" id="logoutBtn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        <span>Logout</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- ========== MOBILE HEADER ========== -->
+  <header class="mobile-header" id="mobileHeader">
+    <button class="hamburger" id="menuToggle" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+    <span class="mobile-header__title">Sweet Sundays</span>
+    <button class="mobile-header__dark" id="darkToggleMobile" aria-label="Toggle dark mode">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
+  </header>
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <!-- ========== MAIN CONTENT ========== -->
+  <main class="main" id="main">
+    <div class="topbar">
+      <div class="topbar__left">
+        <h2 class="topbar__title" id="pageTitle">Dashboard</h2>
+        <p class="topbar__sub" id="pageSubtitle">Overview of your Sunday business</p>
+      </div>
+      <div class="topbar__right">
+        <div class="topbar__status" id="businessStatusBadge">
+          <span class="status-dot status-dot--open"></span>
+          Open This Sunday
+        </div>
+        <button class="topbar__dark" id="darkToggle" aria-label="Toggle dark mode">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- ===== PAGE: DASHBOARD ===== -->
+    <section class="page page--active" id="page-dashboard">
+      <div class="stats-grid">
+        <div class="stat-card stat-card--green">
+          <div class="stat-card__icon">🧀</div>
+          <div class="stat-card__info">
+            <span class="stat-card__label">This Week's Dessert</span>
+            <span class="stat-card__value" id="statDessert">—</span>
+          </div>
+        </div>
+        <div class="stat-card stat-card--purple">
+          <div class="stat-card__icon">📍</div>
+          <div class="stat-card__info">
+            <span class="stat-card__label">This Sunday's Location</span>
+            <span class="stat-card__value stat-card__value--sm" id="statLocation">—</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="dashboard-grid">
+        <div class="dash-card">
+          <h3 class="dash-card__title">Quick Actions</h3>
+          <div class="quick-actions">
+            <button class="qa-btn" data-action="change-dessert" onclick="navigateTo('dessert')">
+              <span class="qa-btn__icon">🎂</span>
+              <span>Change Dessert</span>
+            </button>
+            <button class="qa-btn" data-action="update-location" onclick="navigateTo('location')">
+              <span class="qa-btn__icon">📍</span>
+              <span>Update Location</span>
+            </button>
+            <button class="qa-btn qa-btn--danger" data-action="soldout" id="qaSoldOut">
+              <span class="qa-btn__icon">🚫</span>
+              <span>Mark Sold Out</span>
+            </button>
+            <button class="qa-btn" data-action="announcement" onclick="navigateTo('announcements')">
+              <span class="qa-btn__icon">📢</span>
+              <span>Add Announcement</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="dash-card">
+          <h3 class="dash-card__title">This Sunday</h3>
+          <div class="sunday-info" id="sundayInfo">
+            <div class="sunday-info__row">
+              <span class="sunday-info__label">Days Until Sunday</span>
+              <span class="sunday-info__value" id="daysUntilSunday">—</span>
+            </div>
+            <div class="sunday-info__row">
+              <span class="sunday-info__label">Business Status</span>
+              <span class="sunday-info__value" id="businessStatus">Open</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="dash-card">
+          <h3 class="dash-card__title">Notifications</h3>
+        <div class="notifications" id="notificationsList">
+          <p class="empty-state">All clear! No notifications.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== PAGE: WEEKLY DESSERT ===== -->
+    <section class="page" id="page-dessert">
+      <div class="dessert-editor">
+        <div class="dessert-editor__form">
+          <div class="form-card">
+            <h3 class="form-card__title">Dessert Details</h3>
+            <div class="form-grid">
+              <div class="form-field">
+                <label>Dessert Name</label>
+                <input type="text" id="dName" placeholder="e.g. Burnt Basque Cheesecake">
+              </div>
+              <div class="form-field">
+                <label>Price</label>
+                <input type="text" id="dPrice" placeholder="₹400">
+              </div>
+              <div class="form-field form-field--full">
+                <label>Description</label>
+                <textarea id="dDesc" rows="3" placeholder="Short description of the dessert..."></textarea>
+              </div>
+              <div class="form-field">
+                <label>Emoji</label>
+                <input type="text" id="dEmoji" placeholder="🧀" maxlength="4">
+              </div>
+              <div class="form-field">
+                <label>Accent Color</label>
+                <div class="color-input-wrap">
+                  <input type="color" id="dColor" value="#8E82FF">
+                  <input type="text" id="dColorText" value="#8E82FF" class="color-text">
+                </div>
+              </div>
+              <div class="form-field">
+                <label>Serves</label>
+                <input type="text" id="dServes" placeholder="Serves 2–3">
+              </div>
+              <div class="form-field">
+                <label>Allergens</label>
+                <input type="text" id="dAllergens" placeholder="Contains dairy, eggs">
+              </div>
+              <div class="form-field form-field--full">
+                <label>Pickup Note</label>
+                <input type="text" id="dPickup" placeholder="Pick up cold. Best enjoyed within 24 hours.">
+              </div>
+              <div class="form-field form-field--full">
+                <label>Image URL (or drag & drop below)</label>
+                <input type="text" id="dImage" placeholder="https://... or paste URL">
+              </div>
+              <div class="form-field form-field--full">
+                <div class="dropzone" id="dessertDropzone">
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                  <p>Drag & drop image here or <strong>click to browse</strong></p>
+                  <span>Supports JPG, PNG, WebP (max 5MB)</span>
+                  <input type="file" id="dessertFile" accept="image/*" hidden>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-card">
+            <h3 class="form-card__title">Inventory & Availability</h3>
+            <div class="form-grid">
+              <div class="form-field">
+                <label>Available Quantity</label>
+                <input type="number" id="dQty" min="1" max="100" value="5">
+              </div>
+              <div class="form-field">
+                <label>Remaining Pieces</label>
+                <input type="number" id="dRemaining" min="0" max="100" value="5">
+              </div>
+              <div class="form-field form-field--full">
+                <label>Status</label>
+                <div class="toggle-group">
+                  <button class="toggle-btn active" data-status="available" id="statusAvailable">Available</button>
+                  <button class="toggle-btn" data-status="soldout" id="statusSoldout">Sold Out</button>
+                  <button class="toggle-btn" data-status="hidden" id="statusHidden">Hidden</button>
+                </div>
+              </div>
+              <div class="form-field form-field--full">
+                <label>Featured Badge</label>
+                <div class="toggle-group">
+                  <button class="toggle-btn" data-badge="" id="badgeNone">None</button>
+                  <button class="toggle-btn" data-badge="Featured" id="badgeFeatured">Featured</button>
+                  <button class="toggle-btn" data-badge="Seasonal" id="badgeSeasonal">Seasonal</button>
+                  <button class="toggle-btn" data-badge="Popular" id="badgePopular">Popular</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="dessert-editor__preview">
+          <div class="form-card">
+            <h3 class="form-card__title">Live Preview</h3>
+            <div class="preview-card" id="dessertPreview">
+              <div class="preview-card__image" id="previewImage">
+                <span class="preview-card__emoji" id="previewEmoji">🧀</span>
+                <span class="preview-card__badge" id="previewBadge" style="display:none"></span>
+              </div>
+              <div class="preview-card__body">
+                <h4 id="previewName">Dessert Name</h4>
+                <p id="previewDesc" class="preview-card__desc">Description goes here...</p>
+                <div class="preview-card__meta">
+                  <span class="preview-card__price" id="previewPrice">₹0</span>
+                  <span id="previewServes">Serves 2–3</span>
+                </div>
+                <div class="preview-card__stock">
+                  <div class="preview-card__stock-bar">
+                    <div class="preview-card__stock-fill" id="previewStockFill"></div>
+                  </div>
+                  <span id="previewStockText">0 of 0 remaining</span>
+                </div>
+                <div class="preview-card__status" id="previewStatus">Available</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button class="btn btn--primary" id="saveDessert">Save Dessert</button>
+        <button class="btn btn--ghost" id="publishDessert">Publish to Website</button>
+      </div>
+    </section>
+
+    <!-- ===== PAGE: DESSERT HISTORY ===== -->
+    <section class="page" id="page-history">
+      <div class="page-toolbar">
+        <input type="text" class="search-input" id="historySearch" placeholder="Search desserts...">
+        <select class="filter-select" id="historyFilter">
+          <option value="all">All Status</option>
+          <option value="sold">Sold</option>
+          <option value="hidden">Hidden</option>
+        </select>
+      </div>
+      <div class="table-wrap">
+        <table class="data-table" id="historyTable">
+          <thead>
+            <tr>
+              <th>Dessert</th>
+              <th>Price</th>
+              <th>Date</th>
+              <th>Sold / Total</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="historyBody"></tbody>
+        </table>
+      </div>
+      <div class="empty-wrap" id="historyEmpty" style="display:none">
+        <p class="empty-state">No dessert history yet.</p>
+      </div>
+    </section>
+
+    <!-- ===== PAGE: LOCATION ===== -->
+    <section class="page" id="page-location">
+      <div class="location-editor">
+        <div class="form-card">
+          <h3 class="form-card__title">This Sunday's Location</h3>
+          <div class="form-grid">
+            <div class="form-field">
+              <label>Location Name</label>
+              <input type="text" id="locName" placeholder="e.g. Koramangala Social Grounds">
+            </div>
+            <div class="form-field form-field--full">
+              <label>Address</label>
+              <input type="text" id="locAddress" placeholder="Full address">
+            </div>
+            <div class="form-field form-field--full">
+              <label>Google Maps Embed URL</label>
+              <input type="url" id="locMap" placeholder="https://www.google.com/maps/embed?...">
+            </div>
+            <div class="form-field form-field--full">
+              <label>Directions URL</label>
+              <input type="url" id="locDirections" placeholder="https://www.google.com/maps/dir/...">
+            </div>
+            <div class="form-field form-field--full">
+              <label>Parking Information</label>
+              <input type="text" id="locParking" placeholder="Free parking available...">
+            </div>
+            <div class="form-field form-field--full">
+              <label>Opening Hours</label>
+              <input type="text" id="locHours" placeholder="Sunday: 10:00 AM – 8:00 PM">
+            </div>
+          </div>
+        </div>
+        <div class="form-card">
+          <h3 class="form-card__title">Map Preview</h3>
+          <div class="map-preview" id="mapPreview">
+            <iframe id="mapFrame" src="" width="100%" height="300" style="border:0; border-radius:12px;" allowfullscreen loading="lazy"></iframe>
+            <p class="empty-state" id="mapEmpty">Enter a map URL above to preview.</p>
+          </div>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button class="btn btn--primary" id="saveLocation">Save Location</button>
+        <button class="btn btn--ghost" id="publishLocation">Publish to Website</button>
+      </div>
+    </section>
+
+    <!-- ===== PAGE: GALLERY ===== -->
+    <section class="page" id="page-gallery">
+      <div class="page-toolbar">
+        <select class="filter-select" id="galleryFilter">
+          <option value="all">All Categories</option>
+          <option value="desserts">Desserts</option>
+          <option value="kitchen">Kitchen</option>
+          <option value="events">Events</option>
+          <option value="family">Family</option>
+        </select>
+        <button class="btn btn--primary btn--sm" id="addGalleryImage">+ Add Image</button>
+      </div>
+      <div class="gallery-grid" id="galleryGrid"></div>
+      <div class="empty-wrap" id="galleryEmpty" style="display:none">
+        <p class="empty-state">No images in gallery yet.</p>
+      </div>
+      <input type="file" id="galleryFileInput" accept="image/*" hidden>
+    </section>
+
+    <!-- ===== PAGE: REVIEWS ===== -->
+    <section class="page" id="page-reviews">
+      <div class="page-toolbar">
+        <button class="btn btn--primary btn--sm" id="addReview">+ Add Review</button>
+      </div>
+      <div class="reviews-list" id="reviewsList"></div>
+      <div class="empty-wrap" id="reviewsEmpty" style="display:none">
+        <p class="empty-state">No reviews yet.</p>
+      </div>
+    </section>
+
+    <!-- ===== PAGE: ANNOUNCEMENTS ===== -->
+    <section class="page" id="page-announcements">
+      <div class="page-toolbar">
+        <button class="btn btn--primary btn--sm" id="addAnnouncement">+ New Announcement</button>
+      </div>
+      <div class="announcements-list" id="announcementsList"></div>
+      <div class="empty-wrap" id="announcementsEmpty" style="display:none">
+        <p class="empty-state">No announcements created yet.</p>
+      </div>
+    </section>
+
+    <!-- ===== PAGE: WEBSITE SETTINGS ===== -->
+    <section class="page" id="page-website">
+      <div class="form-card">
+        <h3 class="form-card__title">Hero Section</h3>
+        <div class="form-grid">
+          <div class="form-field">
+            <label>Hero Title</label>
+            <input type="text" id="wsHeroTitle" placeholder="SWEET SUNDAYS">
+          </div>
+          <div class="form-field form-field--full">
+            <label>Hero Description</label>
+            <textarea id="wsHeroDesc" rows="3" placeholder="Hero description..."></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="form-card">
+        <h3 class="form-card__title">SEO</h3>
+        <div class="form-grid">
+          <div class="form-field form-field--full">
+            <label>SEO Title</label>
+            <input type="text" id="wsSeoTitle" placeholder="Sweet Sundays | Homemade Desserts — Bangalore">
+          </div>
+          <div class="form-field form-field--full">
+            <label>SEO Description</label>
+            <textarea id="wsSeoDesc" rows="2" placeholder="Meta description..."></textarea>
+          </div>
+          <div class="form-field form-field--full">
+            <label>Meta Keywords</label>
+            <input type="text" id="wsKeywords" placeholder="desserts, bangalore, homemade">
+          </div>
+        </div>
+      </div>
+      <div class="form-card">
+        <h3 class="form-card__title">Footer & Banner</h3>
+        <div class="form-grid">
+          <div class="form-field form-field--full">
+            <label>Footer Text</label>
+            <input type="text" id="wsFooter" placeholder="Made with ❤️ in Bangalore.">
+          </div>
+          <div class="form-field form-field--full">
+            <label>Announcement Banner Text</label>
+            <input type="text" id="wsBanner" placeholder="Leave empty to hide banner">
+          </div>
+          <div class="form-field">
+            <label>Banner Background</label>
+            <input type="color" id="wsBannerBg" value="#D8FF63">
+          </div>
+          <div class="form-field">
+            <label>Banner Text Color</label>
+            <input type="color" id="wsBannerColor" value="#101010">
+          </div>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button class="btn btn--primary" id="saveWebsite">Save Website Settings</button>
+      </div>
+    </section>
+
+    <!-- ===== PAGE: BUSINESS SETTINGS ===== -->
+    <section class="page" id="page-business">
+      <div class="form-card">
+        <h3 class="form-card__title">Business Information</h3>
+        <div class="form-grid">
+          <div class="form-field">
+            <label>Business Name</label>
+            <input type="text" id="bsName" placeholder="Sweet Sundays">
+          </div>
+          <div class="form-field">
+            <label>Phone</label>
+            <input type="tel" id="bsPhone" placeholder="+91 98765 43210">
+          </div>
+          <div class="form-field">
+            <label>WhatsApp</label>
+            <input type="text" id="bsWhatsApp" placeholder="919876543210">
+          </div>
+          <div class="form-field">
+            <label>Email</label>
+            <input type="email" id="bsEmail" placeholder="hello@sweetsundays.in">
+          </div>
+          <div class="form-field">
+            <label>Instagram</label>
+            <input type="text" id="bsInstagram" placeholder="sweetsundays.blr">
+          </div>
+          <div class="form-field">
+            <label>Operating Day</label>
+            <input type="text" id="bsDay" value="Sunday" readonly>
+          </div>
+          <div class="form-field">
+            <label>Operating Hours</label>
+            <input type="text" id="bsHours" placeholder="10:00 AM – 8:00 PM">
+          </div>
+          <div class="form-field">
+            <label>Max Pieces (Default)</label>
+            <input type="number" id="bsMax" min="1" max="100" value="5">
+          </div>
+          <div class="form-field form-field--full">
+            <label>Business Status</label>
+            <div class="toggle-group">
+              <button class="toggle-btn active" data-bsstatus="open" id="bsOpen">Open</button>
+              <button class="toggle-btn" data-bsstatus="closed" id="bsClosed">Closed</button>
+              <button class="toggle-btn" data-bsstatus="holiday" id="bsHoliday">Holiday</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button class="btn btn--primary" id="saveBusiness">Save Business Settings</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- ========== TOAST ========== -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- ========== MODAL ========== -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal" id="modal">
+      <div class="modal__header">
+        <h3 class="modal__title" id="modalTitle"></h3>
+        <button class="modal__close" id="modalClose">&times;</button>
+      </div>
+      <div class="modal__body" id="modalBody"></div>
+      <div class="modal__footer" id="modalFooter"></div>
+    </div>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="dashboard.js"></script>
+</body>
+</html>

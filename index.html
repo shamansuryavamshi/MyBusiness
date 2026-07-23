@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sweet Sundays | Homemade Desserts — Bangalore</title>
+  <meta name="description" content="One handcrafted dessert every Sunday in Bangalore. When it's gone, it's gone.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- ============================================
+       CONFIG — Edit this object to update the site.
+       Change the weekly dessert each Sunday here.
+       ============================================ -->
+  <script id="site-config" type="application/json">
+  {
+    "businessName": "Sweet Sundays",
+    "tagline": "Homemade Desserts",
+    "heroDescription": "One handcrafted dessert every Sunday. Limited pieces. When it's gone, it's gone.",
+    "sundayNotice": "Open Every Sunday · Bangalore Only",
+
+    "weeklyDessert": {
+      "name": "Burnt Basque Cheesecake",
+      "description": "A caramelised, smoky crust hides a velvety cream cheese centre. No flour, no fuss — just pure indulgence baked low and slow. Each slice is a labour of love.",
+      "price": "₹400",
+      "image": "",
+      "emoji": "🧀",
+      "color": "#8E82FF",
+      "quantity": 15,
+      "remaining": 8,
+      "available": true,
+      "serves": "Serves 2–3",
+      "allergens": "Contains dairy, eggs",
+      "pickupNote": "Pick up cold. Best enjoyed within 24 hours."
+    },
+
+    "pastSpecials": [],
+
+    "location": {
+      "thisSundayLabel": "📍 This Sunday's Location",
+      "name": "Koramangala Social Grounds",
+      "address": "4th Block, 80 Feet Road, Koramangala, Bangalore 560034",
+      "mapEmbed": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3888.5!2d77.6245!3d12.9352!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTLCsDU2JzA2LjciTiA3N8KwMzcnMjguMiJF!5e0!3m2!1sen!2sin!4v1",
+      "directionsUrl": "https://www.google.com/maps/dir/?api=1&destination=Koramangala,+Bangalore",
+      "parking": "Free parking available at the venue. Two-wheeler parking on-site."
+    },
+
+    "hours": {
+      "open": "Sunday: 10:00 AM – 8:00 PM",
+      "closed": "Monday – Saturday: Closed",
+      "badge": "SUNDAY EXCLUSIVE"
+    },
+
+    "contact": {
+      "phone": "+91 98765 43210",
+      "whatsapp": "919876543210",
+      "email": "hello@sweetsundays.in",
+      "instagram": "sweetsundays.blr",
+      "address": "Bangalore, Karnataka, India"
+    },
+
+    "reviews": []
+  }
+  </script>
+
+  <!-- ========== NAVIGATION ========== -->
+  <nav class="nav" id="nav">
+    <div class="nav__inner">
+      <a href="#" class="nav__logo">SWEET SUNDAYS</a>
+      <div class="nav__badge">SUNDAY EXCLUSIVE</div>
+      <ul class="nav__links" id="navLinks">
+        <li><a href="#this-week">This Week</a></li>
+        <li><a href="#location">Location</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#past-specials">Past Specials</a></li>
+        <li><a href="#gallery">Gallery</a></li>
+        <li><a href="#reviews">Reviews</a></li>
+        <li><a href="#location" class="nav__cta">Visit This Sunday</a></li>
+      </ul>
+      <button class="nav__hamburger" id="hamburger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ========== HERO ========== -->
+  <section class="hero" id="hero">
+    <div class="hero__container">
+      <div class="hero__content">
+        <p class="hero__badge anim-fade">Open Every Sunday · Bangalore</p>
+        <h1 class="hero__title">
+          <span class="hero__line anim-slide-up">SWEET</span>
+          <span class="hero__line anim-slide-up" style="animation-delay:.1s">SUNDAYS</span>
+        </h1>
+        <p class="hero__desc anim-fade" style="animation-delay:.3s">
+          One handcrafted dessert every Sunday. Limited pieces. When it's gone, it's gone.
+        </p>
+        <div class="hero__actions anim-fade" style="animation-delay:.5s">
+          <a href="#this-week" class="btn btn--primary">See This Sunday's Dessert</a>
+          <a href="#location" class="btn btn--outline">This Sunday's Location</a>
+        </div>
+      </div>
+      <div class="hero__visual anim-scale">
+        <div class="hero__image-card">
+          <div class="hero__image-placeholder">
+            <span>🎂</span>
+            <p>One Dessert.<br>Every Sunday.</p>
+          </div>
+        </div>
+        <div class="hero__floating-shape hero__floating-shape--1"></div>
+        <div class="hero__floating-shape hero__floating-shape--2"></div>
+      </div>
+    </div>
+    <div class="hero__bg-text" aria-hidden="true">SWEET</div>
+  </section>
+
+  <!-- ========== THIS WEEK'S FEATURED DESSERT ========== -->
+  <section class="featured" id="this-week">
+    <div class="container">
+      <div class="section-badge anim-fade">This Sunday's Dessert</div>
+      <h2 class="section-title anim-slide-up">One Dessert.<br>Limited Pieces.</h2>
+
+      <div class="featured__card anim-slide-up">
+        <div class="featured__image-wrap">
+          <div class="featured__image" id="featuredImage">
+            <span class="featured__emoji" id="featuredEmoji">🧀</span>
+            <div class="featured__image-overlay"></div>
+          </div>
+          <div class="featured__badges" id="featuredBadges">
+            <span class="featured__badge featured__badge--available">Available This Sunday</span>
+            <span class="featured__badge featured__badge--qty" id="featuredQtyBadge">Only 8 Left</span>
+          </div>
+        </div>
+
+        <div class="featured__info">
+          <div class="featured__countdown" id="countdown">
+            <span class="featured__countdown-label">Next Sunday in</span>
+            <div class="featured__countdown-timer">
+              <div class="countdown__unit">
+                <span class="countdown__number" id="cdDays">00</span>
+                <span class="countdown__label">Days</span>
+              </div>
+              <div class="countdown__sep">:</div>
+              <div class="countdown__unit">
+                <span class="countdown__number" id="cdHours">00</span>
+                <span class="countdown__label">Hours</span>
+              </div>
+              <div class="countdown__sep">:</div>
+              <div class="countdown__unit">
+                <span class="countdown__number" id="cdMins">00</span>
+                <span class="countdown__label">Mins</span>
+              </div>
+              <div class="countdown__sep">:</div>
+              <div class="countdown__unit">
+                <span class="countdown__number" id="cdSecs">00</span>
+                <span class="countdown__label">Secs</span>
+              </div>
+            </div>
+          </div>
+
+          <h3 class="featured__name" id="featuredName">Burnt Basque Cheesecake</h3>
+          <p class="featured__desc" id="featuredDesc">A caramelised, smoky crust hides a velvety cream cheese centre. No flour, no fuss — just pure indulgence baked low and slow. Each slice is a labour of love.</p>
+
+          <div class="featured__meta">
+            <span class="featured__price" id="featuredPrice">₹400</span>
+            <span class="featured__dot">·</span>
+            <span class="featured__serves" id="featuredServes">Serves 2–3</span>
+            <span class="featured__dot">·</span>
+            <span class="featured__allergens" id="featuredAllergens">Contains dairy, eggs</span>
+          </div>
+
+          <div class="featured__stock" id="featuredStock">
+            <div class="featured__stock-bar">
+              <div class="featured__stock-fill" id="stockFill"></div>
+            </div>
+            <p class="featured__stock-text" id="stockText">
+              <strong id="remainingCount">8</strong> of <span id="totalCount">15</span> pieces remaining
+            </p>
+          </div>
+
+          <p class="featured__pickup" id="featuredPickup">Pick up cold. Best enjoyed within 24 hours.</p>
+
+          <div class="featured__actions" id="featuredActions">
+            <a href="#location" class="btn btn--primary">Visit This Sunday</a>
+            <a href="https://instagram.com/sweetsundays.blr" target="_blank" rel="noopener" class="btn btn--outline">Follow on Instagram</a>
+          </div>
+
+          <div class="featured__soldout" id="featuredSoldout" style="display:none">
+            <div class="featured__soldout-badge">SOLD OUT</div>
+            <p>This Sunday's dessert has sold out. Follow us on Instagram to see next week's dessert first.</p>
+            <a href="https://instagram.com/sweetsundays.blr" target="_blank" rel="noopener" class="btn btn--primary">Follow on Instagram</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== THIS SUNDAY'S LOCATION ========== -->
+  <section class="location" id="location">
+    <div class="container">
+      <div class="section-badge anim-fade">📍 This Sunday's Location</div>
+      <h2 class="section-title anim-slide-up">Come Visit Us</h2>
+      <div class="location__card anim-slide-up">
+        <div class="location__info">
+          <h3 class="location__name">Koramangala Social Grounds</h3>
+          <p class="location__address">4th Block, 80 Feet Road, Koramangala, Bangalore 560034</p>
+          <p class="location__hours">🕐 Sunday: 10:00 AM – 8:00 PM</p>
+          <p class="location__parking">🅿️ Free parking available at the venue. Two-wheeler parking on-site.</p>
+          <div class="location__actions">
+            <a href="https://www.google.com/maps/dir/?api=1&destination=Koramangala,+Bangalore" target="_blank" rel="noopener" class="btn btn--primary">Get Directions</a>
+            <a href="https://wa.me/919876543210?text=Hi!%20Are%20you%20at%20Koramangala%20this%20Sunday?" target="_blank" rel="noopener" class="btn btn--outline">Chat on WhatsApp</a>
+          </div>
+        </div>
+        <div class="location__map">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3888.5!2d77.6245!3d12.9352!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTLCsDU2JzA2LjciTiA3N8KwMzcnMjguMiJF!5e0!3m2!1sen!2sin!4v1"
+            width="100%" height="100%" style="border:0; border-radius: 20px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+            title="This Sunday's Location">
+          </iframe>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== ABOUT / OUR STORY ========== -->
+  <section class="about" id="about">
+    <div class="container">
+      <div class="about__grid">
+        <div class="about__content">
+          <div class="section-badge anim-fade">Our Story</div>
+          <h2 class="section-title anim-slide-up">Born From a<br>Kitchen Full of Love</h2>
+          <p class="about__text anim-fade">
+            What started as baking for friends and family turned into Bangalore's most anticipated Sunday tradition. Every dessert is handcrafted from scratch using the finest ingredients — no shortcuts, no preservatives, just pure passion.
+          </p>
+          <p class="about__text anim-fade">
+            We believe great desserts deserve patience. That's why we make one dessert each week, in tiny batches, ensuring every piece is perfect. From our kitchen to your hands — made with love, served with a smile.
+          </p>
+          <div class="about__values anim-fade">
+            <div class="about__value">
+              <span class="about__value-icon">🧈</span>
+              <div>
+                <h4>100% Homemade</h4>
+                <p>Every dessert is handcrafted from scratch</p>
+              </div>
+            </div>
+            <div class="about__value">
+              <span class="about__value-icon">🌿</span>
+              <div>
+                <h4>Fresh Ingredients</h4>
+                <p>No preservatives, no artificial flavours</p>
+              </div>
+            </div>
+            <div class="about__value">
+              <span class="about__value-icon">✨</span>
+              <div>
+                <h4>One Dessert Weekly</h4>
+                <p>One creation, perfected. Gone when it sells out.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="about__visual anim-slide-up">
+          <div class="about__image-card about__image-card--1">
+            <div class="about__image-placeholder">
+              <span>👩‍🍳</span>
+              <p>Baking with love</p>
+            </div>
+          </div>
+          <div class="about__image-card about__image-card--2">
+            <div class="about__image-placeholder about__image-placeholder--accent">
+              <span>🎂</span>
+              <p>One dessert.<br>Perfected.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== PAST SUNDAY SPECIALS ========== -->
+  <section class="past-specials" id="past-specials">
+    <div class="container">
+      <div class="section-badge anim-fade">Past Sunday Specials</div>
+      <h2 class="section-title anim-slide-up">They May<br>Return Someday</h2>
+      <p class="section-subtitle anim-fade">These desserts have been featured on previous Sundays. They're not available right now — but one might make a comeback.</p>
+      <div class="past-specials__grid" id="pastSpecialsGrid">
+        <div class="past-special__card anim-slide-up">
+          <div class="past-special__image" style="background:#8E82FF">
+            <span class="past-special__emoji">🍰</span>
+            <span class="past-special__date">June 29</span>
+          </div>
+          <div class="past-special__info">
+            <h3>Classic Tiramisu</h3>
+            <p>Espresso-soaked ladyfingers layered with mascarpone cream and dusted with cocoa.</p>
+            <div class="past-special__bottom">
+              <span class="past-special__price">₹350</span>
+              <span class="past-special__status">Not Available</span>
+            </div>
+          </div>
+        </div>
+        <div class="past-special__card anim-slide-up" style="animation-delay:.1s">
+          <div class="past-special__image" style="background:#D8FF63">
+            <span class="past-special__emoji">🍵</span>
+            <span class="past-special__date">June 22</span>
+          </div>
+          <div class="past-special__info">
+            <h3>Matcha Mille Crêpe</h3>
+            <p>20 layers of paper-thin crêpes with matcha diplomat cream. Delicate and earthy.</p>
+            <div class="past-special__bottom">
+              <span class="past-special__price">₹380</span>
+              <span class="past-special__status">Not Available</span>
+            </div>
+          </div>
+        </div>
+        <div class="past-special__card anim-slide-up" style="animation-delay:.2s">
+          <div class="past-special__image" style="background:#D8FF63">
+            <span class="past-special__emoji">🥭</span>
+            <span class="past-special__date">June 15</span>
+          </div>
+          <div class="past-special__info">
+            <h3>Mango Passionfruit Tart</h3>
+            <p>Buttery tart shell filled with passionfruit curd, topped with Alphonso mangoes.</p>
+            <div class="past-special__bottom">
+              <span class="past-special__price">₹320</span>
+              <span class="past-special__status">Not Available</span>
+            </div>
+          </div>
+        </div>
+        <div class="past-special__card anim-slide-up" style="animation-delay:.3s">
+          <div class="past-special__image" style="background:#8E82FF">
+            <span class="past-special__emoji">🌹</span>
+            <span class="past-special__date">June 8</span>
+          </div>
+          <div class="past-special__info">
+            <h3>Pistachio Rose Cake</h3>
+            <p>Pistachio sponge with rose water buttercream and crushed pistachios.</p>
+            <div class="past-special__bottom">
+              <span class="past-special__price">₹420</span>
+              <span class="past-special__status">Not Available</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== GALLERY ========== -->
+  <section class="gallery" id="gallery">
+    <div class="container">
+      <div class="section-badge anim-fade">Gallery</div>
+      <h2 class="section-title anim-slide-up">Every Dessert<br>is a Masterpiece</h2>
+      <div class="gallery__grid" id="galleryGrid">
+        <div class="gallery__item gallery__item--tall anim-slide-up">
+          <div class="gallery__placeholder" style="background:#8E82FF"><span>🍰</span></div>
+        </div>
+        <div class="gallery__item anim-slide-up" style="animation-delay:.1s">
+          <div class="gallery__placeholder" style="background:#D8FF63"><span>🧀</span></div>
+        </div>
+        <div class="gallery__item anim-slide-up" style="animation-delay:.2s">
+          <div class="gallery__placeholder" style="background:var(--cream); color:var(--black)"><span>🍫</span></div>
+        </div>
+        <div class="gallery__item anim-slide-up" style="animation-delay:.15s">
+          <div class="gallery__placeholder" style="background:var(--black); color:var(--accent-green)"><span>🌹</span></div>
+        </div>
+        <div class="gallery__item gallery__item--wide anim-slide-up" style="animation-delay:.25s">
+          <div class="gallery__placeholder" style="background:#8E82FF"><span>🎂</span></div>
+        </div>
+        <div class="gallery__item anim-slide-up" style="animation-delay:.3s">
+          <div class="gallery__placeholder" style="background:#D8FF63"><span>🥭</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== REVIEWS ========== -->
+  <section class="reviews" id="reviews">
+    <div class="container">
+      <div class="section-badge anim-fade">Customer Love</div>
+      <h2 class="section-title anim-slide-up">What Bangalore<br>Says About Us</h2>
+      <div class="reviews__grid" id="reviewsGrid">
+        <div class="review-card anim-slide-up">
+          <div class="review-card__stars">★★★★★</div>
+          <p class="review-card__text">"The tiramisu is hands down the best I've had in Bangalore. Every Sunday is worth the wait!"</p>
+          <p class="review-card__author">— Priya S.</p>
+        </div>
+        <div class="review-card anim-slide-up" style="animation-delay:.1s">
+          <div class="review-card__stars">★★★★★</div>
+          <p class="review-card__text">"Ordered the basque cheesecake for my wife's birthday. She loved it! Great quality homemade desserts."</p>
+          <p class="review-card__author">— Arjun K.</p>
+        </div>
+        <div class="review-card anim-slide-up" style="animation-delay:.2s">
+          <div class="review-card__stars">★★★★★</div>
+          <p class="review-card__text">"Found them on Instagram and now I'm a regular. The pistachio rose cake is unbelievable."</p>
+          <p class="review-card__author">— Meera R.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== ANNOUNCEMENTS ========== -->
+  <section class="announcements" id="announcements" style="display:none">
+    <div class="container">
+      <div class="announcements__list" id="announcementsList"></div>
+    </div>
+  </section>
+
+  <!-- ========== CONTACT / FOOTER ========== -->
+  <footer class="footer" id="contact">
+    <div class="container">
+      <div class="footer__top">
+        <div class="footer__brand">
+          <h2 class="footer__logo">SWEET<br>SUNDAYS</h2>
+          <p class="footer__tagline">Homemade Desserts · Bangalore</p>
+          <div class="footer__sunday-badge">SUNDAY EXCLUSIVE</div>
+          <p class="footer__hours" id="footerHours">
+            <strong>Open:</strong> Sunday 10:00 AM – 8:00 PM<br>
+            <strong>Closed:</strong> Monday – Saturday
+          </p>
+        </div>
+        <div class="footer__links">
+          <div class="footer__col">
+            <h4>Explore</h4>
+            <a href="#this-week">This Week's Dessert</a>
+            <a href="#past-specials">Past Specials</a>
+            <a href="#gallery">Gallery</a>
+            <a href="#reviews">Reviews</a>
+          </div>
+          <div class="footer__col">
+            <h4>Connect</h4>
+            <a href="https://wa.me/919876543210" target="_blank" rel="noopener">WhatsApp</a>
+            <a href="https://instagram.com/sweetsundays.blr" target="_blank" rel="noopener">Instagram</a>
+            <a href="mailto:hello@sweetsundays.in">Email Us</a>
+            <a href="tel:+919876543210">Call Us</a>
+          </div>
+          <div class="footer__col">
+            <h4>Visit</h4>
+            <p>Koramangala Social Grounds<br>4th Block, 80 Feet Road<br>Koramangala, Bangalore 560034</p>
+            <a href="https://www.google.com/maps/dir/?api=1&destination=Koramangala,+Bangalore" target="_blank" rel="noopener" class="btn btn--outline btn--sm">Get Directions</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <p>&copy; 2026 Sweet Sundays. All rights reserved. Made with ❤️ in Bangalore.</p>
+        <div class="footer__sunday-notice">
+          <span>Open Every Sunday</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ========== FLOATING WHATSAPP BUTTON ========== -->
+  <a id="whatsappFloat" href="https://wa.me/919876543210?text=Hi!%20I%20have%20a%20question%20about%20Sweet%20Sundays." class="whatsapp-float anim-fade" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+  </a>
+
+  <script>
+    // ========== Read Config (admin overrides static JSON) ==========
+    function loadConfig() {
+      const staticConfig = JSON.parse(document.getElementById('site-config').textContent);
+      const tryParse = (raw) => { try { return JSON.parse(raw); } catch { return null; } };
+      const adminDessert = tryParse(localStorage.getItem('ss_weeklyDessert'));
+      const adminLocation = tryParse(localStorage.getItem('ss_location'));
+      const adminBusiness = tryParse(localStorage.getItem('ss_business'));
+      const adminAnnouncements = tryParse(localStorage.getItem('ss_announcements'));
+      const adminGallery = tryParse(localStorage.getItem('ss_gallery'));
+      const adminReviews = tryParse(localStorage.getItem('ss_reviews'));
+      const adminHistory = tryParse(localStorage.getItem('ss_dessertHistory'));
+      if (adminDessert) staticConfig.weeklyDessert = adminDessert;
+      if (adminLocation) staticConfig.location = adminLocation;
+      if (adminBusiness) staticConfig.contact = { ...staticConfig.contact, ...adminBusiness };
+      if (adminAnnouncements) staticConfig.announcements = adminAnnouncements;
+      if (adminGallery) staticConfig.gallery = adminGallery;
+      if (adminReviews) staticConfig.reviews = adminReviews;
+      if (adminHistory) staticConfig.pastSpecials = adminHistory;
+      return staticConfig;
+    }
+    const CONFIG = loadConfig();
+    const D = CONFIG.weeklyDessert;
+    const WA = CONFIG.contact.whatsapp || '919876543210';
+
+    // ========== Render Featured Dessert ==========
+    function renderFeatured() {
+      const live = JSON.parse(localStorage.getItem('ss_weeklyDessert') || 'null') || D;
+
+      document.getElementById('featuredEmoji').textContent = live.emoji;
+      document.getElementById('featuredName').textContent = live.name;
+      document.getElementById('featuredDesc').textContent = live.description;
+      document.getElementById('featuredPrice').textContent = live.price;
+      document.getElementById('featuredServes').textContent = live.serves;
+      document.getElementById('featuredAllergens').textContent = live.allergens;
+      document.getElementById('featuredPickup').textContent = live.pickupNote;
+      document.getElementById('totalCount').textContent = live.quantity;
+      document.getElementById('remainingCount').textContent = live.remaining;
+
+      const featuredImage = document.getElementById('featuredImage');
+      featuredImage.style.background = live.color;
+      if (live.image) {
+        document.getElementById('featuredEmoji').style.display = 'none';
+        featuredImage.style.backgroundImage = 'url(' + live.image + ')';
+        featuredImage.style.backgroundSize = 'cover';
+        featuredImage.style.backgroundPosition = 'center';
+      } else {
+        document.getElementById('featuredEmoji').style.display = 'block';
+        featuredImage.style.backgroundImage = 'none';
+      }
+
+      const pct = (live.remaining / live.quantity) * 100;
+      document.getElementById('stockFill').style.width = pct + '%';
+
+      const qtyBadge = document.getElementById('featuredQtyBadge');
+      const actions = document.getElementById('featuredActions');
+      const soldout = document.getElementById('featuredSoldout');
+      const stock = document.getElementById('featuredStock');
+      const badges = document.getElementById('featuredBadges');
+
+      if (!live.available || live.remaining <= 0) {
+        if (badges) badges.style.display = 'none';
+        actions.style.display = 'none';
+        soldout.style.display = 'block';
+        stock.style.display = 'none';
+        document.getElementById('stockFill').style.width = '0%';
+      } else {
+        if (badges) badges.style.display = '';
+        qtyBadge.textContent = 'Only ' + live.remaining + ' Left';
+      }
+
+      if (live.remaining <= 3 && live.remaining > 0) {
+        qtyBadge.classList.add('featured__badge--low');
+      }
+    }
+
+    // ========== Render Past Specials ==========
+    function renderPastSpecials() {
+      const grid = document.getElementById('pastSpecialsGrid');
+      const history = JSON.parse(localStorage.getItem('ss_dessertHistory') || 'null') || CONFIG.pastSpecials || [];
+      if (history.length === 0) {
+        grid.innerHTML = '<p style="color:var(--text-muted);text-align:center;grid-column:1/-1;padding:40px 0;font-size:15px;">Past specials will appear here once the admin adds them.</p>';
+        return;
+      }
+      grid.innerHTML = history.map((s, i) => `
+        <div class="past-special__card anim-slide-up" style="animation-delay:${i * 0.1}s">
+          <div class="past-special__image" style="background:${s.color}">
+            <span class="past-special__emoji">${s.emoji}</span>
+            <span class="past-special__date">${fmtDateShort(s.date)}</span>
+          </div>
+          <div class="past-special__info">
+            <h3>${s.name}</h3>
+            <p>${s.description}</p>
+            <div class="past-special__bottom">
+              <span class="past-special__price">${s.price}</span>
+              <span class="past-special__status">Not Available</span>
+            </div>
+          </div>
+        </div>
+      `).join('');
+      grid.querySelectorAll('.anim-slide-up').forEach(el => observer.observe(el));
+    }
+
+    // ========== Render Gallery ==========
+    function renderGallery() {
+      const grid = document.getElementById('galleryGrid');
+      const gallery = JSON.parse(localStorage.getItem('ss_gallery') || 'null') || CONFIG.gallery || [];
+      if (gallery.length === 0) {
+        grid.innerHTML = '<p style="color:var(--text-muted);text-align:center;grid-column:1/-1;padding:40px 0;font-size:15px;">Gallery photos will appear here once the admin adds them.</p>';
+        return;
+      }
+      grid.innerHTML = gallery.map((g, i) => {
+        const delay = i * 0.08;
+        const sizeClass = i % 5 === 0 ? 'gallery__item--tall' : i % 5 === 3 ? 'gallery__item--wide' : '';
+        if (g.url) {
+          return `<div class="gallery__item ${sizeClass} anim-slide-up" style="animation-delay:${delay}s"><img src="${g.url}" alt="${g.caption || ''}" style="width:100%;height:100%;object-fit:cover;border-radius:16px"></div>`;
+        }
+        const colors = ['#8E82FF', '#D8FF63', 'var(--cream)', 'var(--black)'];
+        const emojis = ['🍰', '🧀', '🍫', '🌹', '🎂', '🥭'];
+        const bg = colors[i % colors.length];
+        const color = bg === 'var(--cream)' ? 'var(--black)' : bg === 'var(--black)' ? 'var(--accent-green)' : '';
+        return `<div class="gallery__item ${sizeClass} anim-slide-up" style="animation-delay:${delay}s"><div class="gallery__placeholder" style="background:${bg};${color ? ' color:' + color : ''}"><span>${emojis[i % emojis.length]}</span></div></div>`;
+      }).join('');
+      grid.querySelectorAll('.anim-slide-up').forEach(el => observer.observe(el));
+    }
+
+    // ========== Render Reviews ==========
+    function renderReviews() {
+      const grid = document.getElementById('reviewsGrid');
+      const reviews = JSON.parse(localStorage.getItem('ss_reviews') || 'null') || CONFIG.reviews || [];
+      const approved = reviews.filter(r => r.approved !== false);
+      if (approved.length === 0) {
+        grid.innerHTML = '<p style="color:var(--text-muted);text-align:center;grid-column:1/-1;padding:40px 0;font-size:15px;">Customer reviews will appear here once the admin approves them.</p>';
+        return;
+      }
+      grid.innerHTML = approved.map((r, i) => `
+        <div class="review-card anim-slide-up" style="animation-delay:${i * 0.1}s">
+          <div class="review-card__stars">${'★'.repeat(r.stars || r.rating || 5)}${'☆'.repeat(5 - (r.stars || r.rating || 5))}</div>
+          <p class="review-card__text">"${r.text}"</p>
+          <p class="review-card__author">— ${r.name}</p>
+        </div>
+      `).join('');
+      grid.querySelectorAll('.anim-slide-up').forEach(el => observer.observe(el));
+    }
+
+    // ========== Format date short ==========
+    function fmtDateShort(d) {
+      if (!d) return '';
+      const dt = new Date(d);
+      return dt.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' });
+    }
+
+    // ========== Render Footer Hours from Location ==========
+    function renderFooter() {
+      const loc = JSON.parse(localStorage.getItem('ss_location') || '{}');
+      const el = document.getElementById('footerHours');
+      if (!el) return;
+      if (loc.hours) {
+        el.innerHTML = `<strong>Open:</strong> ${loc.hours}`;
+      }
+    }
+
+    // ========== Render Announcements ==========
+    function renderAnnouncements() {
+      const section = document.getElementById('announcements');
+      const list = document.getElementById('announcementsList');
+      const items = JSON.parse(localStorage.getItem('ss_announcements') || '[]');
+      const now = new Date();
+      const today = now.toISOString().split('T')[0];
+      const visible = items.filter(a => {
+        if (!a.isPublished) return false;
+        if (a.startDate && a.startDate > today) return false;
+        if (a.endDate && a.endDate < today) return false;
+        return true;
+      });
+      visible.sort((a, b) => {
+        if (a.isPinned && !b.isPinned) return -1;
+        if (!a.isPinned && b.isPinned) return 1;
+        return new Date(b.createdAt) - new Date(a.createdAt);
+      });
+      if (visible.length === 0) { section.style.display = 'none'; return; }
+      section.style.display = '';
+      const typeIcons = { 'General': '📢', 'New Dessert': '🆕', 'Location Change': '📍', 'Holiday': '🎌', 'Sold Out': '🔴', 'Special Event': '⭐' };
+      list.innerHTML = visible.map(a => {
+        const icon = typeIcons[a.type] || '📢';
+        return `
+        <div class="announcement-banner anim-fade" style="background:${a.backgroundColor || '#D8FF63'};color:${a.textColor || '#101010'}">
+          <span class="announcement-banner__icon">${icon}</span>
+          <div class="announcement-banner__content">
+            <strong>${a.title}</strong>
+            ${a.message ? `<span class="announcement-banner__msg">${a.message}</span>` : ''}
+          </div>
+          ${a.isPinned ? '<span class="announcement-banner__pin">📌</span>' : ''}
+        </div>`;
+      }).join('');
+    }
+
+    // ========== Sunday Countdown ==========
+    function updateCountdown() {
+      const now = new Date();
+      let nextSunday = new Date(now);
+      nextSunday.setDate(now.getDate() + ((7 - now.getDay()) % 7 || 7));
+      nextSunday.setHours(10, 0, 0, 0);
+      const diff = nextSunday - now;
+      if (diff <= 0) {
+        document.getElementById('cdDays').textContent = '00';
+        document.getElementById('cdHours').textContent = '00';
+        document.getElementById('cdMins').textContent = '00';
+        document.getElementById('cdSecs').textContent = '00';
+        return;
+      }
+      const d = Math.floor(diff / 86400000);
+      const h = Math.floor((diff % 86400000) / 3600000);
+      const m = Math.floor((diff % 3600000) / 60000);
+      const s = Math.floor((diff % 60000) / 1000);
+      document.getElementById('cdDays').textContent = String(d).padStart(2, '0');
+      document.getElementById('cdHours').textContent = String(h).padStart(2, '0');
+      document.getElementById('cdMins').textContent = String(m).padStart(2, '0');
+      document.getElementById('cdSecs').textContent = String(s).padStart(2, '0');
+    }
+
+    // ========== Mobile Menu ==========
+    const hamburger = document.getElementById('hamburger');
+    const navLinks = document.getElementById('navLinks');
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.toggle('active');
+      navLinks.classList.toggle('open');
+    });
+    navLinks.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        hamburger.classList.remove('active');
+        navLinks.classList.remove('open');
+      });
+    });
+
+    // ========== Scroll Animations ==========
+    const animElements = document.querySelectorAll('.anim-fade, .anim-slide-up, .anim-scale');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in-view');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+    animElements.forEach(el => observer.observe(el));
+
+    // ========== Nav Scroll ==========
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('nav--scrolled', window.scrollY > 60);
+    });
+
+    // ========== Smooth Scroll ==========
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', e => {
+        e.preventDefault();
+        const target = document.querySelector(a.getAttribute('href'));
+        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+
+    // ========== WhatsApp Float Link ==========
+    document.getElementById('whatsappFloat').href = 'https://wa.me/' + WA + '?text=' + encodeURIComponent('Hi! I have a question about Sweet Sundays.');
+
+    // ========== Listen for admin updates ==========
+    window.addEventListener('storage', (e) => {
+      if (!e.key || !e.key.startsWith('ss_')) return;
+      if (e.key === 'ss_weeklyDessert') { renderFeatured(); return; }
+      if (e.key === 'ss_dessertHistory') { renderPastSpecials(); return; }
+      if (e.key === 'ss_gallery') { renderGallery(); return; }
+      if (e.key === 'ss_reviews') { renderReviews(); return; }
+      if (e.key === 'ss_announcements') { renderAnnouncements(); return; }
+      if (e.key === 'ss_location') { renderFooter(); return; }
+      if (e.key === 'ss_business' || e.key === 'ss_websiteSettings') {
+        location.reload();
+      }
+    });
+
+    // ========== Init ==========
+    renderFeatured();
+    renderPastSpecials();
+    renderGallery();
+    renderReviews();
+    renderAnnouncements();
+    renderFooter();
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+  </script>
+
+</body>
+</html>
