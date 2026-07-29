@@ -572,7 +572,7 @@
         const delay = i * 0.08;
         const sizeClass = i % 5 === 0 ? 'gallery__item--tall' : i % 5 === 3 ? 'gallery__item--wide' : '';
         if (g.url) {
-          return `<div class="gallery__item ${sizeClass} anim-slide-up" style="animation-delay:${delay}s"><img src="${g.url}" alt="${g.caption || ''}" style="width:100%;height:100%;object-fit:cover;border-radius:16px"></div>`;
+          return `<div class="gallery__item ${sizeClass} anim-slide-up" style="animation-delay:${delay}s"><img src="${g.url}" alt="${g.caption || ''}" loading="lazy" style="width:100%;height:100%;object-fit:cover;border-radius:16px"></div>`;
         }
         const colors = ['#8E82FF', '#D8FF63', 'var(--cream)', 'var(--black)'];
         const emojis = ['🍰', '🧀', '🍫', '🌹', '🎂', '🥭'];

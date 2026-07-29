@@ -314,11 +314,21 @@
   fileInput.addEventListener('change', (e) => { if (e.target.files[0]) handleImageFile(e.target.files[0]); });
 
   function handleImageFile(file) {
-    if (!file || !file.type.startsWith('image/')) { toast('Please select an image file', 'error'); return; }
-    if (file.size > 5 * 1024 * 1024) { toast('Image must be under 5MB', 'error'); return; }
-    const reader = new FileReader();
-    reader.onload = (e) => { setVal('dImage', e.target.result); updateDessertPreview(); toast('Image loaded', 'success'); };
-    reader.readAsDataURL(file);
+    if (!file) return;
+    const dz = $('#dessertDropzone');
+    dz.classList.add('dragover');
+    dz.querySelector('p').textContent = 'Uploading...';
+    toast('Uploading image...', 'info');
+    ImageUpload.upload(file).then(result => {
+      setVal('dImage', result.url);
+      updateDessertPreview();
+      toast('Image uploaded successfully', 'success');
+    }).catch(err => {
+      toast(err.message || 'Image upload failed. Please try again.', 'error');
+    }).finally(() => {
+      dz.classList.remove('dragover');
+      dz.querySelector('p').innerHTML = 'Drag & drop image here or <strong>click to browse</strong>';
+    });
   }
 
   /* ============================================
@@ -471,15 +481,16 @@
   $('#galleryFileInput').addEventListener('change', (e) => {
     const file = e.target.files[0];
     if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (ev) => {
+    toast('Uploading image...', 'info');
+    ImageUpload.upload(file).then(result => {
       const gallery = DB.get(STORAGE_KEYS.GALLERY, []);
-      gallery.push({ id: uid(), url: ev.target.result, caption: file.name, category: 'desserts', order: gallery.length + 1 });
+      gallery.push({ id: uid(), url: result.url, caption: file.name, category: 'desserts', order: gallery.length + 1 });
       DB.set(STORAGE_KEYS.GALLERY, gallery);
       loadGallery();
       toast('Image added to gallery', 'success');
-    };
-    reader.readAsDataURL(file);
+    }).catch(err => {
+      toast(err.message || 'Image upload failed. Please try again.', 'error');
+    });
     e.target.value = '';
   });
 
@@ -742,8 +753,13 @@
     setVal('bsDay', biz.operatingDay);
     setVal('bsHours', biz.operatingHours);
     setVal('bsMax', biz.maxPieces);
+    setVal('bsCloudName', biz.cloudName || '');
+    setVal('bsUploadPreset', biz.cloudUploadPreset || '');
     currentBizStatus = biz.status || 'open';
     $$('.toggle-btn[data-bsstatus]').forEach(b => b.classList.toggle('active', b.dataset.bsstatus === currentBizStatus));
+    // Apply cloud config to ImageUpload
+    if (biz.cloudName) window.CLOUDINARY_CLOUD_NAME = biz.cloudName;
+    if (biz.cloudUploadPreset) window.CLOUDINARY_UPLOAD_PRESET = biz.cloudUploadPreset;
   }
 
   $$('.toggle-btn[data-bsstatus]').forEach(btn => {
@@ -760,8 +776,12 @@
       email: val('bsEmail'), instagram: val('bsInstagram'),
       operatingDay: val('bsDay'), operatingHours: val('bsHours'),
       maxPieces: parseInt(val('bsMax')) || 5, status: currentBizStatus,
+      cloudName: val('bsCloudName'), cloudUploadPreset: val('bsUploadPreset'),
     };
     DB.set(STORAGE_KEYS.BUSINESS, biz);
+    // Apply cloud config immediately
+    if (biz.cloudName) window.CLOUDINARY_CLOUD_NAME = biz.cloudName;
+    if (biz.cloudUploadPreset) window.CLOUDINARY_UPLOAD_PRESET = biz.cloudUploadPreset;
     refreshDashboard();
     toast('Business settings saved', 'success');
   };
@@ -777,6 +797,43 @@
     if (e.key === 'g') navigateTo('gallery');
     if (e.key === 'n') toggleDark();
   });
+
+  /* ============================================
+       MIGRATION — Convert base64 images to cloud URLs
+       ============================================ */
+  async function migrateBase64Images() {
+    let migrated = 0;
+    // Dessert image
+    const dessert = DB.get(STORAGE_KEYS.DESSERT, null);
+    if (dessert && ImageUpload.isBase64(dessert.image)) {
+      try {
+        const result = await ImageUpload.migrateBase64(dessert.image);
+        dessert.image = result.url;
+        DB.set(STORAGE_KEYS.DESSERT, dessert);
+        migrated++;
+      } catch (e) { console.warn('Dessert image migration failed:', e.message); }
+    }
+    // Gallery images
+    const gallery = DB.get(STORAGE_KEYS.GALLERY, []);
+    let galleryDirty = false;
+    for (const g of gallery) {
+      if (ImageUpload.isBase64(g.url)) {
+        try {
+          const result = await ImageUpload.migrateBase64(g.url);
+          g.url = result.url;
+          galleryDirty = true;
+          migrated++;
+        } catch (e) { console.warn('Gallery image migration failed:', e.message); }
+      }
+    }
+    if (galleryDirty) DB.set(STORAGE_KEYS.GALLERY, gallery);
+    if (migrated > 0) {
+      toast(`Migrated ${migrated} image(s) to cloud storage`, 'success');
+    }
+  }
+
+  /* Run migration on load (silently) */
+  migrateBase64Images().catch(() => {});
 
   /* ============================================
        INIT

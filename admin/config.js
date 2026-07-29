@@ -28,6 +28,8 @@ const DEFAULT_BUSINESS = {
   operatingHours: '10:00 AM – 8:00 PM',
   maxPieces: 5,
   status: 'open',
+  cloudName: '',
+  cloudUploadPreset: '',
 };
 
 const DEFAULT_DESSERT = {
