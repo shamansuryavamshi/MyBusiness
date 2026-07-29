@@ -236,14 +236,17 @@
 
     // Image preview
     const img = val('dImage');
+    const removeBtn = $('#removeDessertImage');
     if (img) {
       $('#previewEmoji').style.display = 'none';
       $('#previewImage').style.backgroundImage = `url(${img})`;
       $('#previewImage').style.backgroundSize = 'cover';
       $('#previewImage').style.backgroundPosition = 'center';
+      if (removeBtn) removeBtn.style.display = 'flex';
     } else {
       $('#previewEmoji').style.display = 'block';
       $('#previewImage').style.backgroundImage = 'none';
+      if (removeBtn) removeBtn.style.display = 'none';
     }
   }
 
@@ -314,6 +317,7 @@
   dz.addEventListener('dragleave', () => dz.classList.remove('dragover'));
   dz.addEventListener('drop', (e) => { e.preventDefault(); dz.classList.remove('dragover'); handleImageFile(e.dataTransfer.files[0]); });
   fileInput.addEventListener('change', (e) => { if (e.target.files[0]) handleImageFile(e.target.files[0]); });
+  $('#removeDessertImage').addEventListener('click', clearDessertImage);
 
   function handleImageFile(file) {
     if (!file) return;
@@ -332,6 +336,12 @@
       dz.classList.remove('dragover');
       dz.querySelector('p').innerHTML = 'Drag & drop image here or <strong>click to browse</strong>';
     });
+  }
+
+  function clearDessertImage() {
+    setVal('dImage', '');
+    setVal('dFileId', '');
+    updateDessertPreview();
   }
 
   /* ============================================

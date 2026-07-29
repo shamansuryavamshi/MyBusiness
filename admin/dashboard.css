@@ -715,6 +715,29 @@ body.dark .stat-card__icon { background: rgba(255,255,255,0.04); }
   border-radius: 999px;
 }
 
+.preview-card__remove-img {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.6);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+  z-index: 2;
+  line-height: 1;
+}
+.preview-card__remove-img:hover {
+  background: rgba(0,0,0,0.85);
+}
+
 .preview-card__body { padding: 20px; }
 
 .preview-card__body h4 { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
