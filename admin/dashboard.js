@@ -304,9 +304,14 @@
   };
 
   // Publish to website
-  $('#publishDessert').onclick = () => {
+  $('#publishDessert').onclick = async () => {
     $('#saveDessert').click();
-    toast('Changes published to website!', 'success');
+    try {
+      await API.publishAll();
+      toast('Dessert published to website!', 'success');
+    } catch (e) {
+      toast('Publish failed: ' + e.message, 'error');
+    }
   };
 
   // Drag & drop
@@ -456,7 +461,15 @@
     toast('Location saved', 'success');
   };
 
-  $('#publishLocation').onclick = () => { $('#saveLocation').click(); toast('Location published to website!', 'success'); };
+  $('#publishLocation').onclick = async () => {
+    $('#saveLocation').click();
+    try {
+      await API.publishAll();
+      toast('Location published to website!', 'success');
+    } catch (e) {
+      toast('Publish failed: ' + e.message, 'error');
+    }
+  };
 
   /* ============================================
        GALLERY
@@ -488,13 +501,13 @@
     const item = gallery.find(g => String(g.id) === String(id));
     if (!item) return;
     if (!await confirmDialog('Delete this image?')) return;
-    // Delete from Google Drive if we have the fileId
     if (item.fileId) {
       try { await ImageUpload.remove(item.fileId); } catch (e) { console.warn('Failed to delete from Drive:', e); }
     }
     deleteById(STORAGE_KEYS.GALLERY, id);
     loadGallery();
     toast('Deleted successfully', 'success');
+    try { await API.publishAll(); } catch (_) {}
   };
 
   if ($('#galleryFilter')) $('#galleryFilter').addEventListener('change', loadGallery);
@@ -504,12 +517,13 @@
     const file = e.target.files[0];
     if (!file) return;
     toast('Uploading image...', 'info');
-    ImageUpload.upload(file, 'Gallery').then(result => {
+    ImageUpload.upload(file, 'Gallery').then(async result => {
       const gallery = DB.get(STORAGE_KEYS.GALLERY, []);
       gallery.push({ id: uid(), url: result.url, fileId: result.fileId, caption: file.name, category: 'desserts', order: gallery.length + 1 });
       DB.set(STORAGE_KEYS.GALLERY, gallery);
       loadGallery();
       toast('Image added to gallery', 'success');
+      try { await API.publishAll(); } catch (_) {}
     }).catch(err => {
       toast(err.message || 'Image upload failed. Please try again.', 'error');
     });
@@ -543,10 +557,11 @@
     `).join('');
   }
 
-  window.toggleReview = function (id, approved) {
+  window.toggleReview = async function (id, approved) {
     let reviews = DB.get(STORAGE_KEYS.REVIEWS, []);
     const r = reviews.find(x => String(x.id) === String(id));
     if (r) { r.approved = approved; DB.set(STORAGE_KEYS.REVIEWS, reviews); loadReviews(); toast('Review updated', 'success'); }
+    try { await API.publishAll(); } catch (_) {}
   };
 
   window.deleteReview = async function (id) {
@@ -554,6 +569,7 @@
     deleteById(STORAGE_KEYS.REVIEWS, id);
     loadReviews();
     toast('Deleted successfully', 'success');
+    try { await API.publishAll(); } catch (_) {}
   };
 
   $('#addReview').onclick = () => {
@@ -564,7 +580,7 @@
     `, `<button class="btn btn--ghost" onclick="hideModal()">Cancel</button><button class="btn btn--primary" onclick="saveNewReview()">Save</button>`);
   };
 
-  window.saveNewReview = function () {
+  window.saveNewReview = async function () {
     const name = $('#mReviewName')?.value?.trim();
     const rating = parseInt($('#mReviewRating')?.value) || 5;
     const text = $('#mReviewText')?.value?.trim();
@@ -575,6 +591,7 @@
     hideModal();
     loadReviews();
     toast('Review added', 'success');
+    try { await API.publishAll(); } catch (_) {}
   };
 
   /* ============================================
@@ -624,7 +641,7 @@
     }).join('');
   }
 
-  window.toggleAnnouncePublish = function (id) {
+  window.toggleAnnouncePublish = async function (id) {
     let items = DB.get(STORAGE_KEYS.ANNOUNCEMENTS, []);
     const a = items.find(x => String(x.id) === String(id));
     if (a) {
@@ -633,10 +650,11 @@
       DB.set(STORAGE_KEYS.ANNOUNCEMENTS, items);
       loadAnnouncements();
       toast(a.isPublished ? 'Announcement published' : 'Announcement unpublished', 'success');
+      try { await API.publishAll(); } catch (_) {}
     }
   };
 
-  window.toggleAnnouncePin = function (id) {
+  window.toggleAnnouncePin = async function (id) {
     let items = DB.get(STORAGE_KEYS.ANNOUNCEMENTS, []);
     const target = items.find(x => String(x.id) === String(id));
     if (!target) return;
@@ -650,6 +668,7 @@
     DB.set(STORAGE_KEYS.ANNOUNCEMENTS, items);
     loadAnnouncements();
     toast(target.isPinned ? 'Announcement pinned' : 'Announcement unpinned', 'success');
+    try { await API.publishAll(); } catch (_) {}
   };
 
   window.editAnnouncement = function (id) {
@@ -666,7 +685,7 @@
     `, `<button class="btn btn--ghost" onclick="hideModal()">Cancel</button><button class="btn btn--primary" onclick="saveEditAnnounce('${a.id}')">Save Changes</button>`);
   };
 
-  window.saveEditAnnounce = function (id) {
+  window.saveEditAnnounce = async function (id) {
     const title = $('#mAnnTitle')?.value?.trim();
     const message = $('#mAnnMsg')?.value?.trim();
     if (!title) { toast('Enter a title', 'error'); return; }
@@ -688,6 +707,7 @@
     hideModal();
     loadAnnouncements();
     toast('Announcement updated', 'success');
+    try { await API.publishAll(); } catch (_) {}
   };
 
   window.deleteAnnounce = async function (id) {
@@ -695,6 +715,7 @@
     deleteById(STORAGE_KEYS.ANNOUNCEMENTS, id);
     loadAnnouncements();
     toast('Deleted successfully', 'success');
+    try { await API.publishAll(); } catch (_) {}
   };
 
   $('#addAnnouncement').onclick = () => {
@@ -708,7 +729,7 @@
     `, `<button class="btn btn--ghost" onclick="hideModal()">Cancel</button><button class="btn btn--primary" onclick="saveNewAnnounce()">Create & Publish</button>`);
   };
 
-  window.saveNewAnnounce = function () {
+  window.saveNewAnnounce = async function () {
     const title = $('#mAnnTitle')?.value?.trim();
     const message = $('#mAnnMsg')?.value?.trim();
     if (!title) { toast('Enter a title', 'error'); return; }
@@ -731,6 +752,7 @@
     hideModal();
     loadAnnouncements();
     toast('Announcement created and published', 'success');
+    try { await API.publishAll(); } catch (_) {}
   };
 
   /* ============================================
@@ -749,7 +771,7 @@
     $('#wsBannerColor').value = ws.announcementBannerTextColor || '#101010';
   }
 
-  $('#saveWebsite').onclick = () => {
+  $('#saveWebsite').onclick = async () => {
     const ws = {
       heroTitle: val('wsHeroTitle'), heroDescription: val('wsHeroDesc'),
       seoTitle: val('wsSeoTitle'), seoDescription: val('wsSeoDesc'), seoKeywords: val('wsKeywords'),
@@ -758,6 +780,7 @@
     };
     DB.set(STORAGE_KEYS.WEBSITE, ws);
     toast('Website settings saved', 'success');
+    try { await API.publishAll(); toast('Website settings published', 'success'); } catch (_) {}
   };
 
   /* ============================================
@@ -790,7 +813,7 @@
     });
   });
 
-  $('#saveBusiness').onclick = () => {
+  $('#saveBusiness').onclick = async () => {
     const biz = {
       name: val('bsName'), phone: val('bsPhone'), whatsapp: val('bsWhatsApp'),
       email: val('bsEmail'), instagram: val('bsInstagram'),
@@ -799,10 +822,10 @@
       apiBaseUrl: val('bsApiUrl'),
     };
     DB.set(STORAGE_KEYS.BUSINESS, biz);
-    // Apply API base URL immediately
     if (biz.apiBaseUrl) window.API_BASE_URL = biz.apiBaseUrl;
     refreshDashboard();
     toast('Business settings saved', 'success');
+    try { await API.publishAll(); toast('Business settings published', 'success'); } catch (_) {}
   };
 
   /* ============================================

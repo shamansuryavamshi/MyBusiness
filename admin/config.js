@@ -91,7 +91,52 @@ const DEFAULT_DESSERT_HISTORY = [
   { id: 4, name: 'Pistachio Rose Cake', price: '₹420', emoji: '🌹', color: '#8E82FF', description: 'Pistachio sponge with rose water buttercream.', date: '2026-06-08', status: 'sold', quantity: 8, sold: 8 },
 ];
 
-/* ---------- CRUD Helpers (swap for API later) ---------- */
+/* ---------- Published Data API (Google Drive backend) ---------- */
+const PUBLISHED_API_URL = window.location.origin + '/api/data';
+
+const API = {
+  async getPublished() {
+    try {
+      const res = await fetch(PUBLISHED_API_URL);
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const data = await res.json();
+      return data;
+    } catch (e) {
+      console.warn('Data API unavailable:', e.message);
+      return null;
+    }
+  },
+
+  async setPublished(data) {
+    const res = await fetch(PUBLISHED_API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.error || 'Publish failed (HTTP ' + res.status + ')');
+    }
+    return true;
+  },
+
+  async publishAll() {
+    const payload = {
+      weeklyDessert: DB.get(STORAGE_KEYS.DESSERT, DEFAULT_DESSERT),
+      location: DB.get(STORAGE_KEYS.LOCATION, DEFAULT_LOCATION),
+      business: DB.get(STORAGE_KEYS.BUSINESS, DEFAULT_BUSINESS),
+      website: DB.get(STORAGE_KEYS.WEBSITE, DEFAULT_WEBSITE),
+      gallery: DB.get(STORAGE_KEYS.GALLERY, []),
+      reviews: DB.get(STORAGE_KEYS.REVIEWS, []),
+      announcements: DB.get(STORAGE_KEYS.ANNOUNCEMENTS, []),
+      dessertHistory: DB.get(STORAGE_KEYS.DESSERT_HISTORY, []),
+      publishedAt: new Date().toISOString(),
+    };
+    return API.setPublished(payload);
+  },
+};
+
+/* ---------- CRUD Helpers (local drafts) ---------- */
 const DB = {
   get(key, fallback) {
     try {
@@ -128,12 +173,6 @@ function seedDefaults() {
   if (!DB.get(STORAGE_KEYS.DESSERT_HISTORY, null)) DB.set(STORAGE_KEYS.DESSERT_HISTORY, DEFAULT_DESSERT_HISTORY);
 }
 seedDefaults();
-
-/* ---------- Notify public site to reload ---------- */
-function notifyPublicSite() {
-  window.dispatchEvent(new Event('admin-updated'));
-  try { localStorage.setItem('ss_lastUpdate', Date.now()); } catch {}
-}
 
 /* ---------- Generate unique ID ---------- */
 function uid() {

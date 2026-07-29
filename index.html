@@ -458,33 +458,46 @@
   </a>
 
   <script>
-    // ========== Read Config (admin overrides static JSON) ==========
-    function loadConfig() {
-      const staticConfig = JSON.parse(document.getElementById('site-config').textContent);
-      const tryParse = (raw) => { try { return JSON.parse(raw); } catch { return null; } };
-      const adminDessert = tryParse(localStorage.getItem('ss_weeklyDessert'));
-      const adminLocation = tryParse(localStorage.getItem('ss_location'));
-      const adminBusiness = tryParse(localStorage.getItem('ss_business'));
-      const adminAnnouncements = tryParse(localStorage.getItem('ss_announcements'));
-      const adminGallery = tryParse(localStorage.getItem('ss_gallery'));
-      const adminReviews = tryParse(localStorage.getItem('ss_reviews'));
-      const adminHistory = tryParse(localStorage.getItem('ss_dessertHistory'));
-      if (adminDessert) staticConfig.weeklyDessert = adminDessert;
-      if (adminLocation) staticConfig.location = adminLocation;
-      if (adminBusiness) staticConfig.contact = { ...staticConfig.contact, ...adminBusiness };
-      if (adminAnnouncements) staticConfig.announcements = adminAnnouncements;
-      if (adminGallery) staticConfig.gallery = adminGallery;
-      if (adminReviews) staticConfig.reviews = adminReviews;
-      if (adminHistory) staticConfig.pastSpecials = adminHistory;
-      return staticConfig;
+    /* ============================================
+       SOURCE OF TRUTH — Published data from API
+       Falls back to static JSON if API is down.
+       ============================================ */
+    let publishedData = null;
+
+    async function fetchPublished() {
+      try {
+        const res = await fetch('/api/data');
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.publishedAt) publishedData = data;
+        }
+      } catch (e) {
+        console.warn('Data API unavailable, using static config:', e.message);
+      }
     }
-    const CONFIG = loadConfig();
-    const D = CONFIG.weeklyDessert;
-    const WA = CONFIG.contact.whatsapp || '919876543210';
+
+    function getPublished(key) {
+      if (publishedData && publishedData[key] != null) return publishedData[key];
+      const staticConfig = JSON.parse(document.getElementById('site-config').textContent);
+      const map = {
+        weeklyDessert: 'weeklyDessert',
+        location: 'location',
+        business: 'contact',
+        announcements: 'announcements',
+        gallery: 'gallery',
+        reviews: 'reviews',
+        dessertHistory: 'pastSpecials',
+        website: null,
+      };
+      const staticKey = map[key];
+      return staticKey ? staticConfig[staticKey] : null;
+    }
+
+    const staticConfig = JSON.parse(document.getElementById('site-config').textContent);
 
     // ========== Render Featured Dessert ==========
     function renderFeatured() {
-      const live = JSON.parse(localStorage.getItem('ss_weeklyDessert') || 'null') || D;
+      const live = getPublished('weeklyDessert') || staticConfig.weeklyDessert;
 
       document.getElementById('featuredEmoji').textContent = live.emoji;
       document.getElementById('featuredName').textContent = live.name;
@@ -536,7 +549,7 @@
     // ========== Render Past Specials ==========
     function renderPastSpecials() {
       const grid = document.getElementById('pastSpecialsGrid');
-      const history = JSON.parse(localStorage.getItem('ss_dessertHistory') || 'null') || CONFIG.pastSpecials || [];
+      const history = getPublished('dessertHistory') || staticConfig.pastSpecials || [];
       if (history.length === 0) {
         grid.innerHTML = '<p style="color:var(--text-muted);text-align:center;grid-column:1/-1;padding:40px 0;font-size:15px;">Past specials will appear here once the admin adds them.</p>';
         return;
@@ -563,7 +576,7 @@
     // ========== Render Gallery ==========
     function renderGallery() {
       const grid = document.getElementById('galleryGrid');
-      const gallery = JSON.parse(localStorage.getItem('ss_gallery') || 'null') || CONFIG.gallery || [];
+      const gallery = getPublished('gallery') || staticConfig.gallery || [];
       if (gallery.length === 0) {
         grid.innerHTML = '<p style="color:var(--text-muted);text-align:center;grid-column:1/-1;padding:40px 0;font-size:15px;">Gallery photos will appear here once the admin adds them.</p>';
         return;
@@ -586,7 +599,7 @@
     // ========== Render Reviews ==========
     function renderReviews() {
       const grid = document.getElementById('reviewsGrid');
-      const reviews = JSON.parse(localStorage.getItem('ss_reviews') || 'null') || CONFIG.reviews || [];
+      const reviews = getPublished('reviews') || staticConfig.reviews || [];
       const approved = reviews.filter(r => r.approved !== false);
       if (approved.length === 0) {
         grid.innerHTML = '<p style="color:var(--text-muted);text-align:center;grid-column:1/-1;padding:40px 0;font-size:15px;">Customer reviews will appear here once the admin approves them.</p>';
@@ -609,13 +622,57 @@
       return dt.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' });
     }
 
+    // ========== Apply Website Settings (hero, SEO, footer) ==========
+    function applyWebsiteSettings() {
+      const ws = getPublished('website') || {};
+
+      if (ws.heroTitle) {
+        const lines = document.querySelectorAll('.hero__line');
+        const parts = ws.heroTitle.split(/\s+/);
+        if (lines.length === 2) {
+          lines[0].textContent = parts[0] || 'SWEET';
+          lines[1].textContent = parts.slice(1).join(' ') || 'SUNDAYS';
+        }
+      }
+      if (ws.heroDescription) {
+        const desc = document.querySelector('.hero__desc');
+        if (desc) desc.textContent = ws.heroDescription;
+      }
+      if (ws.seoTitle) document.title = ws.seoTitle;
+      if (ws.seoDescription) {
+        const meta = document.querySelector('meta[name="description"]');
+        if (meta) meta.content = ws.seoDescription;
+      }
+      if (ws.footerText) {
+        const footerP = document.querySelector('.footer__bottom p');
+        if (footerP) footerP.innerHTML = ws.footerText;
+      }
+    }
+
+    // ========== Apply Business Settings ==========
+    function applyBusinessSettings() {
+      const biz = getPublished('business') || {};
+      const badge = document.querySelector('.hero__badge');
+      if (badge && biz.operatingDay) {
+        badge.textContent = 'Open Every ' + biz.operatingDay + ' · Bangalore';
+      }
+      const footerHours = document.getElementById('footerHours');
+      if (footerHours && biz.operatingDay && biz.operatingHours) {
+        footerHours.innerHTML = '<strong>Open:</strong> ' + biz.operatingDay + ': ' + biz.operatingHours + '<br><strong>Closed:</strong> All other days';
+      }
+      const sundayBadge = document.querySelector('.nav__badge');
+      if (sundayBadge && biz.operatingDay) {
+        sundayBadge.textContent = biz.operatingDay.toUpperCase() + ' EXCLUSIVE';
+      }
+    }
+
     // ========== Render Footer Hours from Location ==========
     function renderFooter() {
-      const loc = JSON.parse(localStorage.getItem('ss_location') || '{}');
+      const loc = getPublished('location') || staticConfig.location || {};
       const el = document.getElementById('footerHours');
       if (!el) return;
       if (loc.hours) {
-        el.innerHTML = `<strong>Open:</strong> ${loc.hours}`;
+        el.innerHTML = '<strong>Open:</strong> ' + loc.hours;
       }
     }
 
@@ -623,7 +680,7 @@
     function renderAnnouncements() {
       const section = document.getElementById('announcements');
       const list = document.getElementById('announcementsList');
-      const items = JSON.parse(localStorage.getItem('ss_announcements') || '[]');
+      const items = getPublished('announcements') || [];
       const now = new Date();
       const today = now.toISOString().split('T')[0];
       const visible = items.filter(a => {
@@ -720,31 +777,50 @@
     });
 
     // ========== WhatsApp Float Link ==========
-    document.getElementById('whatsappFloat').href = 'https://wa.me/' + WA + '?text=' + encodeURIComponent('Hi! I have a question about Sweet Sundays.');
+    function setWhatsAppLink() {
+      const wa = (publishedData && publishedData.business && publishedData.business.whatsapp) || staticConfig.contact.whatsapp || '919876543210';
+      document.getElementById('whatsappFloat').href = 'https://wa.me/' + wa + '?text=' + encodeURIComponent('Hi! I have a question about Sweet Sundays.');
+    }
 
-    // ========== Listen for admin updates ==========
-    window.addEventListener('storage', (e) => {
-      if (!e.key || !e.key.startsWith('ss_')) return;
-      if (e.key === 'ss_weeklyDessert') { renderFeatured(); return; }
-      if (e.key === 'ss_dessertHistory') { renderPastSpecials(); return; }
-      if (e.key === 'ss_gallery') { renderGallery(); return; }
-      if (e.key === 'ss_reviews') { renderReviews(); return; }
-      if (e.key === 'ss_announcements') { renderAnnouncements(); return; }
-      if (e.key === 'ss_location') { renderFooter(); return; }
-      if (e.key === 'ss_business' || e.key === 'ss_websiteSettings') {
-        location.reload();
-      }
-    });
+    // ========== Poll for admin updates (cross-device) ==========
+    async function pollPublished() {
+      try {
+        const res = await fetch('/api/data');
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.publishedAt && data.publishedAt !== (publishedData && publishedData.publishedAt)) {
+            publishedData = data;
+            applyWebsiteSettings();
+            applyBusinessSettings();
+            renderFeatured();
+            renderPastSpecials();
+            renderGallery();
+            renderReviews();
+            renderAnnouncements();
+            renderFooter();
+            setWhatsAppLink();
+          }
+        }
+      } catch (_) {}
+    }
 
     // ========== Init ==========
-    renderFeatured();
-    renderPastSpecials();
-    renderGallery();
-    renderReviews();
-    renderAnnouncements();
-    renderFooter();
+    fetchPublished().then(() => {
+      applyWebsiteSettings();
+      applyBusinessSettings();
+      renderFeatured();
+      renderPastSpecials();
+      renderGallery();
+      renderReviews();
+      renderAnnouncements();
+      renderFooter();
+      setWhatsAppLink();
+    });
+
+    setWhatsAppLink();
     updateCountdown();
     setInterval(updateCountdown, 1000);
+    setInterval(pollPublished, 15000);
   </script>
 
 </body>
