@@ -28,8 +28,7 @@ const DEFAULT_BUSINESS = {
   operatingHours: '10:00 AM – 8:00 PM',
   maxPieces: 5,
   status: 'open',
-  cloudName: '',
-  cloudUploadPreset: '',
+  apiBaseUrl: '',
 };
 
 const DEFAULT_DESSERT = {
@@ -37,6 +36,7 @@ const DEFAULT_DESSERT = {
   description: 'A caramelised, smoky crust hides a velvety cream cheese centre. No flour, no fuss — just pure indulgence baked low and slow. Each slice is a labour of love.',
   price: '₹400',
   image: '',
+  fileId: '',
   emoji: '🧀',
   color: '#8E82FF',
   quantity: 15,

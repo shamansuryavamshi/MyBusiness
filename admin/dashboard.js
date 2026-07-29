@@ -191,6 +191,7 @@
     setVal('dAllergens', d.allergens);
     setVal('dPickup', d.pickupNote);
     setVal('dImage', d.image);
+    setVal('dFileId', d.fileId || '');
     setVal('dQty', d.quantity);
     setVal('dRemaining', d.remaining);
 
@@ -287,6 +288,7 @@
       allergens: val('dAllergens'),
       pickupNote: val('dPickup'),
       image: val('dImage'),
+      fileId: val('dFileId') || '',
       quantity: parseInt(val('dQty')) || 5,
       remaining: parseInt(val('dRemaining')) || 0,
       available: currentDessertStatus === 'available',
@@ -319,8 +321,9 @@
     dz.classList.add('dragover');
     dz.querySelector('p').textContent = 'Uploading...';
     toast('Uploading image...', 'info');
-    ImageUpload.upload(file).then(result => {
+    ImageUpload.upload(file, 'FeaturedDesserts').then(result => {
       setVal('dImage', result.url);
+      setVal('dFileId', result.fileId);
       updateDessertPreview();
       toast('Image uploaded successfully', 'success');
     }).catch(err => {
@@ -378,6 +381,7 @@
         ...DEFAULT_DESSERT,
         name: h.name, price: h.price, emoji: h.emoji, color: h.color,
         description: h.description, quantity: 5, remaining: 5, available: true,
+        image: h.image || '', fileId: h.fileId || '',
       });
       navigateTo('dessert');
       loadDessertEditor();
@@ -393,6 +397,7 @@
       ...DEFAULT_DESSERT,
       name: h.name + ' (Copy)', price: h.price, emoji: h.emoji, color: h.color,
       description: h.description, quantity: 5, remaining: 5, available: true,
+      image: h.image || '', fileId: h.fileId || '',
     });
     navigateTo('dessert');
     loadDessertEditor();
@@ -469,7 +474,14 @@
   }
 
   window.deleteGalleryItem = async function (id) {
+    const gallery = DB.get(STORAGE_KEYS.GALLERY, []);
+    const item = gallery.find(g => String(g.id) === String(id));
+    if (!item) return;
     if (!await confirmDialog('Delete this image?')) return;
+    // Delete from Google Drive if we have the fileId
+    if (item.fileId) {
+      try { await ImageUpload.remove(item.fileId); } catch (e) { console.warn('Failed to delete from Drive:', e); }
+    }
     deleteById(STORAGE_KEYS.GALLERY, id);
     loadGallery();
     toast('Deleted successfully', 'success');
@@ -482,9 +494,9 @@
     const file = e.target.files[0];
     if (!file) return;
     toast('Uploading image...', 'info');
-    ImageUpload.upload(file).then(result => {
+    ImageUpload.upload(file, 'Gallery').then(result => {
       const gallery = DB.get(STORAGE_KEYS.GALLERY, []);
-      gallery.push({ id: uid(), url: result.url, caption: file.name, category: 'desserts', order: gallery.length + 1 });
+      gallery.push({ id: uid(), url: result.url, fileId: result.fileId, caption: file.name, category: 'desserts', order: gallery.length + 1 });
       DB.set(STORAGE_KEYS.GALLERY, gallery);
       loadGallery();
       toast('Image added to gallery', 'success');
@@ -753,13 +765,11 @@
     setVal('bsDay', biz.operatingDay);
     setVal('bsHours', biz.operatingHours);
     setVal('bsMax', biz.maxPieces);
-    setVal('bsCloudName', biz.cloudName || '');
-    setVal('bsUploadPreset', biz.cloudUploadPreset || '');
+    setVal('bsApiUrl', biz.apiBaseUrl || '');
     currentBizStatus = biz.status || 'open';
     $$('.toggle-btn[data-bsstatus]').forEach(b => b.classList.toggle('active', b.dataset.bsstatus === currentBizStatus));
-    // Apply cloud config to ImageUpload
-    if (biz.cloudName) window.CLOUDINARY_CLOUD_NAME = biz.cloudName;
-    if (biz.cloudUploadPreset) window.CLOUDINARY_UPLOAD_PRESET = biz.cloudUploadPreset;
+    // Apply API base URL to ImageUpload
+    if (biz.apiBaseUrl) window.API_BASE_URL = biz.apiBaseUrl;
   }
 
   $$('.toggle-btn[data-bsstatus]').forEach(btn => {
@@ -776,12 +786,11 @@
       email: val('bsEmail'), instagram: val('bsInstagram'),
       operatingDay: val('bsDay'), operatingHours: val('bsHours'),
       maxPieces: parseInt(val('bsMax')) || 5, status: currentBizStatus,
-      cloudName: val('bsCloudName'), cloudUploadPreset: val('bsUploadPreset'),
+      apiBaseUrl: val('bsApiUrl'),
     };
     DB.set(STORAGE_KEYS.BUSINESS, biz);
-    // Apply cloud config immediately
-    if (biz.cloudName) window.CLOUDINARY_CLOUD_NAME = biz.cloudName;
-    if (biz.cloudUploadPreset) window.CLOUDINARY_UPLOAD_PRESET = biz.cloudUploadPreset;
+    // Apply API base URL immediately
+    if (biz.apiBaseUrl) window.API_BASE_URL = biz.apiBaseUrl;
     refreshDashboard();
     toast('Business settings saved', 'success');
   };
@@ -807,8 +816,9 @@
     const dessert = DB.get(STORAGE_KEYS.DESSERT, null);
     if (dessert && ImageUpload.isBase64(dessert.image)) {
       try {
-        const result = await ImageUpload.migrateBase64(dessert.image);
+        const result = await ImageUpload.migrateBase64(dessert.image, 'FeaturedDesserts');
         dessert.image = result.url;
+        dessert.fileId = result.fileId || '';
         DB.set(STORAGE_KEYS.DESSERT, dessert);
         migrated++;
       } catch (e) { console.warn('Dessert image migration failed:', e.message); }
@@ -819,8 +829,9 @@
     for (const g of gallery) {
       if (ImageUpload.isBase64(g.url)) {
         try {
-          const result = await ImageUpload.migrateBase64(g.url);
+          const result = await ImageUpload.migrateBase64(g.url, 'Gallery');
           g.url = result.url;
+          g.fileId = result.fileId || '';
           galleryDirty = true;
           migrated++;
         } catch (e) { console.warn('Gallery image migration failed:', e.message); }
@@ -828,7 +839,7 @@
     }
     if (galleryDirty) DB.set(STORAGE_KEYS.GALLERY, gallery);
     if (migrated > 0) {
-      toast(`Migrated ${migrated} image(s) to cloud storage`, 'success');
+      toast(`Migrated ${migrated} image(s) to Google Drive`, 'success');
     }
   }
 

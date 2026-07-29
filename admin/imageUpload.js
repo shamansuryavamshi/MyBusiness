@@ -1,29 +1,15 @@
 /* ============================================
-   IMAGE UPLOAD — Modular cloud storage provider
+   IMAGE UPLOAD — Modular storage provider
 
-   Swappable: change uploadImage() internals
-   to use Supabase, Firebase, S3, etc.
+   Swappable: change the base URL to use a
+   different backend (Supabase, Firebase, etc.)
    ============================================ */
 
 const ImageUpload = (() => {
 
-  /* ---------- Config (set via localStorage or window) ---------- */
-  function getConfig() {
-    // Try window vars first (set by loadBusiness), then localStorage
-    let cloudName = window.CLOUDINARY_CLOUD_NAME || '';
-    let uploadPreset = window.CLOUDINARY_UPLOAD_PRESET || '';
-    if (!cloudName || !uploadPreset) {
-      try {
-        const biz = JSON.parse(localStorage.getItem('ss_business') || '{}');
-        cloudName = cloudName || biz.cloudName || '';
-        uploadPreset = uploadPreset || biz.cloudUploadPreset || '';
-      } catch {}
-    }
-    return {
-      cloudName,
-      uploadPreset,
-      endpoint: window.CLOUDINARY_ENDPOINT || 'https://api.cloudinary.com/v1_1',
-    };
+  /* ---------- API base URL ---------- */
+  function getApiBase() {
+    return window.API_BASE_URL || '/api/gdrive';
   }
 
   /* ---------- Validation ---------- */
@@ -56,7 +42,7 @@ const ImageUpload = (() => {
           canvas.height = height;
           canvas.getContext('2d').drawImage(img, 0, 0, width, height);
           canvas.toBlob(
-            (blob) => blob ? resolve(blob) : reject(new Error('Compression failed')),
+            (blob) => resolve(blob),
             'image/jpeg',
             quality
           );
@@ -67,37 +53,47 @@ const ImageUpload = (() => {
     });
   }
 
-  /* ---------- Upload to Cloudinary ---------- */
-  async function uploadToCloudinary(blob) {
-    const cfg = getConfig();
-    if (!cfg.cloudName || !cfg.uploadPreset) {
-      throw new Error('Cloud storage not configured. Set Cloudinary credentials in admin settings.');
-    }
-    const form = new FormData();
-    form.append('file', blob);
-    form.append('upload_preset', cfg.uploadPreset);
-    form.append('folder', 'sweetsundays');
-
-    const url = `${cfg.endpoint}/${cfg.cloudName}/image/upload`;
-    const res = await fetch(url, { method: 'POST', body: form });
+  /* ---------- Upload to backend ---------- */
+  async function uploadToBackend(base64, mimeType, folder) {
+    const url = getApiBase();
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ image: base64, mimeType, folder }),
+    });
     if (!res.ok) {
       const err = await res.json().catch(() => ({}));
-      throw new Error(err.error?.message || 'Upload failed');
+      throw new Error(err.error || 'Image upload failed');
     }
     return res.json();
   }
 
   /* ---------- Public: upload image ---------- */
-  async function upload(file) {
+  async function upload(file, folder) {
     validate(file);
     const blob = await compress(file);
-    const data = await uploadToCloudinary(blob);
+    const base64 = await new Promise((resolve, reject) => {
+      const r = new FileReader();
+      r.onerror = () => reject(new Error('Failed to read file'));
+      r.onload = () => resolve(r.result);
+      r.readAsDataURL(blob);
+    });
+    const data = await uploadToBackend(base64, file.type || 'image/jpeg', folder || 'FeaturedDesserts');
     return {
-      url: data.secure_url,
-      publicId: data.public_id,
-      width: data.width,
-      height: data.height,
+      url: data.publicImageUrl || data.url,
+      fileId: data.fileId,
     };
+  }
+
+  /* ---------- Delete from backend ---------- */
+  async function remove(fileId) {
+    if (!fileId) return;
+    const url = getApiBase() + '?id=' + encodeURIComponent(fileId);
+    const res = await fetch(url, { method: 'DELETE' });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      console.warn('Failed to delete from Google Drive:', err.error);
+    }
   }
 
   /* ---------- Public: check if base64 (needs migration) ---------- */
@@ -106,14 +102,14 @@ const ImageUpload = (() => {
   }
 
   /* ---------- Public: migrate a single base64 image ---------- */
-  async function migrateBase64(dataUrl) {
+  async function migrateBase64(dataUrl, folder) {
     const blob = await (async () => {
       const res = await fetch(dataUrl);
       return res.blob();
     })();
     const file = new File([blob], 'migrated.jpg', { type: blob.type || 'image/jpeg' });
-    return upload(file);
+    return upload(file, folder);
   }
 
-  return { upload, validate, isBase64, migrateBase64, getConfig };
+  return { upload, remove, validate, isBase64, migrateBase64 };
 })();

@@ -1,0 +1,11 @@
+{
+  "name": "sweet-sundays",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "vercel-build": "echo static"
+  },
+  "dependencies": {
+    "googleapis": "^137.0.0"
+  }
+}

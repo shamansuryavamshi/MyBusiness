@@ -210,6 +210,7 @@
               <div class="form-field form-field--full">
                 <label>Image URL (or drag & drop below)</label>
                 <input type="text" id="dImage" placeholder="https://... or paste URL">
+                <input type="hidden" id="dFileId">
               </div>
               <div class="form-field form-field--full">
                 <div class="dropzone" id="dessertDropzone">
@@ -509,15 +510,12 @@
             </div>
           </div>
           <div class="form-field form-field--full" style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border)">
-            <label style="font-size:13px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px">Cloud Storage (Cloudinary)</label>
+            <label style="font-size:13px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px">Image Storage (Google Drive)</label>
           </div>
           <div class="form-field form-field--full">
-            <label>Cloud Name</label>
-            <input type="text" id="bsCloudName" placeholder="your-cloud-name">
-          </div>
-          <div class="form-field form-field--full">
-            <label>Upload Preset</label>
-            <input type="text" id="bsUploadPreset" placeholder="sweetsundays_unsigned">
+            <label>API Base URL</label>
+            <input type="text" id="bsApiUrl" placeholder="/api/gdrive (leave blank for default)">
+            <span style="font-size:12px;color:var(--text-muted)">Default: yoursite.vercel.app/api/gdrive</span>
           </div>
         </div>
       </div>
