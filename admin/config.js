@@ -109,8 +109,11 @@ const API = {
 
   async setPublished(data) {
     const json = JSON.stringify(data);
-    const encoded = encodeURIComponent(json);
-    const res = await fetch(PUBLISHED_API_URL + '?set=' + encoded);
+    const res = await fetch(PUBLISHED_API_URL, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'text/plain' },
+      body: json,
+    });
     if (!res.ok) {
       const err = await res.json().catch(() => ({}));
       throw new Error(err.error || 'Publish failed (HTTP ' + res.status + ')');
