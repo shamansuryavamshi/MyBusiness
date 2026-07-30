@@ -78,27 +78,47 @@ module.exports = async (req, res) => {
 
   try {
     if (req.method === 'GET') {
-      const data = await readDataFile();
-      return res.status(200).json(data);
+      // Write mode: ?set=ENCODED_JSON
+      if (req.query && req.query.set) {
+        let parsed;
+        try { parsed = JSON.parse(req.query.set); } catch (e) {
+          return res.status(400).json({ error: 'Invalid JSON in ?set parameter: ' + e.message });
+        }
+        try { await writeDataFile(parsed); return res.status(200).json({ success: true }); }
+        catch (e) { return res.status(500).json({ error: e.message }); }
+      }
+      // Read mode: no ?set
+      try {
+        const data = await readDataFile();
+        return res.status(200).json(data);
+      } catch (e) {
+        return res.status(200).json({ _error: e.message });
+      }
     }
 
     if (req.method === 'POST' || req.method === 'PUT') {
-      let body = '';
-      await new Promise((resolve, reject) => {
-        req.on('data', (chunk) => { body += chunk; });
-        req.on('end', resolve);
-        req.on('error', (e) => { console.error('Stream error:', e); reject(e); });
-      });
+      let raw = '';
+      if (typeof req.body === 'string') {
+        raw = req.body;
+      } else if (typeof req.body === 'object' && req.body !== null) {
+        try { await writeDataFile(req.body); return res.status(200).json({ success: true }); }
+        catch (e) { return res.status(500).json({ error: e.message }); }
+      } else {
+        await new Promise((resolve, reject) => {
+          req.on('data', (chunk) => { raw += chunk; });
+          req.on('end', resolve);
+          req.on('error', reject);
+        });
+      }
+      if (!raw) return res.status(400).json({ error: 'No data received' });
       let data;
-      try { data = JSON.parse(body); } catch (e) { throw new Error('Invalid JSON: ' + e.message + ' | Raw: ' + body.slice(0, 200)); }
-      if (!data || typeof data !== 'object') throw new Error('Body must be a JSON object');
-      await writeDataFile(data);
-      return res.status(200).json({ success: true });
+      try { data = JSON.parse(raw); } catch (e) { return res.status(400).json({ error: 'Invalid JSON: ' + e.message }); }
+      try { await writeDataFile(data); return res.status(200).json({ success: true }); }
+      catch (e) { return res.status(500).json({ error: e.message }); }
     }
 
     return res.status(405).json({ error: 'Method not allowed' });
   } catch (e) {
-    console.error('Data API error:', e);
-    return res.status(500).json({ error: e.message || 'Failed to process data' });
+    return res.status(500).json({ error: 'Unexpected: ' + (e.message || e) });
   }
 };
