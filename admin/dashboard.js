@@ -840,44 +840,7 @@
     if (e.key === 'n') toggleDark();
   });
 
-  /* ============================================
-       MIGRATION — Convert base64 images to cloud URLs
-       ============================================ */
-  async function migrateBase64Images() {
-    let migrated = 0;
-    // Dessert image
-    const dessert = DB.get(STORAGE_KEYS.DESSERT, null);
-    if (dessert && ImageUpload.isBase64(dessert.image)) {
-      try {
-        const result = await ImageUpload.migrateBase64(dessert.image, 'FeaturedDesserts');
-        dessert.image = result.url;
-        dessert.fileId = result.fileId || '';
-        DB.set(STORAGE_KEYS.DESSERT, dessert);
-        migrated++;
-      } catch (e) { console.warn('Dessert image migration failed:', e.message); }
-    }
-    // Gallery images
-    const gallery = DB.get(STORAGE_KEYS.GALLERY, []);
-    let galleryDirty = false;
-    for (const g of gallery) {
-      if (ImageUpload.isBase64(g.url)) {
-        try {
-          const result = await ImageUpload.migrateBase64(g.url, 'Gallery');
-          g.url = result.url;
-          g.fileId = result.fileId || '';
-          galleryDirty = true;
-          migrated++;
-        } catch (e) { console.warn('Gallery image migration failed:', e.message); }
-      }
-    }
-    if (galleryDirty) DB.set(STORAGE_KEYS.GALLERY, gallery);
-    if (migrated > 0) {
-      toast(`Migrated ${migrated} image(s) to Google Drive`, 'success');
-    }
-  }
 
-  /* Run migration on load (silently) */
-  migrateBase64Images().catch(() => {});
 
   /* ============================================
        INIT
