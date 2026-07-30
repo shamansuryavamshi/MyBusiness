@@ -1,4 +1,5 @@
 const { google } = require('googleapis');
+const { Readable } = require('stream');
 
 const DATA_FILE_NAME = 'published-data.json';
 
@@ -41,16 +42,18 @@ async function writeDataFile(data) {
   const content = JSON.stringify(data, null, 2);
   const buf = Buffer.from(content, 'utf-8');
 
+  const stream = Readable.from([buf]);
+
   let file = await findDataFile(rootFolderId);
   if (file) {
     await d.files.update({
       fileId: file.id,
-      media: { mimeType: 'application/json', body: buf },
+      media: { mimeType: 'application/json', body: stream },
     });
   } else {
     file = await d.files.create({
       requestBody: { name: DATA_FILE_NAME, parents: [rootFolderId] },
-      media: { mimeType: 'application/json', body: buf },
+      media: { mimeType: 'application/json', body: stream },
       fields: 'id',
     });
     await d.permissions.create({
