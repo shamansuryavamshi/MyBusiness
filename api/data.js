@@ -1,68 +1,13 @@
-const { google } = require('googleapis');
-const { Readable } = require('stream');
+/* ============================================
+   Data API — Vercel Serverless Function
+   Stores/retrieves all published data as a
+   committed file in the GitHub repo.
+   ============================================ */
 
-const DATA_FILE_NAME = 'published-data.json';
-
-function getAuth() {
-  const json = process.env.GOOGLE_SERVICE_ACCOUNT_JSON;
-  if (!json) throw new Error('GOOGLE_SERVICE_ACCOUNT_JSON not set');
-  const credentials = JSON.parse(json);
-  return new google.auth.GoogleAuth({
-    credentials,
-    scopes: ['https://www.googleapis.com/auth/drive'],
-  });
-}
-
-const drive = () => google.drive({ version: 'v3', auth: getAuth() });
-
-async function findDataFile(folderId) {
-  const d = drive();
-  const query = `name='${DATA_FILE_NAME}' and '${folderId}' in parents and trashed=false`;
-  const res = await d.files.list({ q: query, fields: 'files(id, name)', pageSize: 1 });
-  return res.data.files[0] || null;
-}
-
-async function readDataFile() {
-  const rootFolderId = process.env.GOOGLE_DRIVE_FOLDER_ID;
-  if (!rootFolderId) throw new Error('GOOGLE_DRIVE_FOLDER_ID not set');
-
-  const file = await findDataFile(rootFolderId);
-  if (!file) return {};
-
-  const d = drive();
-  const res = await d.files.get({ fileId: file.id, alt: 'media' });
-  return res.data;
-}
-
-async function writeDataFile(data) {
-  const rootFolderId = process.env.GOOGLE_DRIVE_FOLDER_ID;
-  if (!rootFolderId) throw new Error('GOOGLE_DRIVE_FOLDER_ID not set');
-
-  const d = drive();
-  const content = JSON.stringify(data, null, 2);
-  const buf = Buffer.from(content, 'utf-8');
-
-  const stream = Readable.from([buf]);
-
-  let file = await findDataFile(rootFolderId);
-  if (file) {
-    await d.files.update({
-      fileId: file.id,
-      media: { mimeType: 'application/json', body: stream },
-    });
-  } else {
-    file = await d.files.create({
-      requestBody: { name: DATA_FILE_NAME, parents: [rootFolderId] },
-      media: { mimeType: 'application/json', body: stream },
-      fields: 'id',
-    });
-    await d.permissions.create({
-      fileId: file.data.id,
-      requestBody: { type: 'anyone', role: 'reader' },
-    });
-  }
-  return { success: true };
-}
+const GITHUB_OWNER = 'shamansuryavamshi';
+const GITHUB_REPO = 'MyBusiness';
+const FILE_PATH = 'published-data.json';
+const BRANCH = 'master';
 
 module.exports = async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -87,23 +32,49 @@ module.exports = async (req, res) => {
         }
       }
       if (setParam) {
-        let parsed;
-        try { parsed = JSON.parse(setParam); } catch (e) {
-          return res.status(200).json({ op: 'parse_error', error: e.message, got: setParam.substring(0, 500) });
+        const token = process.env.GH_TOKEN;
+        if (!token) return res.status(200).json({ error: 'GH_TOKEN not set' });
+        let data;
+        try { data = JSON.parse(setParam); } catch (e) {
+          return res.status(200).json({ error: 'Invalid JSON: ' + e.message });
         }
-        try {
-          await writeDataFile(parsed);
-          return res.status(200).json({ op: 'write_ok' });
-        } catch (e) {
-          return res.status(200).json({ op: 'write_error', error: e.message, stack: e.stack ? e.stack.split('\n') : [] });
+        const content = Buffer.from(JSON.stringify(data, null, 2)).toString('base64');
+
+        // Get current file SHA if it exists
+        let sha = null;
+        const getRes = await fetch(
+          `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${FILE_PATH}?ref=${BRANCH}`,
+          { headers: { Authorization: `token ${token}`, Accept: 'application/vnd.github.v3+json' } }
+        );
+        if (getRes.ok) {
+          const existing = await getRes.json();
+          sha = existing.sha;
         }
+
+        // Create or update the file
+        const body = { message: 'Publish data [automated]', content, branch: BRANCH };
+        if (sha) body.sha = sha;
+        const putRes = await fetch(
+          `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${FILE_PATH}`,
+          { method: 'PUT', headers: { Authorization: `token ${token}`, Accept: 'application/vnd.github.v3+json', 'Content-Type': 'application/json' }, body: JSON.stringify(body) }
+        );
+        if (!putRes.ok) {
+          const err = await putRes.json().catch(() => ({}));
+          return res.status(200).json({ error: err.message || 'GitHub API error', detail: err });
+        }
+        return res.status(200).json({ success: true });
       }
-      const data = await readDataFile();
-      return res.status(200).json(data);
+
+      // Read mode — fetch from raw GitHub
+      const rawRes = await fetch(`https://raw.githubusercontent.com/${GITHUB_OWNER}/${GITHUB_REPO}/${BRANCH}/${FILE_PATH}`);
+      if (!rawRes.ok) return res.status(200).json({});
+      const raw = await rawRes.text();
+      try { return res.status(200).json(JSON.parse(raw)); }
+      catch { return res.status(200).json({}); }
     }
 
     return res.status(405).json({ error: 'Method not allowed' });
   } catch (e) {
-    return res.status(200).json({ op: 'unexpected', error: e.message, stack: e.stack ? e.stack.split('\n') : [] });
+    return res.status(200).json({ error: e.message || String(e) });
   }
 };
