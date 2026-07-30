@@ -1,3 +1,8 @@
 {
-  "test": true
+  "publishedAt": "2026-07-30",
+  "weeklyDessert": {
+    "name": "Test Cake",
+    "price": "₹500",
+    "image": ""
+  }
 }
