@@ -78,11 +78,13 @@ module.exports = async (req, res) => {
 
   try {
     if (req.method === 'GET') {
-      // Write mode: ?set=ENCODED_JSON
-      if (req.query && req.query.set) {
+      const qs = req.url.includes('?') ? req.url.split('?')[1] : '';
+      const params = new URLSearchParams(qs);
+      const setParam = params.get('set');
+      if (setParam) {
         let parsed;
-        try { parsed = JSON.parse(req.query.set); } catch (e) {
-          return res.status(400).json({ error: 'Invalid JSON in ?set parameter: ' + e.message });
+        try { parsed = JSON.parse(setParam); } catch (e) {
+          return res.status(400).json({ error: 'Invalid JSON in ?set: ' + e.message });
         }
         try { await writeDataFile(parsed); return res.status(200).json({ success: true }); }
         catch (e) { return res.status(500).json({ error: e.message }); }
