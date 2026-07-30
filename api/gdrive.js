@@ -86,13 +86,9 @@ module.exports = async (req, res) => {
 
   try {
     if (req.method === 'POST') {
-      let body = '';
-      await new Promise((resolve, reject) => {
-        req.on('data', (chunk) => { body += chunk; });
-        req.on('end', resolve);
-        req.on('error', reject);
-      });
-      const { image, mimeType, folder } = JSON.parse(body);
+      const raw = typeof req.body === 'object' ? req.body : (() => { try { return JSON.parse(req.body); } catch { return null; } })();
+      if (!raw) throw new Error('Invalid JSON body');
+      const { image, mimeType, folder } = raw;
       if (!image) throw new Error('No image data provided');
       const result = await uploadImage(image, mimeType || 'image/jpeg', folder || 'FeaturedDesserts');
       return res.status(200).json(result);

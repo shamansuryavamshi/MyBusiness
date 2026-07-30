@@ -83,13 +83,8 @@ module.exports = async (req, res) => {
     }
 
     if (req.method === 'POST' || req.method === 'PUT') {
-      let body = '';
-      await new Promise((resolve, reject) => {
-        req.on('data', (chunk) => { body += chunk; });
-        req.on('end', resolve);
-        req.on('error', reject);
-      });
-      const data = JSON.parse(body);
+      const data = typeof req.body === 'object' ? req.body : (() => { try { return JSON.parse(req.body); } catch { return null; } })();
+      if (!data) throw new Error('Invalid JSON body');
       await writeDataFile(data);
       return res.status(200).json({ success: true });
     }
