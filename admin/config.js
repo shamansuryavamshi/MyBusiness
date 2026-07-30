@@ -110,7 +110,7 @@ const API = {
   async setPublished(data) {
     const res = await fetch(PUBLISHED_API_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'text/plain' },
       body: JSON.stringify(data),
     });
     if (!res.ok) {

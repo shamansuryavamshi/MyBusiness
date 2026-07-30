@@ -58,7 +58,7 @@ const ImageUpload = (() => {
     const url = getApiBase();
     const res = await fetch(url, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'text/plain' },
       body: JSON.stringify({ image: base64, mimeType, folder }),
     });
     if (!res.ok) {
