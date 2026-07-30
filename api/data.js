@@ -83,10 +83,15 @@ module.exports = async (req, res) => {
     }
 
     if (req.method === 'POST' || req.method === 'PUT') {
-      const buffer = [];
-      for await (const chunk of req) buffer.push(chunk);
-      const raw = Buffer.concat(buffer).toString('utf-8');
-      const data = JSON.parse(raw);
+      let body = '';
+      await new Promise((resolve, reject) => {
+        req.on('data', (chunk) => { body += chunk; });
+        req.on('end', resolve);
+        req.on('error', (e) => { console.error('Stream error:', e); reject(e); });
+      });
+      let data;
+      try { data = JSON.parse(body); } catch (e) { throw new Error('Invalid JSON: ' + e.message + ' | Raw: ' + body.slice(0, 200)); }
+      if (!data || typeof data !== 'object') throw new Error('Body must be a JSON object');
       await writeDataFile(data);
       return res.status(200).json({ success: true });
     }
