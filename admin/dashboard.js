@@ -1,6 +1,9 @@
 /* ============================================
    DASHBOARD — All page logic
-   Modular, swap-ready for Firebase/Supabase.
+   Published content is read/written through the
+   backend-backed StorageService (plus GalleryService
+   and AnnouncementService). localStorage is used
+   only for auth and dark mode.
    ============================================ */
 
 (function () {
@@ -126,9 +129,9 @@
        DASHBOARD PAGE
        ============================================ */
   function refreshDashboard() {
-    const d = DB.get(STORAGE_KEYS.DESSERT, DEFAULT_DESSERT);
-    const loc = DB.get(STORAGE_KEYS.LOCATION, DEFAULT_LOCATION);
-    const biz = DB.get(STORAGE_KEYS.BUSINESS, DEFAULT_BUSINESS);
+    const d = StorageService.get(STORAGE_KEYS.DESSERT, DEFAULT_DESSERT);
+    const loc = StorageService.get(STORAGE_KEYS.LOCATION, DEFAULT_LOCATION);
+    const biz = StorageService.get(STORAGE_KEYS.BUSINESS, DEFAULT_BUSINESS);
 
     $('#statDessert').textContent = d.name || '—';
     $('#statLocation').textContent = loc.name || '—';
@@ -163,10 +166,10 @@
   // Quick action: Mark Sold Out
   $('#qaSoldOut').onclick = async () => {
     if (await confirmDialog('Mark this Sunday\'s dessert as sold out?')) {
-      const d = DB.get(STORAGE_KEYS.DESSERT, DEFAULT_DESSERT);
+      const d = StorageService.get(STORAGE_KEYS.DESSERT, DEFAULT_DESSERT);
       d.remaining = 0;
       d.available = false;
-      DB.set(STORAGE_KEYS.DESSERT, d);
+      StorageService.set(STORAGE_KEYS.DESSERT, d);
       refreshDashboard();
       loadDessertEditor();
       toast('Dessert marked as sold out', 'success');
@@ -180,7 +183,7 @@
   let currentDessertBadge = '';
 
   function loadDessertEditor() {
-    const d = DB.get(STORAGE_KEYS.DESSERT, DEFAULT_DESSERT);
+    const d = StorageService.get(STORAGE_KEYS.DESSERT, DEFAULT_DESSERT);
     setVal('dName', d.name);
     setVal('dPrice', d.price);
     setVal('dDesc', d.description);
@@ -298,7 +301,7 @@
       badge: currentDessertBadge,
     };
     if (!d.name) { toast('Please enter a dessert name', 'error'); return; }
-    DB.set(STORAGE_KEYS.DESSERT, d);
+    StorageService.set(STORAGE_KEYS.DESSERT, d);
     refreshDashboard();
     toast('Dessert saved successfully', 'success');
   };
@@ -353,7 +356,7 @@
        DESSERT HISTORY
        ============================================ */
   function loadHistory() {
-    const history = DB.get(STORAGE_KEYS.DESSERT_HISTORY, []);
+    const history = StorageService.get(STORAGE_KEYS.DESSERT_HISTORY, []) || [];
     const search = ($('#historySearch') || {}).value?.toLowerCase() || '';
     const filter = ($('#historyFilter') || {}).value || 'all';
 
@@ -388,11 +391,11 @@
   }
 
   window.reuseDessert = async function (id) {
-    const history = DB.get(STORAGE_KEYS.DESSERT_HISTORY, []);
+    const history = StorageService.get(STORAGE_KEYS.DESSERT_HISTORY, []) || [];
     const h = history.find(x => String(x.id) === String(id));
     if (!h) return;
     if (await confirmDialog(`Reuse "${h.name}" as this Sunday's dessert?`)) {
-      DB.set(STORAGE_KEYS.DESSERT, {
+      StorageService.set(STORAGE_KEYS.DESSERT, {
         ...DEFAULT_DESSERT,
         name: h.name, price: h.price, emoji: h.emoji, color: h.color,
         description: h.description, quantity: 5, remaining: 5, available: true,
@@ -405,10 +408,10 @@
   };
 
   window.duplicateDessert = function (id) {
-    const history = DB.get(STORAGE_KEYS.DESSERT_HISTORY, []);
+    const history = StorageService.get(STORAGE_KEYS.DESSERT_HISTORY, []) || [];
     const h = history.find(x => String(x.id) === String(id));
     if (!h) return;
-    DB.set(STORAGE_KEYS.DESSERT, {
+    StorageService.set(STORAGE_KEYS.DESSERT, {
       ...DEFAULT_DESSERT,
       name: h.name + ' (Copy)', price: h.price, emoji: h.emoji, color: h.color,
       description: h.description, quantity: 5, remaining: 5, available: true,
@@ -433,7 +436,7 @@
        LOCATION
        ============================================ */
   function loadLocation() {
-    const loc = DB.get(STORAGE_KEYS.LOCATION, DEFAULT_LOCATION);
+    const loc = StorageService.get(STORAGE_KEYS.LOCATION, DEFAULT_LOCATION);
     setVal('locName', loc.name);
     setVal('locAddress', loc.address);
     setVal('locMap', loc.mapEmbed);
@@ -456,7 +459,7 @@
   $('#saveLocation').onclick = () => {
     const loc = { name: val('locName'), address: val('locAddress'), mapEmbed: val('locMap'), directionsUrl: val('locDirections'), parking: val('locParking'), hours: val('locHours') };
     if (!loc.name) { toast('Please enter a location name', 'error'); return; }
-    DB.set(STORAGE_KEYS.LOCATION, loc);
+    StorageService.set(STORAGE_KEYS.LOCATION, loc);
     refreshDashboard();
     toast('Location saved', 'success');
   };
@@ -475,7 +478,7 @@
        GALLERY
        ============================================ */
   function loadGallery() {
-    const gallery = DB.get(STORAGE_KEYS.GALLERY, []);
+    const gallery = GalleryService.all();
     const filter = ($('#galleryFilter') || {}).value || 'all';
     let items = gallery;
     if (filter !== 'all') items = items.filter(g => g.category === filter);
@@ -484,30 +487,14 @@
     const empty = $('#galleryEmpty');
     if (items.length === 0) { grid.innerHTML = ''; empty.style.display = 'block'; return; }
     empty.style.display = 'none';
-    grid.innerHTML = items.map(g => `
-      <div class="gallery-item" data-id="${g.id}">
-        ${g.url ? `<img src="${g.url}" alt="${g.caption}">` : `<div class="gallery-item__placeholder">📷</div>`}
-        <div class="gallery-item__overlay">
-          <div class="gallery-item__actions">
-            <button class="gallery-item__btn" onclick="deleteGalleryItem('${g.id}')">Delete</button>
-          </div>
-        </div>
-      </div>
-    `).join('');
+    grid.innerHTML = items.map(g => GalleryService.renderHTML(g)).join('');
   }
 
   window.deleteGalleryItem = async function (id) {
-    const gallery = DB.get(STORAGE_KEYS.GALLERY, []);
-    const item = gallery.find(g => String(g.id) === String(id));
-    if (!item) return;
     if (!await confirmDialog('Delete this image?')) return;
-    if (item.fileId) {
-      try { await ImageUpload.remove(item.fileId); } catch (e) { console.warn('Failed to delete from Drive:', e); }
-    }
-    deleteById(STORAGE_KEYS.GALLERY, id);
+    await GalleryService.remove(id);
     loadGallery();
     toast('Deleted successfully', 'success');
-    try { await API.publishAll(); } catch (_) {}
   };
 
   if ($('#galleryFilter')) $('#galleryFilter').addEventListener('change', loadGallery);
@@ -517,13 +504,9 @@
     const file = e.target.files[0];
     if (!file) return;
     toast('Uploading image...', 'info');
-    ImageUpload.upload(file, 'Gallery').then(async result => {
-      const gallery = DB.get(STORAGE_KEYS.GALLERY, []);
-      gallery.push({ id: uid(), url: result.url, fileId: result.fileId, caption: file.name, category: 'desserts', order: gallery.length + 1 });
-      DB.set(STORAGE_KEYS.GALLERY, gallery);
+    GalleryService.add(file).then(() => {
       loadGallery();
       toast('Image added to gallery', 'success');
-      try { await API.publishAll(); } catch (_) {}
     }).catch(err => {
       toast(err.message || 'Image upload failed. Please try again.', 'error');
     });
@@ -534,7 +517,7 @@
        REVIEWS
        ============================================ */
   function loadReviews() {
-    const reviews = DB.get(STORAGE_KEYS.REVIEWS, []);
+    const reviews = StorageService.get(STORAGE_KEYS.REVIEWS, []) || [];
     const list = $('#reviewsList');
     const empty = $('#reviewsEmpty');
     if (reviews.length === 0) { list.innerHTML = ''; empty.style.display = 'block'; return; }
@@ -558,10 +541,9 @@
   }
 
   window.toggleReview = async function (id, approved) {
-    let reviews = DB.get(STORAGE_KEYS.REVIEWS, []);
+    let reviews = StorageService.get(STORAGE_KEYS.REVIEWS, []) || [];
     const r = reviews.find(x => String(x.id) === String(id));
-    if (r) { r.approved = approved; DB.set(STORAGE_KEYS.REVIEWS, reviews); loadReviews(); toast('Review updated', 'success'); }
-    try { await API.publishAll(); } catch (_) {}
+    if (r) { r.approved = approved; StorageService.set(STORAGE_KEYS.REVIEWS, reviews); loadReviews(); toast('Review updated', 'success'); }
   };
 
   window.deleteReview = async function (id) {
@@ -569,7 +551,6 @@
     deleteById(STORAGE_KEYS.REVIEWS, id);
     loadReviews();
     toast('Deleted successfully', 'success');
-    try { await API.publishAll(); } catch (_) {}
   };
 
   $('#addReview').onclick = () => {
@@ -585,13 +566,12 @@
     const rating = parseInt($('#mReviewRating')?.value) || 5;
     const text = $('#mReviewText')?.value?.trim();
     if (!name || !text) { toast('Fill in all fields', 'error'); return; }
-    const reviews = DB.get(STORAGE_KEYS.REVIEWS, []);
+    const reviews = StorageService.get(STORAGE_KEYS.REVIEWS, []) || [];
     reviews.push({ id: uid(), name, rating, text, image: '', approved: false, date: new Date().toISOString() });
-    DB.set(STORAGE_KEYS.REVIEWS, reviews);
+    StorageService.set(STORAGE_KEYS.REVIEWS, reviews);
     hideModal();
     loadReviews();
     toast('Review added', 'success');
-    try { await API.publishAll(); } catch (_) {}
   };
 
   /* ============================================
@@ -600,7 +580,7 @@
   const ANN_TYPES = ['General', 'New Dessert', 'Location Change', 'Holiday', 'Sold Out', 'Special Event'];
 
   function loadAnnouncements() {
-    const items = DB.get(STORAGE_KEYS.ANNOUNCEMENTS, []);
+    const items = AnnouncementService.all();
     const list = $('#announcementsList');
     const empty = $('#announcementsEmpty');
     if (items.length === 0) { list.innerHTML = ''; empty.style.display = 'block'; return; }
@@ -642,38 +622,23 @@
   }
 
   window.toggleAnnouncePublish = async function (id) {
-    let items = DB.get(STORAGE_KEYS.ANNOUNCEMENTS, []);
-    const a = items.find(x => String(x.id) === String(id));
+    const a = AnnouncementService.togglePublish(id);
     if (a) {
-      a.isPublished = !a.isPublished;
-      a.updatedAt = new Date().toISOString();
-      DB.set(STORAGE_KEYS.ANNOUNCEMENTS, items);
       loadAnnouncements();
       toast(a.isPublished ? 'Announcement published' : 'Announcement unpublished', 'success');
-      try { await API.publishAll(); } catch (_) {}
     }
   };
 
   window.toggleAnnouncePin = async function (id) {
-    let items = DB.get(STORAGE_KEYS.ANNOUNCEMENTS, []);
-    const target = items.find(x => String(x.id) === String(id));
-    if (!target) return;
-    if (target.isPinned) {
-      target.isPinned = false;
-    } else {
-      items.forEach(a => { if (a.isPinned) a.isPinned = false; });
-      target.isPinned = true;
+    const target = AnnouncementService.togglePin(id);
+    if (target) {
+      loadAnnouncements();
+      toast(target.isPinned ? 'Announcement pinned' : 'Announcement unpinned', 'success');
     }
-    target.updatedAt = new Date().toISOString();
-    DB.set(STORAGE_KEYS.ANNOUNCEMENTS, items);
-    loadAnnouncements();
-    toast(target.isPinned ? 'Announcement pinned' : 'Announcement unpinned', 'success');
-    try { await API.publishAll(); } catch (_) {}
   };
 
   window.editAnnouncement = function (id) {
-    const items = DB.get(STORAGE_KEYS.ANNOUNCEMENTS, []);
-    const a = items.find(x => String(x.id) === String(id));
+    const a = AnnouncementService.find(id);
     if (!a) return;
     const typeOptions = ANN_TYPES.map(t => `<option value="${t}" ${a.type === t ? 'selected' : ''}>${t}</option>`).join('');
     showModal('Edit Announcement', `
@@ -689,11 +654,7 @@
     const title = $('#mAnnTitle')?.value?.trim();
     const message = $('#mAnnMsg')?.value?.trim();
     if (!title) { toast('Enter a title', 'error'); return; }
-    let items = DB.get(STORAGE_KEYS.ANNOUNCEMENTS, []);
-    const idx = items.findIndex(x => String(x.id) === String(id));
-    if (idx === -1) return;
-    items[idx] = {
-      ...items[idx],
+    AnnouncementService.update(id, {
       title,
       message,
       type: $('#mAnnType')?.value || 'General',
@@ -701,21 +662,17 @@
       textColor: $('#mAnnColor').value,
       startDate: $('#mAnnStart').value || null,
       endDate: $('#mAnnEnd').value || null,
-      updatedAt: new Date().toISOString(),
-    };
-    DB.set(STORAGE_KEYS.ANNOUNCEMENTS, items);
+    });
     hideModal();
     loadAnnouncements();
     toast('Announcement updated', 'success');
-    try { await API.publishAll(); } catch (_) {}
   };
 
   window.deleteAnnounce = async function (id) {
     if (!await confirmDialog('Delete this announcement?')) return;
-    deleteById(STORAGE_KEYS.ANNOUNCEMENTS, id);
+    AnnouncementService.remove(id);
     loadAnnouncements();
     toast('Deleted successfully', 'success');
-    try { await API.publishAll(); } catch (_) {}
   };
 
   $('#addAnnouncement').onclick = () => {
@@ -733,9 +690,7 @@
     const title = $('#mAnnTitle')?.value?.trim();
     const message = $('#mAnnMsg')?.value?.trim();
     if (!title) { toast('Enter a title', 'error'); return; }
-    const items = DB.get(STORAGE_KEYS.ANNOUNCEMENTS, []);
-    items.unshift({
-      id: uid(),
+    AnnouncementService.create({
       title,
       message: message || '',
       type: $('#mAnnType')?.value || 'General',
@@ -745,21 +700,17 @@
       endDate: $('#mAnnEnd').value || null,
       isPublished: true,
       isPinned: false,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
     });
-    DB.set(STORAGE_KEYS.ANNOUNCEMENTS, items);
     hideModal();
     loadAnnouncements();
     toast('Announcement created and published', 'success');
-    try { await API.publishAll(); } catch (_) {}
   };
 
   /* ============================================
        WEBSITE SETTINGS
        ============================================ */
   function loadWebsite() {
-    const ws = DB.get(STORAGE_KEYS.WEBSITE, DEFAULT_WEBSITE);
+    const ws = StorageService.get(STORAGE_KEYS.WEBSITE, DEFAULT_WEBSITE);
     setVal('wsHeroTitle', ws.heroTitle);
     setVal('wsHeroDesc', ws.heroDescription);
     setVal('wsSeoTitle', ws.seoTitle);
@@ -778,9 +729,8 @@
       footerText: val('wsFooter'),
       announcementBanner: val('wsBanner'), announcementBannerColor: $('#wsBannerBg').value, announcementBannerTextColor: $('#wsBannerColor').value,
     };
-    DB.set(STORAGE_KEYS.WEBSITE, ws);
+    StorageService.set(STORAGE_KEYS.WEBSITE, ws);
     toast('Website settings saved', 'success');
-    try { await API.publishAll(); toast('Website settings published', 'success'); } catch (_) {}
   };
 
   /* ============================================
@@ -789,7 +739,7 @@
   let currentBizStatus = 'open';
 
   function loadBusiness() {
-    const biz = DB.get(STORAGE_KEYS.BUSINESS, DEFAULT_BUSINESS);
+    const biz = StorageService.get(STORAGE_KEYS.BUSINESS, DEFAULT_BUSINESS);
     setVal('bsName', biz.name);
     setVal('bsPhone', biz.phone);
     setVal('bsWhatsApp', biz.whatsapp);
@@ -821,11 +771,10 @@
       maxPieces: parseInt(val('bsMax')) || 5, status: currentBizStatus,
       apiBaseUrl: val('bsApiUrl'),
     };
-    DB.set(STORAGE_KEYS.BUSINESS, biz);
+    StorageService.set(STORAGE_KEYS.BUSINESS, biz);
     if (biz.apiBaseUrl) window.API_BASE_URL = biz.apiBaseUrl;
     refreshDashboard();
     toast('Business settings saved', 'success');
-    try { await API.publishAll(); toast('Business settings published', 'success'); } catch (_) {}
   };
 
   /* ============================================
@@ -845,14 +794,17 @@
   /* ============================================
        INIT
        ============================================ */
-  refreshDashboard();
-  loadDessertEditor();
-  loadHistory();
-  loadLocation();
-  loadGallery();
-  loadReviews();
-  loadAnnouncements();
-  loadWebsite();
-  loadBusiness();
+  (async () => {
+    await StorageService.init();
+    refreshDashboard();
+    loadDessertEditor();
+    loadHistory();
+    loadLocation();
+    loadGallery();
+    loadReviews();
+    loadAnnouncements();
+    loadWebsite();
+    loadBusiness();
+  })();
 
 })();

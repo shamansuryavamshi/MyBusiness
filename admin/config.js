@@ -1,8 +1,10 @@
 /* ============================================
    CONFIG — Shared data structures & defaults
    All admin pages import this file.
-   Replace localStorage calls with Firebase/
-   Supabase SDK later — just swap the CRUD layer.
+   Published content is read/written through the
+   backend-backed StorageService; localStorage (DB)
+   is used ONLY for auth (ss_auth) and dark mode
+   (ss_darkMode).
    ============================================ */
 
 const STORAGE_KEYS = {
@@ -91,53 +93,23 @@ const DEFAULT_DESSERT_HISTORY = [
   { id: 4, name: 'Pistachio Rose Cake', price: '₹420', emoji: '🌹', color: '#8E82FF', description: 'Pistachio sponge with rose water buttercream.', date: '2026-06-08', status: 'sold', quantity: 8, sold: 8 },
 ];
 
-/* ---------- Published Data API (Google Drive backend) ---------- */
-const PUBLISHED_API_URL = window.location.origin + '/api/data';
-
+/* ---------- Published Data API (GitHub-backed) ---------- */
 const API = {
   async getPublished() {
-    try {
-      const res = await fetch(PUBLISHED_API_URL);
-      if (!res.ok) throw new Error('HTTP ' + res.status);
-      const data = await res.json();
-      return data;
-    } catch (e) {
-      console.warn('Data API unavailable:', e.message);
-      return null;
-    }
+    return ApiService.get();
   },
 
   async setPublished(data) {
-    const json = JSON.stringify(data);
-    const res = await fetch(PUBLISHED_API_URL, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'text/plain' },
-      body: json,
-    });
-    if (!res.ok) {
-      const err = await res.json().catch(() => ({}));
-      throw new Error(err.error || 'Publish failed (HTTP ' + res.status + ')');
-    }
-    return true;
+    return ApiService.set(data);
   },
 
+  // Publish the full payload read from StorageService (backend state).
   async publishAll() {
-    const payload = {
-      weeklyDessert: DB.get(STORAGE_KEYS.DESSERT, DEFAULT_DESSERT),
-      location: DB.get(STORAGE_KEYS.LOCATION, DEFAULT_LOCATION),
-      business: DB.get(STORAGE_KEYS.BUSINESS, DEFAULT_BUSINESS),
-      website: DB.get(STORAGE_KEYS.WEBSITE, DEFAULT_WEBSITE),
-      gallery: DB.get(STORAGE_KEYS.GALLERY, []),
-      reviews: DB.get(STORAGE_KEYS.REVIEWS, []),
-      announcements: DB.get(STORAGE_KEYS.ANNOUNCEMENTS, []),
-      dessertHistory: DB.get(STORAGE_KEYS.DESSERT_HISTORY, []),
-      publishedAt: new Date().toISOString(),
-    };
-    return API.setPublished(payload);
+    return StorageService.save();
   },
 };
 
-/* ---------- CRUD Helpers (local drafts) ---------- */
+/* ---------- localStorage (auth + dark mode only) ---------- */
 const DB = {
   get(key, fallback) {
     try {
@@ -153,27 +125,13 @@ const DB = {
   },
 };
 
-/* ---------- Reusable delete helper ---------- */
+/* ---------- Reusable delete helper (backend-backed) ---------- */
 function deleteById(storageKey, id) {
   const strId = String(id);
-  let items = DB.get(storageKey, []);
-  items = items.filter(item => String(item.id) !== strId);
-  DB.set(storageKey, items);
+  const items = (StorageService.get(storageKey, []) || []).filter(item => String(item.id) !== strId);
+  StorageService.set(storageKey, items);
   return items;
 }
-
-/* ---------- Seed defaults on first load ---------- */
-function seedDefaults() {
-  if (!DB.get(STORAGE_KEYS.BUSINESS, null)) DB.set(STORAGE_KEYS.BUSINESS, DEFAULT_BUSINESS);
-  if (!DB.get(STORAGE_KEYS.DESSERT, null)) DB.set(STORAGE_KEYS.DESSERT, DEFAULT_DESSERT);
-  if (!DB.get(STORAGE_KEYS.LOCATION, null)) DB.set(STORAGE_KEYS.LOCATION, DEFAULT_LOCATION);
-  if (!DB.get(STORAGE_KEYS.WEBSITE, null)) DB.set(STORAGE_KEYS.WEBSITE, DEFAULT_WEBSITE);
-  if (!DB.get(STORAGE_KEYS.GALLERY, null)) DB.set(STORAGE_KEYS.GALLERY, DEFAULT_GALLERY);
-  if (!DB.get(STORAGE_KEYS.REVIEWS, null)) DB.set(STORAGE_KEYS.REVIEWS, DEFAULT_REVIEWS);
-  if (!DB.get(STORAGE_KEYS.ANNOUNCEMENTS, null)) DB.set(STORAGE_KEYS.ANNOUNCEMENTS, DEFAULT_ANNOUNCEMENTS);
-  if (!DB.get(STORAGE_KEYS.DESSERT_HISTORY, null)) DB.set(STORAGE_KEYS.DESSERT_HISTORY, DEFAULT_DESSERT_HISTORY);
-}
-seedDefaults();
 
 /* ---------- Generate unique ID ---------- */
 function uid() {

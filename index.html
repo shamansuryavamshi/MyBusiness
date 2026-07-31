@@ -93,8 +93,7 @@
       <div class="hero__content">
         <p class="hero__badge anim-fade">Open Every Sunday · Bangalore</p>
         <h1 class="hero__title">
-          <span class="hero__line anim-slide-up">SWEET</span>
-          <span class="hero__line anim-slide-up" style="animation-delay:.1s">SUNDAYS</span>
+          <span class="hero__line anim-slide-up">DOMINGO</span>
         </h1>
         <p class="hero__desc anim-fade" style="animation-delay:.3s">
           One handcrafted dessert every Sunday. Limited pieces. When it's gone, it's gone.
@@ -115,7 +114,7 @@
         <div class="hero__floating-shape hero__floating-shape--2"></div>
       </div>
     </div>
-    <div class="hero__bg-text" aria-hidden="true">SWEET</div>
+    <div class="hero__bg-text" aria-hidden="true">DOMINGO</div>
   </section>
 
   <!-- ========== THIS WEEK'S FEATURED DESSERT ========== -->
@@ -413,7 +412,7 @@
     <div class="container">
       <div class="footer__top">
         <div class="footer__brand">
-          <h2 class="footer__logo">SWEET<br>SUNDAYS</h2>
+          <h2 class="footer__logo">DOMINGO</h2>
           <p class="footer__tagline">Homemade Desserts · Bangalore</p>
           <div class="footer__sunday-badge">SUNDAY EXCLUSIVE</div>
           <p class="footer__hours" id="footerHours">
@@ -628,10 +627,14 @@
 
       if (ws.heroTitle) {
         const lines = document.querySelectorAll('.hero__line');
-        const parts = ws.heroTitle.split(/\s+/);
-        if (lines.length === 2) {
-          lines[0].textContent = parts[0] || 'SWEET';
-          lines[1].textContent = parts.slice(1).join(' ') || 'SUNDAYS';
+        const parts = ws.heroTitle.trim().split(/\s+/);
+        if (lines.length >= 2 && parts.length >= 2) {
+          lines[0].textContent = parts[0];
+          lines[1].textContent = parts.slice(1).join(' ');
+          lines[1].style.display = '';
+        } else if (lines[0]) {
+          lines[0].textContent = parts[0] || 'DOMINGO';
+          if (lines[1]) lines[1].style.display = 'none';
         }
       }
       if (ws.heroDescription) {
