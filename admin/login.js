@@ -1,12 +1,12 @@
 /* ============================================
    LOGIN — Authentication logic
-   Demo credentials: admin@sweetsundays.in / sundays123
+   Demo credentials: admin@domingo.in / domingo123
    Replace with Firebase Auth later.
    ============================================ */
 
 const DEMO_USER = {
-  email: 'admin@sweetsundays.in',
-  password: 'sundays123',
+  email: 'admin@domingo.in',
+  password: 'domingo123',
   name: 'Admin',
 };
 

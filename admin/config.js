@@ -19,11 +19,11 @@ const STORAGE_KEYS = {
 };
 
 const DEFAULT_BUSINESS = {
-  name: 'Sweet Sundays',
+  name: 'Domingo',
   phone: '+91 98765 43210',
   whatsapp: '919876543210',
-  email: 'hello@sweetsundays.in',
-  instagram: 'sweetsundays.blr',
+  email: 'hello@domingo.in',
+  instagram: 'domingo.blr',
   operatingDay: 'Sunday',
   operatingHours: '10:00 AM – 8:00 PM',
   maxPieces: 5,
@@ -58,9 +58,9 @@ const DEFAULT_LOCATION = {
 };
 
 const DEFAULT_WEBSITE = {
-  heroTitle: 'SWEET SUNDAYS',
+  heroTitle: 'DOMINGO',
   heroDescription: 'One handcrafted dessert every Sunday. Limited pieces. When it\'s gone, it\'s gone.',
-  seoTitle: 'Sweet Sundays | Homemade Desserts — Bangalore',
+  seoTitle: 'Domingo | Homemade Desserts — Bangalore',
   seoDescription: 'Handcrafted homemade desserts available every Sunday in Bangalore.',
   seoKeywords: 'desserts, bangalore, homemade, sunday, bakery',
   footerText: 'Made with ❤️ in Bangalore.',
