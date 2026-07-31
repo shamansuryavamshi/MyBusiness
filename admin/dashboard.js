@@ -59,6 +59,13 @@
   }
 
   /* ============================================
+       SYNC ERROR HANDLING
+       ============================================ */
+  // Surface background-save failures so the admin knows a change did not
+  // reach the website (e.g. payload too large -> HTTP 413).
+  StorageService.setErrorHandler((msg) => toast(msg, 'error'));
+
+  /* ============================================
        NAVIGATION
        ============================================ */
   const pageTitles = {

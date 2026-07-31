@@ -14,7 +14,7 @@ const GalleryService = (() => {
   }
 
   async function add(file) {
-    const result = await ImageService.upload(file);
+    const result = await ImageService.upload(file, { maxDim: 900, quality: 0.7 });
     const gallery = all();
     const item = {
       id: uid(),

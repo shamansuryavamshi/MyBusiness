@@ -7,15 +7,17 @@
 
 const ImageService = (() => {
   const ALLOWED = ['image/jpeg', 'image/png', 'image/webp'];
-  const MAX_SIZE = 5 * 1024 * 1024;
+  const MAX_SIZE = 15 * 1024 * 1024;
+  const DEFAULT_MAX_DIM = 1280;
+  const DEFAULT_QUALITY = 0.75;
 
   function validate(file) {
     if (!file) throw new Error('No file provided');
     if (!ALLOWED.includes(file.type)) throw new Error('Only JPG, PNG, and WEBP images are allowed');
-    if (file.size > MAX_SIZE) throw new Error('Image must be under 5MB');
+    if (file.size > MAX_SIZE) throw new Error('Image must be under 15MB');
   }
 
-  function compress(file, maxDim = 1600, quality = 0.82) {
+  function compress(file, maxDim = DEFAULT_MAX_DIM, quality = DEFAULT_QUALITY) {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.onerror = () => reject(new Error('Failed to read file'));
@@ -50,9 +52,11 @@ const ImageService = (() => {
     });
   }
 
-  async function upload(file) {
+  async function upload(file, opts) {
     validate(file);
-    const blob = await compress(file);
+    const maxDim = (opts && opts.maxDim) || DEFAULT_MAX_DIM;
+    const quality = (opts && opts.quality) || DEFAULT_QUALITY;
+    const blob = await compress(file, maxDim, quality);
     const url = await blobToDataURL(blob);
     return { url, fileId: null, publicImageUrl: url };
   }

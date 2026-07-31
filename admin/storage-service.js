@@ -105,18 +105,54 @@ const StorageService = (() => {
     };
   }
 
-  /* Debounced + serialized persistence */
+  /* Debounced + serialized persistence.
+     Vercel rejects request bodies over ~4.5MB with HTTP 413, so we guard
+     the payload size and retry transient failures. Background-save errors
+     are surfaced through onError so the admin knows their change did not
+     sync to other devices. */
+  const MAX_PAYLOAD_BYTES = 4 * 1024 * 1024;
   let saveTimer = null;
+  let onError = null;
+
+  function payloadBytes(payload) {
+    const s = JSON.stringify(payload);
+    if (typeof TextEncoder !== 'undefined') return new TextEncoder().encode(s).length;
+    return unescape(encodeURIComponent(s)).length;
+  }
 
   function persist() {
-    return ApiService.enqueue(buildPayload());
+    const payload = buildPayload();
+    const bytes = payloadBytes(payload);
+    if (bytes > MAX_PAYLOAD_BYTES) {
+      const mb = Math.round((bytes / (1024 * 1024)) * 10) / 10;
+      throw new Error(`Published data is too large (${mb} MB). Remove some gallery images or upload smaller photos.`);
+    }
+    const run = async () => {
+      let lastErr;
+      for (let attempt = 0; attempt < 3; attempt++) {
+        try {
+          return await ApiService.enqueue(payload);
+        } catch (e) {
+          lastErr = e;
+          if (String(e.message).includes('413')) {
+            throw new Error('Published data is too large for the server. Remove some gallery images or upload smaller photos.');
+          }
+          if (attempt < 2) await new Promise(r => setTimeout(r, 1200 * (attempt + 1)));
+        }
+      }
+      throw lastErr;
+    };
+    return run();
   }
 
   function scheduleSave() {
     if (saveTimer) clearTimeout(saveTimer);
     saveTimer = setTimeout(() => {
       saveTimer = null;
-      persist().catch((e) => console.warn('Background save failed:', e.message));
+      persist().catch((e) => {
+        console.warn('Background save failed:', e.message);
+        if (onError) onError('Sync failed: ' + e.message);
+      });
     }, 600);
   }
 
@@ -131,6 +167,7 @@ const StorageService = (() => {
     set,
     save,
     payloadName,
+    setErrorHandler(fn) { onError = fn; },
     getAll() { return state; },
   };
 })();
