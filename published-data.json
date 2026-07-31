@@ -91,7 +91,7 @@
       "rating": 5,
       "text": "Ordered the basque cheesecake for my wife's birthday. She loved it!",
       "image": "",
-      "approved": false,
+      "approved": true,
       "date": "2026-06-22"
     },
     {
@@ -155,5 +155,5 @@
       "sold": 8
     }
   ],
-  "publishedAt": "2026-07-31T13:05:25.430Z"
+  "publishedAt": "2026-07-31T13:05:29.150Z"
 }
