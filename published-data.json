@@ -24,7 +24,7 @@
     "hours": "Sunday: 10:00 AM - 8:00 PM"
   },
   "business": {
-    "name": "Sweet Sundays",
+    "name": "Domingo",
     "phone": "+91 98765 43210",
     "whatsapp": "919876543210",
     "email": "hello@sweetsundays.in",
@@ -36,12 +36,12 @@
     "apiBaseUrl": ""
   },
   "website": {
-    "heroTitle": "SWEET SUNDAYS",
+    "heroTitle": "DOMINGO",
     "heroDescription": "One handcrafted dessert every Sunday. Limited pieces. When it's gone, it's gone.",
     "seoTitle": "Sweet Sundays | Homemade Desserts - Bangalore",
     "seoDescription": "Handcrafted homemade desserts available every Sunday in Bangalore.",
     "seoKeywords": "desserts, bangalore, homemade, sunday, bakery",
-    "footerText": "Made with ?? in Bangalore.",
+    "footerText": "Made with ❤️ in Bangalore.",
     "announcementBanner": "",
     "announcementBannerColor": "#D8FF63",
     "announcementBannerTextColor": "#101010"
@@ -74,14 +74,6 @@
       "caption": "Sunday Setup",
       "category": "events",
       "order": 4
-    },
-    {
-      "id": "ms98f42oi698tw",
-      "url": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAYEBAUEBAYFBQUGBgYHCQ4JCQgICRINDQoOFRIWFhUSFBQXGiEcFxgfGRQUHScdHyIjJSUlFhwpLCgkKyEkJST/2wBDAQYGBgkICREJCREkGBQYJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCT/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAf/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAABQf/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCDgA1Uf//Z",
-      "fileId": null,
-      "caption": "test-pixel.png",
-      "category": "desserts",
-      "order": 5
     }
   ],
   "reviews": [
