@@ -703,7 +703,7 @@
       list.innerHTML = visible.map(a => {
         const icon = typeIcons[a.type] || '📢';
         return `
-        <div class="announcement-banner anim-fade" style="background:${a.backgroundColor || '#D8FF63'};color:${a.textColor || '#101010'}">
+        <div class="announcement-banner" style="background:${a.backgroundColor || '#D8FF63'};color:${a.textColor || '#101010'}">
           <span class="announcement-banner__icon">${icon}</span>
           <div class="announcement-banner__content">
             <strong>${a.title}</strong>
