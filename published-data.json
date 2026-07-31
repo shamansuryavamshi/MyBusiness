@@ -115,6 +115,20 @@
   ],
   "announcements": [
     {
+      "id": "ms9aff3uu1myfj",
+      "title": "e2e-test-announcement",
+      "message": "test sync message",
+      "type": "General",
+      "backgroundColor": "#d8ff63",
+      "textColor": "#101010",
+      "startDate": null,
+      "endDate": null,
+      "isPublished": true,
+      "isPinned": false,
+      "createdAt": "2026-07-31T18:40:26.682Z",
+      "updatedAt": "2026-07-31T18:40:26.682Z"
+    },
+    {
       "id": "ms97tn16bttf21",
       "title": "hi dk",
       "message": "halkat",
@@ -179,5 +193,5 @@
       "sold": 8
     }
   ],
-  "publishedAt": "2026-07-31T18:34:32.546Z"
+  "publishedAt": "2026-07-31T18:40:27.295Z"
 }
