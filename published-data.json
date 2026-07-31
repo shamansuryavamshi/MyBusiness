@@ -104,36 +104,20 @@
       "date": "2026-06-15"
     }
   ],
-  "announcements": [
-    {
-      "message": "temporary",
-      "textColor": "#101010",
-      "id": "synctest123",
-      "type": "General",
-      "isPinned": false,
-      "startDate": null,
-      "createdAt": "2026-07-31T19:08:45.4564530+05:30",
-      "isPublished": false,
-      "backgroundColor": "#D8FF63",
-      "endDate": null,
-      "updatedAt": "2026-07-31T19:08:45.9611349+05:30",
-      "title": "SYNC TEST - DELETE ME"
-    },
-    {
-      "id": "ms8yjfu6wkujr9",
-      "title": "hi dk",
-      "message": "halkat",
-      "type": "General",
-      "backgroundColor": "#ff6161",
-      "textColor": "#fafafa",
-      "startDate": null,
-      "endDate": null,
-      "isPublished": true,
-      "isPinned": false,
-      "createdAt": "2026-07-31T13:07:38.862Z",
-      "updatedAt": "2026-07-31T13:07:38.862Z"
-    }
-  ],
+  "announcements": {
+    "id": "ms8yjfu6wkujr9",
+    "title": "hi dk",
+    "message": "halkat",
+    "type": "General",
+    "backgroundColor": "#ff6161",
+    "textColor": "#fafafa",
+    "startDate": null,
+    "endDate": null,
+    "isPublished": true,
+    "isPinned": false,
+    "createdAt": "2026-07-31T13:07:38.862Z",
+    "updatedAt": "2026-07-31T13:07:38.862Z"
+  },
   "dessertHistory": [
     {
       "id": 1,
@@ -149,11 +133,11 @@
     },
     {
       "id": 2,
-      "name": "Matcha Mille Cr�pe",
+      "name": "Matcha Mille Cr?pe",
       "price": "?380",
       "emoji": "??",
       "color": "#D8FF63",
-      "description": "20 layers of paper-thin cr�pes with matcha diplomat cream.",
+      "description": "20 layers of paper-thin cr?pes with matcha diplomat cream.",
       "date": "2026-06-22",
       "status": "sold",
       "quantity": 10,
