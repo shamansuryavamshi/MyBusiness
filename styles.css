@@ -1377,7 +1377,10 @@ button, input, select, textarea {
    ANNOUNCEMENTS
    ============================================ */
 .announcements {
-  padding: 24px 0 0;
+  margin-top: 80px;
+  padding: 16px 0 0;
+  position: relative;
+  z-index: 5;
 }
 
 .announcements__list {
