@@ -82,7 +82,7 @@
       "rating": 5,
       "text": "The tiramisu is hands down the best I've had in Bangalore. Every Sunday is worth the wait!",
       "image": "",
-      "approved": false,
+      "approved": true,
       "date": "2026-06-29"
     },
     {
@@ -155,5 +155,5 @@
       "sold": 8
     }
   ],
-  "publishedAt": "2026-07-31T13:05:29.150Z"
+  "publishedAt": "2026-07-31T13:05:30.142Z"
 }
