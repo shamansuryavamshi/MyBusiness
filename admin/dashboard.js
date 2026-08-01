@@ -207,8 +207,8 @@
     setVal('dPrice', d.price);
     setVal('dDesc', d.description);
     setVal('dEmoji', d.emoji);
-    $('#dColor').value = d.color || '#8E82FF';
-    setVal('dColorText', d.color || '#8E82FF');
+  $('#dColor').value = d.color || '#74D3AE';
+  setVal('dColorText', d.color || '#74D3AE');
     setVal('dServes', d.serves);
     setVal('dAllergens', d.allergens);
     setVal('dPickup', d.pickupNote);
@@ -233,7 +233,7 @@
     const price = val('dPrice') || '₹0';
     const desc = val('dDesc') || 'Description goes here...';
     const emoji = val('dEmoji') || '🎂';
-    const color = $('#dColor').value || '#8E82FF';
+    const color = $('#dColor').value || '#74D3AE';
     const serves = val('dServes');
     const qty = parseInt(val('dQty')) || 5;
     const reserved = ReservationService.reservedQty();
@@ -631,7 +631,7 @@
       const isExpired = a.endDate && new Date(a.endDate) < new Date();
       const expiredBadge = isExpired ? '<span class="badge badge--danger" style="margin-left:6px">Expired</span>' : '';
       return `
-      <div class="announce-item" style="border-left:4px solid ${a.backgroundColor || '#D8FF63'}">
+      <div class="announce-item" style="border-left:4px solid ${a.backgroundColor || '#678D58'}">
         <div class="announce-item__header">
           <div>
             <span class="announce-item__text">${a.title || 'Untitled'}</span>
@@ -640,7 +640,7 @@
           ${statusBadge}
         </div>
         <div class="announce-item__message">${a.message || ''}</div>
-        <div class="announce-item__preview" style="background:${a.backgroundColor || '#D8FF63'};color:${a.textColor || '#101010'}">${a.title || ''} — ${a.message || ''}</div>
+        <div class="announce-item__preview" style="background:${a.backgroundColor || '#678D58'};color:${a.textColor || '#FFFFFF'}">${a.title || ''} — ${a.message || ''}</div>
         <div class="announce-item__meta">
           <span>${dateRange}</span>
           <span>Created: ${fmtDate(a.createdAt)}</span>
@@ -679,7 +679,7 @@
       <div class="form-field" style="margin-bottom:16px"><label style="display:block;font-size:12px;font-weight:600;margin-bottom:6px;color:var(--text-secondary)">Title</label><input type="text" id="mAnnTitle" value="${(a.title || '').replace(/"/g, '&quot;')}" style="width:100%;padding:10px 14px;background:var(--bg);border:1.5px solid var(--border);border-radius:10px;color:var(--text);font-size:14px;font-family:var(--font)"></div>
       <div class="form-field" style="margin-bottom:16px"><label style="display:block;font-size:12px;font-weight:600;margin-bottom:6px;color:var(--text-secondary)">Message</label><textarea id="mAnnMsg" rows="3" style="width:100%;padding:10px 14px;background:var(--bg);border:1.5px solid var(--border);border-radius:10px;color:var(--text);font-size:14px;font-family:var(--font);resize:vertical">${(a.message || '').replace(/</g, '&lt;')}</textarea></div>
       <div class="form-field" style="margin-bottom:16px"><label style="display:block;font-size:12px;font-weight:600;margin-bottom:6px;color:var(--text-secondary)">Type</label><select id="mAnnType" style="width:100%;padding:10px 14px;background:var(--bg);border:1.5px solid var(--border);border-radius:10px;color:var(--text);font-size:14px;font-family:var(--font)">${typeOptions}</select></div>
-      <div style="display:flex;gap:12px;margin-bottom:16px"><div class="form-field" style="flex:1"><label style="display:block;font-size:12px;font-weight:600;margin-bottom:6px;color:var(--text-secondary)">Background</label><input type="color" id="mAnnBg" value="${a.backgroundColor || '#D8FF63'}" style="width:100%;height:40px;padding:4px;cursor:pointer;border-radius:8px"></div><div class="form-field" style="flex:1"><label style="display:block;font-size:12px;font-weight:600;margin-bottom:6px;color:var(--text-secondary)">Text Color</label><input type="color" id="mAnnColor" value="${a.textColor || '#101010'}" style="width:100%;height:40px;padding:4px;cursor:pointer;border-radius:8px"></div></div>
+      <div style="display:flex;gap:12px;margin-bottom:16px"><div class="form-field" style="flex:1"><label style="display:block;font-size:12px;font-weight:600;margin-bottom:6px;color:var(--text-secondary)">Background</label><input type="color" id="mAnnBg" value="${a.backgroundColor || '#678D58'}" style="width:100%;height:40px;padding:4px;cursor:pointer;border-radius:8px"></div><div class="form-field" style="flex:1"><label style="display:block;font-size:12px;font-weight:600;margin-bottom:6px;color:var(--text-secondary)">Text Color</label><input type="color" id="mAnnColor" value="${a.textColor || '#FFFFFF'}" style="width:100%;height:40px;padding:4px;cursor:pointer;border-radius:8px"></div></div>
       <div style="display:flex;gap:12px;margin-bottom:0"><div class="form-field" style="flex:1"><label style="display:block;font-size:12px;font-weight:600;margin-bottom:6px;color:var(--text-secondary)">Start Date</label><input type="date" id="mAnnStart" value="${a.startDate || ''}" style="width:100%;padding:10px 14px;background:var(--bg);border:1.5px solid var(--border);border-radius:10px;color:var(--text);font-size:14px;font-family:var(--font)"></div><div class="form-field" style="flex:1"><label style="display:block;font-size:12px;font-weight:600;margin-bottom:6px;color:var(--text-secondary)">End Date</label><input type="date" id="mAnnEnd" value="${a.endDate || ''}" style="width:100%;padding:10px 14px;background:var(--bg);border:1.5px solid var(--border);border-radius:10px;color:var(--text);font-size:14px;font-family:var(--font)"></div></div>
     `, `<button class="btn btn--ghost" onclick="hideModal()">Cancel</button><button class="btn btn--primary" onclick="saveEditAnnounce('${a.id}')">Save Changes</button>`);
   };
@@ -715,7 +715,7 @@
       <div class="form-field" style="margin-bottom:16px"><label style="display:block;font-size:12px;font-weight:600;margin-bottom:6px;color:var(--text-secondary)">Title</label><input type="text" id="mAnnTitle" placeholder="e.g. Sold Out! See you next Sunday" style="width:100%;padding:10px 14px;background:var(--bg);border:1.5px solid var(--border);border-radius:10px;color:var(--text);font-size:14px;font-family:var(--font)"></div>
       <div class="form-field" style="margin-bottom:16px"><label style="display:block;font-size:12px;font-weight:600;margin-bottom:6px;color:var(--text-secondary)">Message</label><textarea id="mAnnMsg" rows="3" placeholder="Additional details (optional)" style="width:100%;padding:10px 14px;background:var(--bg);border:1.5px solid var(--border);border-radius:10px;color:var(--text);font-size:14px;font-family:var(--font);resize:vertical"></textarea></div>
       <div class="form-field" style="margin-bottom:16px"><label style="display:block;font-size:12px;font-weight:600;margin-bottom:6px;color:var(--text-secondary)">Type</label><select id="mAnnType" style="width:100%;padding:10px 14px;background:var(--bg);border:1.5px solid var(--border);border-radius:10px;color:var(--text);font-size:14px;font-family:var(--font)">${typeOptions}</select></div>
-      <div style="display:flex;gap:12px;margin-bottom:16px"><div class="form-field" style="flex:1"><label style="display:block;font-size:12px;font-weight:600;margin-bottom:6px;color:var(--text-secondary)">Background</label><input type="color" id="mAnnBg" value="#D8FF63" style="width:100%;height:40px;padding:4px;cursor:pointer;border-radius:8px"></div><div class="form-field" style="flex:1"><label style="display:block;font-size:12px;font-weight:600;margin-bottom:6px;color:var(--text-secondary)">Text Color</label><input type="color" id="mAnnColor" value="#101010" style="width:100%;height:40px;padding:4px;cursor:pointer;border-radius:8px"></div></div>
+      <div style="display:flex;gap:12px;margin-bottom:16px"><div class="form-field" style="flex:1"><label style="display:block;font-size:12px;font-weight:600;margin-bottom:6px;color:var(--text-secondary)">Background</label><input type="color" id="mAnnBg" value="#678D58" style="width:100%;height:40px;padding:4px;cursor:pointer;border-radius:8px"></div><div class="form-field" style="flex:1"><label style="display:block;font-size:12px;font-weight:600;margin-bottom:6px;color:var(--text-secondary)">Text Color</label><input type="color" id="mAnnColor" value="#FFFFFF" style="width:100%;height:40px;padding:4px;cursor:pointer;border-radius:8px"></div></div>
       <div style="display:flex;gap:12px;margin-bottom:0"><div class="form-field" style="flex:1"><label style="display:block;font-size:12px;font-weight:600;margin-bottom:6px;color:var(--text-secondary)">Start Date</label><input type="date" id="mAnnStart" style="width:100%;padding:10px 14px;background:var(--bg);border:1.5px solid var(--border);border-radius:10px;color:var(--text);font-size:14px;font-family:var(--font)"></div><div class="form-field" style="flex:1"><label style="display:block;font-size:12px;font-weight:600;margin-bottom:6px;color:var(--text-secondary)">End Date</label><input type="date" id="mAnnEnd" style="width:100%;padding:10px 14px;background:var(--bg);border:1.5px solid var(--border);border-radius:10px;color:var(--text);font-size:14px;font-family:var(--font)"></div></div>
     `, `<button class="btn btn--ghost" onclick="hideModal()">Cancel</button><button class="btn btn--primary" onclick="saveNewAnnounce()">Create & Publish</button>`);
   };
@@ -859,8 +859,8 @@
     setVal('wsKeywords', ws.seoKeywords);
     setVal('wsFooter', ws.footerText);
     setVal('wsBanner', ws.announcementBanner);
-    $('#wsBannerBg').value = ws.announcementBannerColor || '#D8FF63';
-    $('#wsBannerColor').value = ws.announcementBannerTextColor || '#101010';
+  $('#wsBannerBg').value = ws.announcementBannerColor || '#678D58';
+  $('#wsBannerColor').value = ws.announcementBannerTextColor || '#FFFFFF';
   }
 
   $('#saveWebsite').onclick = async () => {

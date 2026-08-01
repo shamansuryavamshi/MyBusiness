@@ -40,7 +40,7 @@ const DEFAULT_DESSERT = {
   image: '',
   fileId: '',
   emoji: '🧀',
-  color: '#8E82FF',
+  color: '#74D3AE',
   quantity: 5,
   remaining: 5,
   available: true,
@@ -69,8 +69,8 @@ const DEFAULT_WEBSITE = {
   seoKeywords: 'desserts, bangalore, homemade, sunday, bakery',
   footerText: 'Made with ❤️ in Bangalore.',
   announcementBanner: '',
-  announcementBannerColor: '#D8FF63',
-  announcementBannerTextColor: '#101010',
+  announcementBannerColor: '#678D58',
+  announcementBannerTextColor: '#FFFFFF',
 };
 
 const DEFAULT_GALLERY = [
@@ -89,10 +89,10 @@ const DEFAULT_REVIEWS = [
 const DEFAULT_ANNOUNCEMENTS = [];
 
 const DEFAULT_DESSERT_HISTORY = [
-  { id: 1, name: 'Classic Tiramisu', price: '₹350', emoji: '🍰', color: '#8E82FF', description: 'Espresso-soaked ladyfingers layered with mascarpone cream.', date: '2026-06-29', status: 'sold', quantity: 12, sold: 12 },
-  { id: 2, name: 'Matcha Mille Crêpe', price: '₹380', emoji: '🍵', color: '#D8FF63', description: '20 layers of paper-thin crêpes with matcha diplomat cream.', date: '2026-06-22', status: 'sold', quantity: 10, sold: 10 },
-  { id: 3, name: 'Mango Passionfruit Tart', price: '₹320', emoji: '🥭', color: '#D8FF63', description: 'Buttery tart shell with passionfruit curd and Alphonso mangoes.', date: '2026-06-15', status: 'sold', quantity: 15, sold: 13 },
-  { id: 4, name: 'Pistachio Rose Cake', price: '₹420', emoji: '🌹', color: '#8E82FF', description: 'Pistachio sponge with rose water buttercream.', date: '2026-06-08', status: 'sold', quantity: 8, sold: 8 },
+  { id: 1, name: 'Classic Tiramisu', price: '₹350', emoji: '🍰', color: '#74D3AE', description: 'Espresso-soaked ladyfingers layered with mascarpone cream.', date: '2026-06-29', status: 'sold', quantity: 12, sold: 12 },
+  { id: 2, name: 'Matcha Mille Crêpe', price: '₹380', emoji: '🍵', color: '#A6C48A', description: '20 layers of paper-thin crêpes with matcha diplomat cream.', date: '2026-06-22', status: 'sold', quantity: 10, sold: 10 },
+  { id: 3, name: 'Mango Passionfruit Tart', price: '₹320', emoji: '🥭', color: '#A6C48A', description: 'Buttery tart shell with passionfruit curd and Alphonso mangoes.', date: '2026-06-15', status: 'sold', quantity: 15, sold: 13 },
+  { id: 4, name: 'Pistachio Rose Cake', price: '₹420', emoji: '🌹', color: '#74D3AE', description: 'Pistachio sponge with rose water buttercream.', date: '2026-06-08', status: 'sold', quantity: 8, sold: 8 },
 ];
 
 /* ---------- Published Data API (GitHub-backed) ---------- */
