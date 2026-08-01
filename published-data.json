@@ -9,7 +9,7 @@
     "color": "#8e82ff",
     "quantity": 5,
     "remaining": 5,
-    "available": false,
+    "available": true,
     "serves": "Serves 2-3",
     "allergens": "Contains dairy, eggs",
     "pickupNote": "Pick up cold. Best enjoyed within 24 hours.",
@@ -26,7 +26,6 @@
   "business": {
     "name": "Domingo",
     "phone": "+91 98765 43210",
-    "whatsapp": "919876543210",
     "email": "shamaninbusiness@gmail.com",
     "instagram": "domingo.five",
     "operatingDay": "Sunday",

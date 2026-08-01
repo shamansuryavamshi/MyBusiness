@@ -30,8 +30,8 @@
       "image": "",
       "emoji": "🧀",
       "color": "#8E82FF",
-      "quantity": 15,
-      "remaining": 8,
+      "quantity": 5,
+      "remaining": 5,
       "available": true,
       "serves": "Serves 2–3",
       "allergens": "Contains dairy, eggs",
@@ -57,7 +57,6 @@
 
     "contact": {
       "phone": "+91 98765 43210",
-      "whatsapp": "919876543210",
       "email": "shamaninbusiness@gmail.com",
       "instagram": "domingo.five",
       "address": "Bangalore, Karnataka, India"
@@ -74,6 +73,7 @@
       <div class="nav__badge">SUNDAY EXCLUSIVE</div>
       <ul class="nav__links" id="navLinks">
         <li><a href="#this-week">This Week</a></li>
+        <li><a href="#reserve">Reserve</a></li>
         <li><a href="#location">Location</a></li>
         <li><a href="#about">About</a></li>
         <li><a href="#past-specials">Past Specials</a></li>
@@ -191,7 +191,7 @@
           <p class="featured__pickup" id="featuredPickup">Pick up cold. Best enjoyed within 24 hours.</p>
 
           <div class="featured__actions" id="featuredActions">
-            <a href="#location" class="btn btn--primary">Visit This Sunday</a>
+            <a href="#reserve" class="btn btn--primary">Reserve This Sunday</a>
             <a href="https://instagram.com/domingo.five" target="_blank" rel="noopener" class="btn btn--outline">Follow on Instagram</a>
           </div>
 
@@ -200,6 +200,67 @@
             <p>This Sunday's dessert has sold out. Follow us on Instagram to see next week's dessert first.</p>
             <a href="https://instagram.com/domingo.five" target="_blank" rel="noopener" class="btn btn--primary">Follow on Instagram</a>
           </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== RESERVE THIS SUNDAY'S DESSERT ========== -->
+  <section class="reserve" id="reserve">
+    <div class="container">
+      <div class="section-badge anim-fade">Reservations</div>
+      <h2 class="section-title anim-slide-up">Reserve Your<br>Piece This Sunday</h2>
+      <p class="section-subtitle anim-fade">Only <strong id="reserveRemainingText">5</strong> of <span id="reserveTotalText">5</span> pieces are still available. Reserve yours now — no payment needed, just reserve.</p>
+
+      <div class="reserve__card anim-slide-up">
+        <div class="reserve__stock">
+          <div class="reserve__stock-bar">
+            <div class="reserve__stock-fill" id="reserveFill"></div>
+          </div>
+          <p class="reserve__stock-text" id="reserveStockText">5 of 5 pieces remaining</p>
+        </div>
+
+        <form class="reserve__form" id="reserveForm" novalidate>
+          <div class="reserve__field">
+            <label for="reserveName">Your Name *</label>
+            <input type="text" id="reserveName" placeholder="e.g. Priya Sharma" maxlength="50" autocomplete="name">
+            <p class="reserve__error" id="reserveErrorName"></p>
+          </div>
+          <div class="reserve__field">
+            <label for="reserveMobile">Mobile Number *</label>
+            <input type="tel" id="reserveMobile" placeholder="10-digit mobile number" maxlength="10" inputmode="numeric" autocomplete="tel">
+            <p class="reserve__error" id="reserveErrorMobile"></p>
+          </div>
+          <div class="reserve__row">
+            <div class="reserve__field">
+              <label for="reserveQty">Quantity *</label>
+              <input type="number" id="reserveQty" min="1" max="5" value="1" inputmode="numeric">
+              <p class="reserve__error" id="reserveErrorQty"></p>
+            </div>
+            <div class="reserve__field">
+              <label for="reserveNotes">Special Notes (optional)</label>
+              <input type="text" id="reserveNotes" placeholder="Allergies, pickup time, etc." maxlength="200">
+            </div>
+          </div>
+          <button type="submit" class="btn btn--primary btn--full" id="reserveSubmit">
+            Reserve Dessert
+          </button>
+          <p class="reserve__fineprint">Reservations are confirmed by Domingo. You'll be contacted before Sunday.</p>
+        </form>
+
+        <div class="reserve__success" id="reserveSuccess" style="display:none">
+          <div class="reserve__success-icon">✓</div>
+          <h3>Reservation Successful</h3>
+          <p class="reserve__success-line">Thank you for reserving this week's dessert.</p>
+          <p class="reserve__success-id">Reservation ID: <strong id="reserveSuccessId">########</strong></p>
+          <p class="reserve__success-line">Your reservation is currently</p>
+          <p class="reserve__success-status">Pending</p>
+          <p class="reserve__success-line">We'll contact you after confirmation.</p>
+        </div>
+
+        <div class="reserve__soldout" id="reserveSoldout" style="display:none">
+          <div class="featured__soldout-badge">SOLD OUT</div>
+          <p>This week's dessert has sold out. See you next Sunday.</p>
         </div>
       </div>
     </div>
@@ -218,7 +279,7 @@
           <p class="location__parking">🅿️ Free parking available at the venue. Two-wheeler parking on-site.</p>
           <div class="location__actions">
             <a href="https://www.google.com/maps/dir/?api=1&destination=Koramangala,+Bangalore" target="_blank" rel="noopener" class="btn btn--primary">Get Directions</a>
-            <a href="https://wa.me/919876543210?text=Hi!%20Are%20you%20at%20Koramangala%20this%20Sunday?" target="_blank" rel="noopener" class="btn btn--outline">Chat on WhatsApp</a>
+            <a href="#reserve" class="btn btn--outline">Reserve This Sunday</a>
           </div>
         </div>
         <div class="location__map">
@@ -430,7 +491,6 @@
           </div>
           <div class="footer__col">
             <h4>Connect</h4>
-            <a href="https://wa.me/919876543210" target="_blank" rel="noopener">WhatsApp</a>
             <a href="https://instagram.com/domingo.five" target="_blank" rel="noopener">Instagram</a>
             <a href="mailto:shamaninbusiness@gmail.com">Email Us</a>
             <a href="tel:+919876543210">Call Us</a>
@@ -451,10 +511,7 @@
     </div>
   </footer>
 
-  <!-- ========== FLOATING WHATSAPP BUTTON ========== -->
-  <a id="whatsappFloat" href="https://wa.me/919876543210?text=Hi!%20I%20have%20a%20question%20about%20Sweet%20Sundays." class="whatsapp-float anim-fade" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
-    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
-  </a>
+  <!-- ========== RESERVATION SUCCESS ANCHOR (no floating buttons) ========== -->
 
   <script>
     /* ============================================
@@ -544,6 +601,121 @@
         qtyBadge.classList.add('featured__badge--low');
       }
     }
+
+    // ========== Render Reservation Section ==========
+    let reserveSuccessShown = false;
+    function renderReserve() {
+      const live = getPublished('weeklyDessert') || staticConfig.weeklyDessert;
+      const available = !!live.available;
+      const quantity = parseInt(live.quantity) || 5;
+      const remaining = parseInt(live.remaining) || 0;
+      const soldOut = !available || remaining <= 0;
+
+      document.getElementById('reserveRemainingText').textContent = remaining;
+      document.getElementById('reserveTotalText').textContent = quantity;
+
+      const fill = quantity > 0 ? (remaining / quantity) * 100 : 0;
+      document.getElementById('reserveFill').style.width = fill + '%';
+      document.getElementById('reserveStockText').textContent = remaining + ' of ' + quantity + ' pieces remaining';
+
+      const form = document.getElementById('reserveForm');
+      const success = document.getElementById('reserveSuccess');
+      const soldout = document.getElementById('reserveSoldout');
+      const qtyInput = document.getElementById('reserveQty');
+
+      qtyInput.max = Math.min(5, remaining);
+
+      if (soldOut) {
+        form.style.display = 'none';
+        success.style.display = 'none';
+        soldout.style.display = 'block';
+      } else if (reserveSuccessShown) {
+        form.style.display = 'none';
+        success.style.display = 'block';
+        soldout.style.display = 'none';
+      } else {
+        form.style.display = '';
+        success.style.display = 'none';
+        soldout.style.display = 'none';
+      }
+    }
+
+    // ========== Reservation Form Submission ==========
+    const reserveForm = document.getElementById('reserveForm');
+    reserveForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const name = document.getElementById('reserveName').value.trim();
+      const mobile = document.getElementById('reserveMobile').value.trim();
+      const quantity = parseInt(document.getElementById('reserveQty').value) || 0;
+      const notes = document.getElementById('reserveNotes').value.trim();
+      const live = getPublished('weeklyDessert') || staticConfig.weeklyDessert;
+      const remaining = parseInt(live.remaining) || 0;
+
+      let valid = true;
+      const setErr = (id, msg) => {
+        const el = document.getElementById('reserveError' + id);
+        el.textContent = msg;
+        if (msg) el.classList.add('show');
+        else el.classList.remove('show');
+        if (msg) valid = false;
+      };
+
+      if (name.length < 2) setErr('Name', 'Please enter your name (at least 2 characters).');
+      else setErr('Name', '');
+
+      if (!/^\d{10}$/.test(mobile)) setErr('Mobile', 'Please enter a valid 10-digit mobile number.');
+      else setErr('Mobile', '');
+
+      if (!quantity || quantity < 1 || quantity > 5) setErr('Qty', 'Quantity must be between 1 and 5.');
+      else if (quantity > remaining) setErr('Qty', 'Only ' + remaining + ' piece' + (remaining === 1 ? '' : 's') + ' remaining.');
+      else setErr('Qty', '');
+
+      if (!valid) return;
+
+      const btn = document.getElementById('reserveSubmit');
+      btn.disabled = true;
+      btn.textContent = 'Reserving...';
+
+      try {
+        const res = await fetch('/api/reservations', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'create', name, mobile, quantity, notes }),
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok || !data.success) {
+          throw new Error(data.error || 'Something went wrong. Please try again.');
+        }
+        document.getElementById('reserveSuccessId').textContent = data.reservation.id;
+        reserveSuccessShown = true;
+        document.getElementById('reserveForm').style.display = 'none';
+        document.getElementById('reserveSuccess').style.display = 'block';
+        document.getElementById('reserveSoldout').style.display = 'none';
+        document.getElementById('reserveForm').reset();
+
+        // Update local counts so the UI reflects the new reservation immediately.
+        if (publishedData && publishedData.weeklyDessert && typeof data.remaining === 'number') {
+          publishedData.weeklyDessert.remaining = data.remaining;
+        }
+        renderReserve();
+        renderFeatured();
+      } catch (err) {
+        setErr('Name', err.message || 'Something went wrong. Please try again.');
+        renderReserve();
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Reserve Dessert';
+      }
+    });
+
+    // Clear individual errors on input
+    ['Name', 'Mobile', 'Qty'].forEach(k => {
+      const input = document.getElementById(k === 'Qty' ? 'reserveQty' : k === 'Name' ? 'reserveName' : 'reserveMobile');
+      input.addEventListener('input', () => {
+        document.getElementById('reserveError' + k).classList.remove('show');
+      });
+    });
 
     // ========== Render Past Specials ==========
     function renderPastSpecials() {
@@ -779,12 +951,6 @@
       });
     });
 
-    // ========== WhatsApp Float Link ==========
-    function setWhatsAppLink() {
-      const wa = (publishedData && publishedData.business && publishedData.business.whatsapp) || staticConfig.contact.whatsapp || '919876543210';
-      document.getElementById('whatsappFloat').href = 'https://wa.me/' + wa + '?text=' + encodeURIComponent('Hi! I have a question about Domingo.');
-    }
-
     // ========== Poll for admin updates (cross-device) ==========
     async function pollPublished() {
       try {
@@ -796,12 +962,12 @@
             applyWebsiteSettings();
             applyBusinessSettings();
             renderFeatured();
+            renderReserve();
             renderPastSpecials();
             renderGallery();
             renderReviews();
             renderAnnouncements();
             renderFooter();
-            setWhatsAppLink();
           }
         }
       } catch (_) {}
@@ -812,15 +978,14 @@
       applyWebsiteSettings();
       applyBusinessSettings();
       renderFeatured();
+      renderReserve();
       renderPastSpecials();
       renderGallery();
       renderReviews();
       renderAnnouncements();
       renderFooter();
-      setWhatsAppLink();
     });
 
-    setWhatsAppLink();
     updateCountdown();
     setInterval(updateCountdown, 1000);
     setInterval(pollPublished, 15000);

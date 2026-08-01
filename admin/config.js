@@ -17,13 +17,13 @@ const STORAGE_KEYS = {
   REVIEWS: 'ss_reviews',
   ANNOUNCEMENTS: 'ss_announcements',
   WEBSITE: 'ss_websiteSettings',
+  RESERVATIONS: 'ss_reservations',
   DARK_MODE: 'ss_darkMode',
 };
 
 const DEFAULT_BUSINESS = {
   name: 'Domingo',
   phone: '+91 98765 43210',
-  whatsapp: '919876543210',
   email: 'shamaninbusiness@gmail.com',
   instagram: 'domingo.five',
   operatingDay: 'Sunday',
@@ -41,14 +41,16 @@ const DEFAULT_DESSERT = {
   fileId: '',
   emoji: '🧀',
   color: '#8E82FF',
-  quantity: 15,
-  remaining: 8,
+  quantity: 5,
+  remaining: 5,
   available: true,
   serves: 'Serves 2–3',
   allergens: 'Contains dairy, eggs',
   pickupNote: 'Pick up cold. Best enjoyed within 24 hours.',
   badge: '',
 };
+
+const DEFAULT_RESERVATIONS = [];
 
 const DEFAULT_LOCATION = {
   name: 'Koramangala Social Grounds',
@@ -136,6 +138,14 @@ function deleteById(storageKey, id) {
 /* ---------- Generate unique ID ---------- */
 function uid() {
   return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+}
+
+/* ---------- Generate 8-char reservation ID ---------- */
+function reservationId() {
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  let id = '';
+  for (let i = 0; i < 8; i++) id += chars[Math.floor(Math.random() * chars.length)];
+  return id;
 }
 
 /* ---------- Format date ---------- */

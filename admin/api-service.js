@@ -8,6 +8,7 @@
 
 const ApiService = (() => {
   const URL = window.location.origin + '/api/data';
+  const URL_RESERVATIONS = window.location.origin + '/api/reservations';
 
   let writeQueue = Promise.resolve();
 
@@ -39,5 +40,22 @@ const ApiService = (() => {
     return run;
   }
 
-  return { get, set, enqueue };
+  async function getReservations() {
+    const res = await fetch(URL_RESERVATIONS);
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    return res.json();
+  }
+
+  async function postReservation(body) {
+    const res = await fetch(URL_RESERVATIONS, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify(body),
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(data.error || 'Request failed (HTTP ' + res.status + ')');
+    return data;
+  }
+
+  return { get, set, enqueue, getReservations, postReservation };
 })();

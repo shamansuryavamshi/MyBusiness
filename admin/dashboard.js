@@ -21,6 +21,8 @@
   const $$ = (s, p) => [...(p || document).querySelectorAll(s)];
   const val = (id) => $(`#${id}`).value.trim();
   const setVal = (id, v) => { const el = $(`#${id}`); if (el) el.value = v || ''; };
+  const escapeHTML = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const escapeAttr = (s) => escapeHTML(s);
 
   /* ============================================
        TOAST
@@ -76,6 +78,7 @@
     gallery: ['Gallery', 'Manage dessert and event photos'],
     reviews: ['Reviews', 'Customer reviews and ratings'],
     announcements: ['Announcements', 'Temporary notices for visitors'],
+    reservations: ['Reservations', 'Manage this week\'s dessert reservations'],
     website: ['Website Settings', 'Control what visitors see'],
     business: ['Business Settings', 'Core business information'],
   };
@@ -143,6 +146,15 @@
     $('#statDessert').textContent = d.name || '—';
     $('#statLocation').textContent = loc.name || '—';
 
+    // Reservation summary
+    const counts = ReservationService.counts();
+    $('#rsvAvailable').textContent = counts.available;
+    $('#rsvReserved').textContent = counts.reserved;
+    $('#rsvRemaining').textContent = counts.remaining;
+    $('#rsvPending').textContent = counts.pending;
+    $('#rsvConfirmed').textContent = counts.confirmed;
+    $('#rsvCancelled').textContent = counts.cancelled;
+
     const days = daysUntilSunday();
     $('#daysUntilSunday').textContent = days === 0 ? 'Today!' : days + ' day' + (days > 1 ? 's' : '');
 
@@ -157,8 +169,9 @@
 
     // Notifications
     const notifs = [];
-    if (d.remaining <= 2 && d.remaining > 0 && d.available) notifs.push({ type: 'danger', text: `Only ${d.remaining} piece${d.remaining > 1 ? 's' : ''} left!` });
-    if (d.remaining === 0 && d.available) notifs.push({ type: 'danger', text: 'Dessert is sold out! Update the status.' });
+    const remaining = counts.remaining;
+    if (remaining <= 2 && remaining > 0 && d.available) notifs.push({ type: 'danger', text: `Only ${remaining} piece${remaining > 1 ? 's' : ''} left!` });
+    if (remaining === 0 && d.available) notifs.push({ type: 'danger', text: 'Dessert is sold out! Update the status.' });
     if (!loc.name) notifs.push({ type: 'warning', text: 'No location set for this Sunday.' });
     if (days <= 1) notifs.push({ type: 'info', text: 'Sunday is' + (days === 0 ? ' today' : ' tomorrow') + '! Make sure everything is ready.' });
 
@@ -174,7 +187,6 @@
   $('#qaSoldOut').onclick = async () => {
     if (await confirmDialog('Mark this Sunday\'s dessert as sold out?')) {
       const d = StorageService.get(STORAGE_KEYS.DESSERT, DEFAULT_DESSERT);
-      d.remaining = 0;
       d.available = false;
       StorageService.set(STORAGE_KEYS.DESSERT, d);
       refreshDashboard();
@@ -203,9 +215,11 @@
     setVal('dImage', d.image);
     setVal('dFileId', d.fileId || '');
     setVal('dQty', d.quantity);
-    setVal('dRemaining', d.remaining);
 
-    currentDessertStatus = d.available ? 'available' : (d.remaining === 0 ? 'soldout' : 'hidden');
+    const derivedRemaining = ReservationService.remaining();
+    setVal('dRemaining', derivedRemaining);
+
+    currentDessertStatus = d.available ? 'available' : (derivedRemaining === 0 ? 'soldout' : 'hidden');
     currentDessertBadge = d.badge || '';
 
     $$('.toggle-btn[data-status]').forEach(b => b.classList.toggle('active', b.dataset.status === currentDessertStatus));
@@ -221,8 +235,9 @@
     const emoji = val('dEmoji') || '🎂';
     const color = $('#dColor').value || '#8E82FF';
     const serves = val('dServes');
-    const qty = parseInt(val('dQty')) || 0;
-    const remaining = parseInt(val('dRemaining')) || 0;
+    const qty = parseInt(val('dQty')) || 5;
+    const reserved = ReservationService.reservedQty();
+    const remaining = Math.max(0, qty - reserved);
 
     $('#previewName').textContent = name;
     $('#previewDesc').textContent = desc;
@@ -261,7 +276,7 @@
   }
 
   // Live preview binding
-  ['dName', 'dPrice', 'dDesc', 'dEmoji', 'dServes', 'dAllergens', 'dPickup', 'dQty', 'dRemaining', 'dImage'].forEach(id => {
+  ['dName', 'dPrice', 'dDesc', 'dEmoji', 'dServes', 'dAllergens', 'dPickup', 'dQty', 'dImage'].forEach(id => {
     const el = $(`#${id}`);
     if (el) el.addEventListener('input', updateDessertPreview);
   });
@@ -291,6 +306,7 @@
 
   // Save dessert
   $('#saveDessert').onclick = () => {
+    const quantity = parseInt(val('dQty')) || 5;
     const d = {
       name: val('dName'),
       price: val('dPrice'),
@@ -302,8 +318,8 @@
       pickupNote: val('dPickup'),
       image: val('dImage'),
       fileId: val('dFileId') || '',
-      quantity: parseInt(val('dQty')) || 5,
-      remaining: parseInt(val('dRemaining')) || 0,
+      quantity: quantity,
+      remaining: Math.max(0, quantity - ReservationService.reservedQty()),
       available: currentDessertStatus === 'available',
       badge: currentDessertBadge,
     };
@@ -317,7 +333,16 @@
   $('#publishDessert').onclick = async () => {
     $('#saveDessert').click();
     try {
+      const prevName = (ReservationService.dessert() && ReservationService.dessert().name) || '';
+      const newName = val('dName') || '';
+      const isNewDessert = prevName && newName && prevName !== newName;
       await API.publishAll();
+      if (isNewDessert) {
+        await ReservationService.reset();
+        toast('New dessert published — reservations reset', 'info');
+      }
+      refreshDashboard();
+      loadDessertEditor();
       toast('Dessert published to website!', 'success');
     } catch (e) {
       toast('Publish failed: ' + e.message, 'error');
@@ -405,7 +430,8 @@
       StorageService.set(STORAGE_KEYS.DESSERT, {
         ...DEFAULT_DESSERT,
         name: h.name, price: h.price, emoji: h.emoji, color: h.color,
-        description: h.description, quantity: 5, remaining: 5, available: true,
+        description: h.description, quantity: 5, available: true,
+        remaining: Math.max(0, 5 - ReservationService.reservedQty()),
         image: h.image || '', fileId: h.fileId || '',
       });
       navigateTo('dessert');
@@ -421,7 +447,8 @@
     StorageService.set(STORAGE_KEYS.DESSERT, {
       ...DEFAULT_DESSERT,
       name: h.name + ' (Copy)', price: h.price, emoji: h.emoji, color: h.color,
-      description: h.description, quantity: 5, remaining: 5, available: true,
+      description: h.description, quantity: 5, available: true,
+      remaining: Math.max(0, 5 - ReservationService.reservedQty()),
       image: h.image || '', fileId: h.fileId || '',
     });
     navigateTo('dessert');
@@ -714,6 +741,113 @@
   };
 
   /* ============================================
+       RESERVATIONS
+       ============================================ */
+  const RES_STATUS_LABEL = { pending: 'Pending', confirmed: 'Confirmed', cancelled: 'Cancelled' };
+  let reservationsSearch = '';
+  let reservationsFilter = 'all';
+  let reservationsDate = '';
+  let reservationsSort = 'newest';
+
+  function loadReservations() {
+    let items = ReservationService.all();
+
+    if (reservationsSearch) {
+      const q = reservationsSearch.toLowerCase();
+      items = items.filter(r =>
+        String(r.name || '').toLowerCase().includes(q) ||
+        String(r.mobile || '').includes(q) ||
+        String(r.id || '').toLowerCase().includes(q));
+    }
+    if (reservationsFilter !== 'all') items = items.filter(r => r.status === reservationsFilter);
+    if (reservationsDate) items = items.filter(r => String(r.date || '').startsWith(reservationsDate));
+
+    items = [...items].sort((a, b) => {
+      const ta = (a.createdAt || a.date || '').toString();
+      const tb = (b.createdAt || b.date || '').toString();
+      return reservationsSort === 'newest' ? tb.localeCompare(ta) : ta.localeCompare(tb);
+    });
+
+    const tbody = $('#reservationBody');
+    const empty = $('#reservationEmpty');
+    if (items.length === 0) {
+      tbody.innerHTML = '';
+      empty.style.display = 'block';
+      return;
+    }
+    empty.style.display = 'none';
+    tbody.innerHTML = items.map(r => {
+      const status = r.status || 'pending';
+      const canConfirm = status === 'pending';
+      const canCancel = status === 'pending' || status === 'confirmed';
+      return `
+      <tr data-id="${r.id}">
+        <td><strong style="font-family:monospace;font-size:13px">${r.id}</strong></td>
+        <td>${escapeHTML(r.name)}</td>
+        <td>${escapeHTML(r.mobile)}</td>
+        <td>${escapeHTML(r.dessertName || '—')}</td>
+        <td>${r.quantity || 1}</td>
+        <td class="reservation-notes" title="${escapeAttr(r.notes || '')}">${escapeHTML(r.notes || '—')}</td>
+        <td>${escapeHTML(r.date || '—')}</td>
+        <td>${escapeHTML(r.time || '—')}</td>
+        <td><span class="badge badge--${status}">${RES_STATUS_LABEL[status] || status}</span></td>
+        <td>
+          <div class="row-actions">
+            ${canConfirm ? `<button class="row-btn row-btn--green" onclick="confirmReservation('${r.id}')">Confirm</button>` : ''}
+            ${canCancel ? `<button class="row-btn" onclick="cancelReservation('${r.id}')">Cancel</button>` : ''}
+            <button class="row-btn row-btn--red" onclick="deleteReservation('${r.id}')">Delete</button>
+          </div>
+        </td>
+      </tr>`;
+    }).join('');
+  }
+
+  window.confirmReservation = async function (id) {
+    const r = ReservationService.all().find(x => String(x.id) === String(id));
+    if (!r) return;
+    if (!await confirmDialog(`Confirm reservation ${r.id} for ${r.name} (${r.quantity} pcs)?`)) return;
+    try {
+      await ReservationService.setStatus(id, 'confirmed');
+      loadReservations();
+      refreshDashboard();
+      toast('Reservation confirmed', 'success');
+    } catch (e) {
+      toast('Failed: ' + e.message, 'error');
+    }
+  };
+
+  window.cancelReservation = async function (id) {
+    const r = ReservationService.all().find(x => String(x.id) === String(id));
+    if (!r) return;
+    if (!await confirmDialog(`Cancel reservation ${r.id} for ${r.name}?`)) return;
+    try {
+      await ReservationService.setStatus(id, 'cancelled');
+      loadReservations();
+      refreshDashboard();
+      toast('Reservation cancelled', 'success');
+    } catch (e) {
+      toast('Failed: ' + e.message, 'error');
+    }
+  };
+
+  window.deleteReservation = async function (id) {
+    if (!await confirmDialog('Delete this reservation permanently?')) return;
+    try {
+      await ReservationService.remove(id);
+      loadReservations();
+      refreshDashboard();
+      toast('Reservation deleted', 'success');
+    } catch (e) {
+      toast('Failed: ' + e.message, 'error');
+    }
+  };
+
+  if ($('#reservationSearch')) $('#reservationSearch').addEventListener('input', (e) => { reservationsSearch = e.target.value; loadReservations(); });
+  if ($('#reservationFilter')) $('#reservationFilter').addEventListener('change', (e) => { reservationsFilter = e.target.value; loadReservations(); });
+  if ($('#reservationDate')) $('#reservationDate').addEventListener('change', (e) => { reservationsDate = e.target.value; loadReservations(); });
+  if ($('#reservationSort')) $('#reservationSort').addEventListener('change', (e) => { reservationsSort = e.target.value; loadReservations(); });
+
+  /* ============================================
        WEBSITE SETTINGS
        ============================================ */
   function loadWebsite() {
@@ -749,7 +883,6 @@
     const biz = StorageService.get(STORAGE_KEYS.BUSINESS, DEFAULT_BUSINESS);
     setVal('bsName', biz.name);
     setVal('bsPhone', biz.phone);
-    setVal('bsWhatsApp', biz.whatsapp);
     setVal('bsEmail', biz.email);
     setVal('bsInstagram', biz.instagram);
     setVal('bsDay', biz.operatingDay);
@@ -772,7 +905,7 @@
 
   $('#saveBusiness').onclick = async () => {
     const biz = {
-      name: val('bsName'), phone: val('bsPhone'), whatsapp: val('bsWhatsApp'),
+      name: val('bsName'), phone: val('bsPhone'),
       email: val('bsEmail'), instagram: val('bsInstagram'),
       operatingDay: val('bsDay'), operatingHours: val('bsHours'),
       maxPieces: parseInt(val('bsMax')) || 5, status: currentBizStatus,
@@ -793,6 +926,7 @@
     if (e.key === 'w') navigateTo('dessert');
     if (e.key === 'l') navigateTo('location');
     if (e.key === 'g') navigateTo('gallery');
+    if (e.key === 'r') navigateTo('reservations');
     if (e.key === 'n') toggleDark();
   });
 
@@ -803,6 +937,7 @@
        ============================================ */
   (async () => {
     await StorageService.init();
+    await ReservationService.refresh();
     refreshDashboard();
     loadDessertEditor();
     loadHistory();
@@ -812,6 +947,18 @@
     loadAnnouncements();
     loadWebsite();
     loadBusiness();
+    loadReservations();
   })();
+
+  // Poll for new customer reservations so the admin sees them instantly
+  // (and re-sync the dashboard counters with the live dessert).
+  setInterval(async () => {
+    try {
+      await ReservationService.refresh();
+      refreshDashboard();
+      loadReservations();
+      if ($('#page-dessert') && $('#page-dessert').classList.contains('page--active')) loadDessertEditor();
+    } catch (_) {}
+  }, 15000);
 
 })();

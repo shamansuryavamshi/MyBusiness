@@ -1234,6 +1234,43 @@ body.dark .stat-card__icon { background: rgba(255,255,255,0.04); }
 }
 
 /* ============================================
+   RESERVATIONS
+   ============================================ */
+.reservation-notes {
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--text-secondary);
+}
+
+.stats-grid--reservations {
+  margin-top: 0;
+}
+
+.stats-grid--reservations .stat-card {
+  padding: 20px 24px;
+}
+
+.stats-grid--reservations .stat-card__value {
+  font-size: 22px;
+}
+
+@media (max-width: 1024px) {
+  .stats-grid--reservations { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (max-width: 768px) {
+  .stats-grid--reservations { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 480px) {
+  .stats-grid--reservations { grid-template-columns: repeat(2, 1fr); }
+  .stats-grid--reservations .stat-card { padding: 16px; }
+  .stats-grid--reservations .stat-card__icon { width: 40px; height: 40px; font-size: 20px; }
+}
+
+/* ============================================
    RESPONSIVE
    ============================================ */
 @media (max-width: 1024px) {

@@ -631,15 +631,6 @@ button, input, select, textarea {
   flex-wrap: wrap;
 }
 
-.featured__whatsapp-btn {
-  background: #25D366;
-  color: var(--white);
-}
-
-.featured__whatsapp-btn:hover {
-  box-shadow: 0 8px 30px rgba(37, 211, 102, 0.35);
-}
-
 .featured__actions .btn--outline {
   border-color: var(--black);
 }
@@ -1045,6 +1036,175 @@ button, input, select, textarea {
 /* ============================================
    RESERVE / WAITING LIST
    ============================================ */
+.reserve {
+  padding: var(--section-pad) 0 0;
+}
+
+.reserve__card {
+  background: var(--white);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-lg);
+  padding: 48px;
+  max-width: 720px;
+}
+
+.reserve__stock {
+  margin-bottom: 32px;
+}
+
+.reserve__stock-bar {
+  height: 10px;
+  background: var(--cream);
+  border-radius: var(--radius-btn);
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+
+.reserve__stock-fill {
+  height: 100%;
+  background: var(--accent-green);
+  border-radius: var(--radius-btn);
+  transition: width 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.reserve__stock-text {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--gray);
+}
+
+.reserve__form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.reserve__row {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 20px;
+}
+
+.reserve__field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.reserve__field label {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  color: var(--black);
+}
+
+.reserve__field input {
+  width: 100%;
+  padding: 14px 18px;
+  font-size: 15px;
+  font-family: var(--font-primary);
+  color: var(--black);
+  background: var(--cream);
+  border: 1.5px solid transparent;
+  border-radius: 12px;
+  transition: border-color 0.3s ease, background 0.3s ease;
+}
+
+.reserve__field input:focus {
+  outline: none;
+  border-color: var(--accent-purple);
+  background: var(--white);
+}
+
+.reserve__error {
+  font-size: 13px;
+  color: var(--red);
+  min-height: 0;
+  display: none;
+}
+
+.reserve__error.show {
+  display: block;
+}
+
+.reserve__fineprint {
+  font-size: 13px;
+  color: var(--gray);
+  text-align: center;
+}
+
+.reserve__success {
+  text-align: center;
+  padding: 24px 0 8px;
+}
+
+.reserve__success-icon {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+  font-weight: 700;
+  color: var(--black);
+  background: var(--accent-green);
+  border-radius: 50%;
+}
+
+.reserve__success h3 {
+  font-size: 26px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.reserve__success-line {
+  font-size: 15px;
+  color: var(--gray);
+  line-height: 1.7;
+}
+
+.reserve__success-id {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--black);
+  margin: 16px 0;
+}
+
+.reserve__success-id strong {
+  font-family: monospace;
+  letter-spacing: 1px;
+  background: var(--cream);
+  padding: 4px 12px;
+  border-radius: 8px;
+}
+
+.reserve__success-status {
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #8a6d00;
+  background: rgba(255, 149, 0, 0.12);
+  padding: 6px 16px;
+  border-radius: var(--radius-btn);
+  margin: 4px 0 16px;
+}
+
+.reserve__soldout {
+  text-align: center;
+  padding: 20px 0 8px;
+}
+
+.reserve__soldout p {
+  font-size: 15px;
+  color: var(--gray);
+  margin-top: 16px;
+  line-height: 1.6;
+}
+
 /* ============================================
    FOOTER
    ============================================ */
@@ -1145,31 +1305,6 @@ button, input, select, textarea {
   color: var(--accent-green);
   padding: 8px 18px;
   border-radius: var(--radius-btn);
-}
-
-/* ============================================
-   FLOATING WHATSAPP BUTTON
-   ============================================ */
-.whatsapp-float {
-  position: fixed;
-  bottom: 28px;
-  right: 28px;
-  width: 60px;
-  height: 60px;
-  background: #25D366;
-  color: var(--white);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 999;
-  box-shadow: 0 8px 24px rgba(37, 211, 102, 0.35);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.whatsapp-float:hover {
-  transform: scale(1.1);
-  box-shadow: 0 12px 32px rgba(37, 211, 102, 0.45);
 }
 
 /* ============================================
@@ -1354,6 +1489,14 @@ button, input, select, textarea {
     grid-template-columns: 1fr;
   }
 
+  .reserve__card {
+    padding: 32px 24px;
+  }
+
+  .reserve__row {
+    grid-template-columns: 1fr;
+  }
+
   .footer__links {
     grid-template-columns: 1fr;
     gap: 32px;
@@ -1363,13 +1506,6 @@ button, input, select, textarea {
     flex-direction: column;
     gap: 16px;
     text-align: center;
-  }
-
-  .whatsapp-float {
-    bottom: 20px;
-    right: 20px;
-    width: 54px;
-    height: 54px;
   }
 }
 
