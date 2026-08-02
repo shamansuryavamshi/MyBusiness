@@ -122,10 +122,10 @@
       "textColor": "#ffffff",
       "startDate": null,
       "endDate": null,
-      "isPublished": false,
+      "isPublished": true,
       "isPinned": false,
       "createdAt": "2026-07-31T17:27:31.290Z",
-      "updatedAt": "2026-08-02T07:24:12.805Z"
+      "updatedAt": "2026-08-02T07:24:13.428Z"
     }
   ],
   "dessertHistory": [
@@ -178,5 +178,5 @@
       "sold": 8
     }
   ],
-  "publishedAt": "2026-08-02T07:24:13.418Z"
+  "publishedAt": "2026-08-02T07:24:14.035Z"
 }
