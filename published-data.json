@@ -112,22 +112,7 @@
       "date": "2026-06-15"
     }
   ],
-  "announcements": [
-    {
-      "id": "ms97tn16bttf21",
-      "title": "hi dk",
-      "message": "halkat",
-      "type": "General",
-      "backgroundColor": "#000000",
-      "textColor": "#ffffff",
-      "startDate": null,
-      "endDate": null,
-      "isPublished": true,
-      "isPinned": false,
-      "createdAt": "2026-07-31T17:27:31.290Z",
-      "updatedAt": "2026-08-02T07:24:13.428Z"
-    }
-  ],
+  "announcements": [],
   "dessertHistory": [
     {
       "id": 1,
@@ -178,5 +163,5 @@
       "sold": 8
     }
   ],
-  "publishedAt": "2026-08-02T07:24:14.035Z"
+  "publishedAt": "2026-08-02T09:03:22.770Z"
 }
