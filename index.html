@@ -29,7 +29,7 @@
       "price": "₹400",
       "image": "",
       "emoji": "🧀",
-      "color": "#74D3AE",
+      "color": "#FFA3A3",
       "quantity": 5,
       "remaining": 5,
       "available": true,
@@ -356,7 +356,7 @@
       <p class="section-subtitle anim-fade">These desserts have been featured on previous Sundays. They're not available right now — but one might make a comeback.</p>
       <div class="past-specials__grid" id="pastSpecialsGrid">
         <div class="past-special__card anim-slide-up">
-  <div class="past-special__image" style="background:#74D3AE">
+  <div class="past-special__image" style="background:#FFA3A3">
     <div class="past-special__emoji">🍰</div>
     <span class="past-special__date">Jul 28</span>
   </div>
@@ -370,7 +370,7 @@
           </div>
         </div>
         <div class="past-special__card anim-slide-up" style="animation-delay:.1s">
-          <div class="past-special__image" style="background:#A6C48A">
+          <div class="past-special__image" style="background:#F3F0DE">
             <span class="past-special__emoji">🍵</span>
             <span class="past-special__date">June 22</span>
           </div>
@@ -384,7 +384,7 @@
           </div>
         </div>
         <div class="past-special__card anim-slide-up" style="animation-delay:.2s">
-          <div class="past-special__image" style="background:#A6C48A">
+          <div class="past-special__image" style="background:#F3F0DE">
             <span class="past-special__emoji">🥭</span>
             <span class="past-special__date">June 15</span>
           </div>
@@ -398,7 +398,7 @@
           </div>
         </div>
         <div class="past-special__card anim-slide-up" style="animation-delay:.3s">
-          <div class="past-special__image" style="background:#74D3AE">
+          <div class="past-special__image" style="background:#FFA3A3">
             <span class="past-special__emoji">🌹</span>
             <span class="past-special__date">June 8</span>
           </div>
@@ -422,10 +422,10 @@
       <h2 class="section-title anim-slide-up">Every Dessert<br>is a Masterpiece</h2>
       <div class="gallery__grid" id="galleryGrid">
         <div class="gallery__item gallery__item--tall anim-slide-up">
-          <div class="gallery__placeholder" style="background:#74D3AE"><span>🍰</span></div>
+          <div class="gallery__placeholder" style="background:#FFA3A3"><span>🍰</span></div>
         </div>
         <div class="gallery__item anim-slide-up" style="animation-delay:.1s">
-          <div class="gallery__placeholder" style="background:#A6C48A"><span>🧀</span></div>
+          <div class="gallery__placeholder" style="background:#F3F0DE"><span>🧀</span></div>
         </div>
         <div class="gallery__item anim-slide-up" style="animation-delay:.2s">
           <div class="gallery__placeholder" style="background:var(--cream); color:var(--black)"><span>🍫</span></div>
@@ -434,10 +434,10 @@
           <div class="gallery__placeholder" style="background:var(--black); color:var(--accent-green)"><span>🌹</span></div>
         </div>
         <div class="gallery__item gallery__item--wide anim-slide-up" style="animation-delay:.25s">
-          <div class="gallery__placeholder" style="background:#74D3AE"><span>🎂</span></div>
+          <div class="gallery__placeholder" style="background:#FFA3A3"><span>🎂</span></div>
         </div>
         <div class="gallery__item anim-slide-up" style="animation-delay:.3s">
-          <div class="gallery__placeholder" style="background:#A6C48A"><span>🥭</span></div>
+          <div class="gallery__placeholder" style="background:#F3F0DE"><span>🥭</span></div>
         </div>
       </div>
     </div>
@@ -758,10 +758,10 @@
         if (g.url) {
           return `<div class="gallery__item ${sizeClass} anim-slide-up" style="animation-delay:${delay}s"><img src="${g.url}" alt="${g.caption || ''}" loading="lazy" style="width:100%;height:100%;object-fit:cover;border-radius:16px"></div>`;
         }
-        const colors = ['#74D3AE', '#678D58', '#A6C48A', 'var(--cream)'];
+        const colors = ['var(--pink)', 'var(--green)', 'var(--cream)', 'var(--dark-green)'];
         const emojis = ['🍰', '🧀', '🍫', '🌹', '🎂', '🥭'];
         const bg = colors[i % colors.length];
-        const color = bg === 'var(--cream)' ? 'var(--black)' : bg === '#A6C48A' ? 'var(--black)' : '';
+        const color = (bg === 'var(--green)' || bg === 'var(--dark-green)') ? 'var(--white)' : 'var(--black)';
         return `<div class="gallery__item ${sizeClass} anim-slide-up" style="animation-delay:${delay}s"><div class="gallery__placeholder" style="background:${bg};${color ? ' color:' + color : ''}"><span>${emojis[i % emojis.length]}</span></div></div>`;
       }).join('');
       grid.querySelectorAll('.anim-slide-up').forEach(el => observer.observe(el));
@@ -875,7 +875,7 @@
       list.innerHTML = visible.map(a => {
         const icon = typeIcons[a.type] || '📢';
         return `
-        <div class="announcement-banner" style="background:${a.backgroundColor || '#678D58'};color:${a.textColor || '#FFFFFF'}">
+        <div class="announcement-banner" style="background:${a.backgroundColor || '#FFA3A3'};color:${a.textColor || '#07120F'}">
           <span class="announcement-banner__icon">${icon}</span>
           <div class="announcement-banner__content">
             <strong>${a.title}</strong>
