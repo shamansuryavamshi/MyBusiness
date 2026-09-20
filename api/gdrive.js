@@ -5,6 +5,7 @@
    ============================================ */
 
 const { google } = require('googleapis');
+const { Readable } = require('stream');
 
 /* ---------- Auth ---------- */
 function getAuth() {
@@ -52,7 +53,7 @@ async function uploadImage(base64Data, mimeType, folderName) {
       name: filename,
       parents: [folderId],
     },
-    media: { mimeType: mimeType || 'image/jpeg', body: buf },
+    media: { mimeType: mimeType || 'image/jpeg', body: Readable.from(buf) },
     fields: 'id',
   });
 
