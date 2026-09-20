@@ -82,22 +82,27 @@ async function uploadImage(base64Data, mimeType, folderName) {
     return fileId;
   };
 
-  let folderId;
+  const uploadTo = async (parentId) => {
+    const folderId = await ensureFolder(parentId, folderName || 'DomingoHero');
+    const fileId = await createFile(folderId);
+    return fileId;
+  };
+
+  let fileId;
   try {
-    folderId = await ensureFolder(rootFolderId, folderName || 'DomingoHero');
+    fileId = await uploadTo(rootFolderId);
   } catch (e) {
     if (!isStorageQuotaError(e)) throw e;
     // Configured folder is in a location the service account cannot write to
     // (e.g. My Drive with no service-account quota). Fall back to a shared drive.
     const sharedDriveId = await findSharedDrive();
     if (sharedDriveId) {
-      folderId = await ensureFolder(sharedDriveId, folderName || 'DomingoHero');
+      fileId = await uploadTo(sharedDriveId);
     } else {
       throw new Error('Google Drive storage is not available. Please configure a shared drive for this service account.');
     }
   }
 
-  const fileId = await createFile(folderId);
   const publicImageUrl = `https://drive.google.com/uc?export=view&id=${fileId}`;
   const downloadUrl = `https://drive.google.com/uc?export=download&id=${fileId}`;
   return { success: true, fileId, publicImageUrl, downloadUrl };
