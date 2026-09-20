@@ -7,7 +7,7 @@
   <meta name="description" content="One handcrafted dessert every Sunday in Bangalore. When it's gone, it's gone.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Archivo+Black&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -69,7 +69,9 @@
   <!-- ========== NAVIGATION ========== -->
   <nav class="nav" id="nav">
     <div class="nav__inner">
-      <a href="#" class="nav__logo">DOMINGO</a>
+      <a href="#" class="nav__logo">
+        <img src="logo.svg" alt="Domingo" class="nav__logo-img">
+      </a>
       <div class="nav__badge">SUNDAY EXCLUSIVE</div>
       <ul class="nav__links" id="navLinks">
         <li><a href="#this-week">This Week</a></li>
@@ -96,6 +98,9 @@
 
   <!-- ========== HERO ========== -->
   <section class="hero" id="hero">
+    <div class="hero__star-layer" id="heroStarLayer">
+      <img src="star.svg" alt="" aria-hidden="true">
+    </div>
     <div class="hero__container">
       <div class="hero__content">
         <p class="hero__badge anim-fade">Open Every Sunday · Bangalore</p>
@@ -111,14 +116,6 @@
         </div>
       </div>
       <div class="hero__visual anim-scale">
-        <div class="hero__image-card">
-          <div class="hero__image-placeholder">
-            <span>🎂</span>
-            <p>One Dessert.<br>Every Sunday.</p>
-          </div>
-        </div>
-        <div class="hero__floating-shape hero__floating-shape--1"></div>
-        <div class="hero__floating-shape hero__floating-shape--2"></div>
       </div>
     </div>
     <div class="hero__bg-text" aria-hidden="true">DOMINGO</div>
