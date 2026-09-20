@@ -36,38 +36,68 @@ async function ensureFolder(parentId, name) {
   return created.data.id;
 }
 
+// Find the first shared drive the service account has access to.
+async function findSharedDrive() {
+  const d = drive();
+  const res = await d.drives.list({ pageSize: 10, fields: 'drives(id)' });
+  return (res.data.drives && res.data.drives[0] && res.data.drives[0].id) || null;
+}
+
+function isStorageQuotaError(e) {
+  return /storage quota|Service Accounts do not have/i.test(e.message || '');
+}
+
 /* ---------- Upload ---------- */
 async function uploadImage(base64Data, mimeType, folderName) {
   const rootFolderId = process.env.GOOGLE_DRIVE_FOLDER_ID;
   if (!rootFolderId) throw new Error('GOOGLE_DRIVE_FOLDER_ID not set');
 
-  const folderId = await ensureFolder(rootFolderId, folderName || 'FeaturedDesserts');
   const buf = Buffer.from(base64Data.replace(/^data:image\/\w+;base64,/, ''), 'base64');
 
   // Preserve extension
   const ext = mimeType === 'image/png' ? 'png' : mimeType === 'image/webp' ? 'webp' : 'jpg';
   const filename = `${Date.now()}_${Math.random().toString(36).slice(2, 8)}.${ext}`;
 
-  const d = drive();
-  const file = await d.files.create({
-    requestBody: {
-      name: filename,
-      parents: [folderId],
-    },
-    media: { mimeType: mimeType || 'image/jpeg', body: Readable.from(buf) },
-    fields: 'id',
-    supportsAllDrives: true,
-  });
+  const createFile = async (parentId) => {
+    const d = drive();
+    const file = await d.files.create({
+      requestBody: {
+        name: filename,
+        parents: [parentId],
+      },
+      media: { mimeType: mimeType || 'image/jpeg', body: Readable.from(buf) },
+      fields: 'id',
+      supportsAllDrives: true,
+    });
 
-  const fileId = file.data.id;
+    const fileId = file.data.id;
 
-  // Make publicly viewable
-  await d.permissions.create({
-    fileId,
-    requestBody: { type: 'anyone', role: 'reader' },
-    supportsAllDrives: true,
-  });
+    // Make publicly viewable
+    await d.permissions.create({
+      fileId,
+      requestBody: { type: 'anyone', role: 'reader' },
+      supportsAllDrives: true,
+    });
 
+    return fileId;
+  };
+
+  let folderId;
+  try {
+    folderId = await ensureFolder(rootFolderId, folderName || 'DomingoHero');
+  } catch (e) {
+    if (!isStorageQuotaError(e)) throw e;
+    // Configured folder is in a location the service account cannot write to
+    // (e.g. My Drive with no service-account quota). Fall back to a shared drive.
+    const sharedDriveId = await findSharedDrive();
+    if (sharedDriveId) {
+      folderId = await ensureFolder(sharedDriveId, folderName || 'DomingoHero');
+    } else {
+      throw new Error('Google Drive storage is not available. Please configure a shared drive for this service account.');
+    }
+  }
+
+  const fileId = await createFile(folderId);
   const publicImageUrl = `https://drive.google.com/uc?export=view&id=${fileId}`;
   const downloadUrl = `https://drive.google.com/uc?export=download&id=${fileId}`;
   return { success: true, fileId, publicImageUrl, downloadUrl };
