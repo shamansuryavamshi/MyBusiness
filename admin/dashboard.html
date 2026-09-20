@@ -65,6 +65,13 @@
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
         <span>Business Settings</span>
       </a>
+
+      <div class="sidebar__divider"></div>
+
+      <a href="#" class="sidebar__link" data-page="domingo">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l19-9-9 19-2-8-8-2z"/></svg>
+        <span>Domingo Hero</span>
+      </a>
     </nav>
 
     <div class="sidebar__footer">
@@ -609,6 +616,57 @@
         <button class="btn btn--primary" id="saveBusiness">Save Business Settings</button>
       </div>
     </section>
+
+    <!-- ===== PAGE: DOMINGO HERO ===== -->
+    <section class="page" id="page-domingo">
+      <div class="form-card">
+        <h3 class="form-card__title">Domingo Hero Dessert</h3>
+        <p style="font-size:13px;color:var(--text-muted);margin-top:-8px;margin-bottom:20px;line-height:1.6">
+          Controls the dessert name and image shown on the <strong>Domingo homepage</strong> hero.
+          This is separate from the main website and never touches the current site's data.
+        </p>
+        <div class="form-grid">
+          <div class="form-field form-field--full">
+            <label>Dessert Name</label>
+            <input type="text" id="dhName" placeholder="e.g. Burnt Basque Cheesecake">
+          </div>
+          <div class="form-field form-field--full">
+            <label>Hero Image (or drag &amp; drop below)</label>
+            <input type="text" id="dhImage" placeholder="Google Drive URL (uploaded automatically)">
+            <input type="hidden" id="dhFileId">
+          </div>
+          <div class="form-field form-field--full">
+            <div class="dropzone" id="dhDropzone">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              <p>Drag &amp; drop image here or <strong>click to browse</strong></p>
+              <span>Uploaded to Google Drive · JPG, PNG, WebP</span>
+              <input type="file" id="dhFile" accept="image/*" hidden>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-card">
+        <h3 class="form-card__title">Hero Preview</h3>
+        <div id="domingoHeroPreview">
+          <div class="domingo-hero-preview">
+            <div class="domingo-hero-preview__art" id="dhPreviewArt">
+              <img id="dhPreviewImg" src="" alt="" style="display:none">
+              <span class="domingo-hero-preview__emoji" id="dhPreviewEmoji">🧁</span>
+            </div>
+            <div class="domingo-hero-preview__badge">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#F97316" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              This week&apos;s special
+            </div>
+            <h2 class="domingo-hero-preview__title" id="dhPreviewTitle">Creme<br>Brulee</h2>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button class="btn btn--primary" id="saveDomingoHero">Save &amp; Publish Domingo Hero</button>
+      </div>
+    </section>
   </main>
 
   <!-- ========== TOAST ========== -->
@@ -634,6 +692,7 @@
   <script src="gallery-service.js"></script>
   <script src="announcement-service.js"></script>
   <script src="reservation-service.js"></script>
+  <script src="domingo-service.js"></script>
   <script src="dashboard.js"></script>
 </body>
 </html>

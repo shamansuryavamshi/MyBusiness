@@ -81,6 +81,7 @@
     reservations: ['Reservations', 'Manage this week\'s dessert reservations'],
     website: ['Website Settings', 'Control what visitors see'],
     business: ['Business Settings', 'Core business information'],
+    domingo: ['Domingo Hero', 'Set the Domingo homepage hero dessert'],
   };
 
   window.navigateTo = function (page) {
@@ -918,6 +919,88 @@
   };
 
   /* ============================================
+       DOMINGO HERO
+       Manages the Domingo homepage hero dessert.
+       Data goes to domingo-data.json via /api/domingo;
+       images upload to Google Drive via /api/gdrive.
+       Fully isolated from the existing website.
+       ============================================ */
+  function dhPreviewName(name) {
+    const parts = (name || '').split(/\s+/).filter(Boolean);
+    if (parts.length === 0) return { line1: 'Creme', line2: 'Brulee' };
+    if (parts.length === 1) return { line1: parts[0], line2: '' };
+    return { line1: parts[0], line2: parts.slice(1).join(' ') };
+  }
+
+  function updateDomingoPreview() {
+    const name = val('dhName');
+    const img = val('dhImage');
+    const { line1, line2 } = dhPreviewName(name);
+    $('#dhPreviewTitle').innerHTML = line1 + (line2 ? '<br>' + line2 : '');
+    if (img) {
+      $('#dhPreviewImg').src = img;
+      $('#dhPreviewImg').style.display = 'block';
+      $('#dhPreviewEmoji').style.display = 'none';
+    } else {
+      $('#dhPreviewImg').style.display = 'none';
+      $('#dhPreviewEmoji').style.display = 'block';
+    }
+  }
+
+  function loadDomingoHero() {
+    DomingoService.get().then(hero => {
+      setVal('dhName', hero.name);
+      setVal('dhImage', hero.image);
+      setVal('dhFileId', hero.fileId || '');
+      updateDomingoPreview();
+    }).catch(err => {
+      toast('Failed to load Domingo hero: ' + err.message, 'error');
+    });
+  }
+
+  if ($('#dhName')) $('#dhName').addEventListener('input', updateDomingoPreview);
+  if ($('#dhImage')) $('#dhImage').addEventListener('input', updateDomingoPreview);
+
+  const dhDropzone = $('#dhDropzone');
+  const dhFileInput = $('#dhFile');
+  if (dhDropzone) {
+    dhDropzone.onclick = () => dhFileInput.click();
+    dhDropzone.addEventListener('dragover', (e) => { e.preventDefault(); dhDropzone.classList.add('dragover'); });
+    dhDropzone.addEventListener('dragleave', () => dhDropzone.classList.remove('dragover'));
+    dhDropzone.addEventListener('drop', (e) => { e.preventDefault(); dhDropzone.classList.remove('dragover'); if (e.dataTransfer.files[0]) saveDomingoHeroImage(e.dataTransfer.files[0]); });
+  }
+  if (dhFileInput) dhFileInput.addEventListener('change', (e) => { if (e.target.files[0]) saveDomingoHeroImage(e.target.files[0]); e.target.value = ''; });
+
+  function saveDomingoHeroImage(file) {
+    const dz = $('#dhDropzone');
+    dz.classList.add('dragover');
+    dz.querySelector('p').textContent = 'Uploading...';
+    toast('Uploading image...', 'info');
+    DomingoService.uploadImage(file).then(result => {
+      setVal('dhImage', result.url);
+      setVal('dhFileId', result.fileId || '');
+      updateDomingoPreview();
+      toast('Image uploaded successfully', 'success');
+    }).catch(err => {
+      toast(err.message || 'Image upload failed. Please try again.', 'error');
+    }).finally(() => {
+      dz.classList.remove('dragover');
+      dz.querySelector('p').innerHTML = 'Drag &amp; drop image here or <strong>click to browse</strong>';
+    });
+  }
+
+  $('#saveDomingoHero').onclick = async () => {
+    const name = val('dhName');
+    if (!name) { toast('Please enter a dessert name', 'error'); return; }
+    try {
+      await DomingoService.save({ name, image: val('dhImage'), fileId: val('dhFileId') });
+      toast('Domingo hero updated successfully', 'success');
+    } catch (e) {
+      toast('Publish failed: ' + e.message, 'error');
+    }
+  };
+
+  /* ============================================
        KEYBOARD SHORTCUTS
        ============================================ */
   document.addEventListener('keydown', (e) => {
@@ -948,6 +1031,7 @@
     loadWebsite();
     loadBusiness();
     loadReservations();
+    loadDomingoHero();
   })();
 
   // Poll for new customer reservations so the admin sees them instantly
