@@ -26,11 +26,12 @@ const folderCache = {};
 async function ensureFolder(parentId, name) {
   const d = drive();
   const query = `name='${name}' and mimeType='application/vnd.google-apps.folder' and '${parentId}' in parents and trashed=false`;
-  const res = await d.files.list({ q: query, fields: 'files(id)' });
+  const res = await d.files.list({ q: query, fields: 'files(id)', supportsAllDrives: true, includeItemsFromAllDrives: true });
   if (res.data.files.length > 0) return res.data.files[0].id;
   const created = await d.files.create({
     requestBody: { name, mimeType: 'application/vnd.google-apps.folder', parents: [parentId] },
     fields: 'id',
+    supportsAllDrives: true,
   });
   return created.data.id;
 }
@@ -55,6 +56,7 @@ async function uploadImage(base64Data, mimeType, folderName) {
     },
     media: { mimeType: mimeType || 'image/jpeg', body: Readable.from(buf) },
     fields: 'id',
+    supportsAllDrives: true,
   });
 
   const fileId = file.data.id;
@@ -63,6 +65,7 @@ async function uploadImage(base64Data, mimeType, folderName) {
   await d.permissions.create({
     fileId,
     requestBody: { type: 'anyone', role: 'reader' },
+    supportsAllDrives: true,
   });
 
   const publicImageUrl = `https://drive.google.com/uc?export=view&id=${fileId}`;
@@ -73,7 +76,7 @@ async function uploadImage(base64Data, mimeType, folderName) {
 /* ---------- Delete ---------- */
 async function deleteImage(fileId) {
   const d = drive();
-  await d.files.delete({ fileId });
+  await d.files.delete({ fileId, supportsAllDrives: true });
   return { success: true };
 }
 
