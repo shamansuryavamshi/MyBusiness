@@ -3,695 +3,238 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Domingo — Dashboard</title>
+  <title>Domingo — Admin</title>
+  <meta name="robots" content="noindex, nofollow">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="dashboard.css">
 </head>
 <body>
-
-  <!-- ========== SIDEBAR ========== -->
-  <aside class="sidebar" id="sidebar">
-    <div class="sidebar__header">
-      <div class="sidebar__logo">D</div>
-      <div class="sidebar__brand">
-        <span class="sidebar__name">Domingo</span>
-        <span class="sidebar__role">Admin</span>
-      </div>
-    </div>
-
-    <nav class="sidebar__nav">
-      <a href="#" class="sidebar__link active" data-page="dashboard">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>
-        <span>Dashboard</span>
-      </a>
-      <a href="#" class="sidebar__link" data-page="dessert">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a5 5 0 0 1 5 5c0 2-.8 3.8-2 5H9c-1.2-1.2-2-3-2-5a5 5 0 0 1 5-5z"/><path d="M7 12v6a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-6"/><line x1="12" y1="18" x2="12" y2="22"/></svg>
-        <span>Weekly Dessert</span>
-      </a>
-      <a href="#" class="sidebar__link" data-page="history">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-        <span>Dessert History</span>
-      </a>
-      <a href="#" class="sidebar__link" data-page="location">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-        <span>Location</span>
-      </a>
-      <a href="#" class="sidebar__link" data-page="gallery">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-        <span>Gallery</span>
-      </a>
-      <a href="#" class="sidebar__link" data-page="reviews">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-        <span>Reviews</span>
-      </a>
-      <a href="#" class="sidebar__link" data-page="announcements">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-        <span>Announcements</span>
-      </a>
-      <a href="#" class="sidebar__link" data-page="reservations">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><path d="M9 16l2 2 4-4"/></svg>
-        <span>Reservations</span>
-      </a>
-
-      <div class="sidebar__divider"></div>
-
-      <a href="#" class="sidebar__link" data-page="website">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-        <span>Website Settings</span>
-      </a>
-      <a href="#" class="sidebar__link" data-page="business">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-        <span>Business Settings</span>
-      </a>
-
-      <div class="sidebar__divider"></div>
-
-      <a href="#" class="sidebar__link" data-page="domingo">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l19-9-9 19-2-8-8-2z"/></svg>
-        <span>Domingo Hero</span>
-      </a>
-    </nav>
-
-    <div class="sidebar__footer">
-      <button class="sidebar__logout" id="logoutBtn">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-        <span>Logout</span>
-      </button>
-    </div>
-  </aside>
-
-  <!-- ========== MOBILE HEADER ========== -->
-  <header class="mobile-header" id="mobileHeader">
-    <button class="hamburger" id="menuToggle" aria-label="Toggle menu">
-      <span></span><span></span><span></span>
-    </button>
-    <span class="mobile-header__title">Domingo</span>
-    <button class="mobile-header__dark" id="darkToggleMobile" aria-label="Toggle dark mode">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-    </button>
-  </header>
-  <div class="sidebar-overlay" id="sidebarOverlay"></div>
-
-  <!-- ========== MAIN CONTENT ========== -->
-  <main class="main" id="main">
-    <div class="topbar">
-      <div class="topbar__left">
-        <h2 class="topbar__title" id="pageTitle">Dashboard</h2>
-        <p class="topbar__sub" id="pageSubtitle">Overview of your Sunday business</p>
-      </div>
-      <div class="topbar__right">
-        <div class="topbar__status" id="businessStatusBadge">
-          <span class="status-dot status-dot--open"></span>
-          Open This Sunday
-        </div>
-        <button class="topbar__dark" id="darkToggle" aria-label="Toggle dark mode">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-        </button>
-      </div>
-    </div>
-
-    <!-- ===== PAGE: DASHBOARD ===== -->
-    <section class="page page--active" id="page-dashboard">
-      <div class="stats-grid">
-        <div class="stat-card stat-card--green">
-          <div class="stat-card__icon">🧀</div>
-          <div class="stat-card__info">
-            <span class="stat-card__label">This Week's Dessert</span>
-            <span class="stat-card__value" id="statDessert">—</span>
-          </div>
-        </div>
-        <div class="stat-card stat-card--purple">
-          <div class="stat-card__icon">📍</div>
-          <div class="stat-card__info">
-            <span class="stat-card__label">This Sunday's Location</span>
-            <span class="stat-card__value stat-card__value--sm" id="statLocation">—</span>
-          </div>
+  <div class="app">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <a href="#" class="brand__mark" data-nav="dashboard">D</a>
+        <div class="brand__text">
+          <span class="brand__name">Domingo</span>
+          <span class="brand__sub">Sundays only</span>
         </div>
       </div>
 
-      <div class="stats-grid stats-grid--reservations" style="margin-bottom:28px">
-        <div class="stat-card stat-card--green">
-          <div class="stat-card__icon">✅</div>
-          <div class="stat-card__info">
-            <span class="stat-card__label">Available</span>
-            <span class="stat-card__value" id="rsvAvailable">5</span>
-          </div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-card__icon">📋</div>
-          <div class="stat-card__info">
-            <span class="stat-card__label">Reserved</span>
-            <span class="stat-card__value" id="rsvReserved">0</span>
-          </div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-card__icon">↩️</div>
-          <div class="stat-card__info">
-            <span class="stat-card__label">Remaining</span>
-            <span class="stat-card__value" id="rsvRemaining">5</span>
-          </div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-card__icon">⏳</div>
-          <div class="stat-card__info">
-            <span class="stat-card__label">Pending</span>
-            <span class="stat-card__value" id="rsvPending">0</span>
-          </div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-card__icon">✔️</div>
-          <div class="stat-card__info">
-            <span class="stat-card__label">Confirmed</span>
-            <span class="stat-card__value" id="rsvConfirmed">0</span>
-          </div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-card__icon">✖️</div>
-          <div class="stat-card__info">
-            <span class="stat-card__label">Cancelled</span>
-            <span class="stat-card__value" id="rsvCancelled">0</span>
-          </div>
-        </div>
+      <nav class="nav">
+        <a href="#" class="nav__item is-active" data-nav="dashboard">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="nav__icon"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+          <span>Dashboard</span>
+        </a>
+        <a href="#" class="nav__item" data-nav="hero">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="nav__icon"><path d="M12 21v-2M7 4h10M8 4v12l4-4 4 4V4"/></svg>
+          <span>Current Dessert</span>
+        </a>
+        <a href="#" class="nav__item" data-nav="preview">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="nav__icon"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          <span>Preview</span>
+        </a>
+        <a href="#" class="nav__item" data-nav="publish">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="nav__icon"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+          <span>Publish Changes</span>
+        </a>
+      </nav>
+
+      <div class="sidebar__foot">
+        <a href="https://shamansuryavamshi.github.io/domingo/" target="_blank" rel="noopener" class="link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="nav__icon"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6"/><path d="M10 14 21 3"/></svg>
+          <span>View public site</span>
+        </a>
+        <button type="button" class="link" id="signOutBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="nav__icon"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          <span>Sign out</span>
+        </a>
       </div>
+    </aside>
 
-      <div class="dashboard-grid">
-        <div class="dash-card">
-          <h3 class="dash-card__title">Quick Actions</h3>
-          <div class="quick-actions">
-            <button class="qa-btn" data-action="change-dessert" onclick="navigateTo('dessert')">
-              <span class="qa-btn__icon">🎂</span>
-              <span>Change Dessert</span>
-            </button>
-            <button class="qa-btn" data-action="update-location" onclick="navigateTo('location')">
-              <span class="qa-btn__icon">📍</span>
-              <span>Update Location</span>
-            </button>
-            <button class="qa-btn qa-btn--danger" data-action="soldout" id="qaSoldOut">
-              <span class="qa-btn__icon">🚫</span>
-              <span>Mark Sold Out</span>
-            </button>
-            <button class="qa-btn" data-action="announcement" onclick="navigateTo('announcements')">
-              <span class="qa-btn__icon">📢</span>
-              <span>Add Announcement</span>
-            </button>
-          </div>
+    <main class="main">
+
+      <!-- ===================== DASHBOARD ===================== -->
+      <section class="view is-active" id="view-dashboard">
+        <header class="page-head">
+          <h1 class="page-title">Dashboard</h1>
+          <p class="page-sub">One dessert. Five pieces. Every Sunday.</p>
+        </header>
+
+        <div class="status-row">
+          <div class="status-chip" id="apiStatus">Checking live data…</div>
+          <div class="status-chip status-chip--muted">Source: /api/domingo · no cache</div>
         </div>
 
-        <div class="dash-card">
-          <h3 class="dash-card__title">This Sunday</h3>
-          <div class="sunday-info" id="sundayInfo">
-            <div class="sunday-info__row">
-              <span class="sunday-info__label">Days Until Sunday</span>
-              <span class="sunday-info__value" id="daysUntilSunday">—</span>
+        <div class="grid grid--3">
+          <div class="card">
+            <span class="card__label">Current dessert</span>
+            <p class="card__value" id="dashName">—</p>
+            <p class="card__note" id="dashUpdated">Not published yet</p>
+          </div>
+          <div class="card">
+            <span class="card__label">Hero image</span>
+            <div class="card__thumb" id="dashThumb">
+              <div class="placeholder" id="dashThumbEmpty">No hero image</div>
             </div>
-            <div class="sunday-info__row">
-              <span class="sunday-info__label">Business Status</span>
-              <span class="sunday-info__value" id="businessStatus">Open</span>
+          </div>
+          <div class="card">
+            <span class="card__label">Next step</span>
+            <div class="card__actions">
+              <button type="button" class="btn btn--solid" data-nav-go="hero">Edit hero</button>
+              <a href="https://shamansuryavamshi.github.io/domingo/" target="_blank" rel="noopener" class="btn">View site</a>
             </div>
           </div>
         </div>
 
-        <div class="dash-card">
-          <h3 class="dash-card__title">Notifications</h3>
-        <div class="notifications" id="notificationsList">
-          <p class="empty-state">All clear! No notifications.</p>
+        <div class="card">
+          <span class="card__label">Live data feed</span>
+          <pre class="feed" id="dashFeed"></pre>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- ===== PAGE: WEEKLY DESSERT ===== -->
-    <section class="page" id="page-dessert">
-      <div class="dessert-editor">
-        <div class="dessert-editor__form">
-          <div class="form-card">
-            <h3 class="form-card__title">Dessert Details</h3>
-            <div class="form-grid">
-              <div class="form-field">
-                <label>Dessert Name</label>
-                <input type="text" id="dName" placeholder="e.g. Burnt Basque Cheesecake">
-              </div>
-              <div class="form-field">
-                <label>Price</label>
-                <input type="text" id="dPrice" placeholder="₹400">
-              </div>
-              <div class="form-field form-field--full">
-                <label>Description</label>
-                <textarea id="dDesc" rows="3" placeholder="Short description of the dessert..."></textarea>
-              </div>
-              <div class="form-field">
-                <label>Emoji</label>
-                <input type="text" id="dEmoji" placeholder="🧀" maxlength="4">
-              </div>
-              <div class="form-field">
-                <label>Accent Color</label>
-                <div class="color-input-wrap">
-                  <input type="color" id="dColor" value="#74D3AE">
-                  <input type="text" id="dColorText" value="#74D3AE" class="color-text">
+      <!-- ===================== HERO / CURRENT DESSERT ===================== -->
+      <section class="view" id="view-hero">
+        <header class="page-head">
+          <h1 class="page-title">Hero &amp; Current Dessert</h1>
+          <p class="page-sub">Set this week's dessert and its hero image. Saved straight to the live site.</p>
+        </header>
+
+        <div class="two-col">
+          <div class="col">
+            <div class="card">
+              <span class="card__label">Dessert name</span>
+              <input type="text" class="input" id="heroNameInput" placeholder="e.g. Burnt Basque Cheesecake" maxlength="80" autocomplete="off">
+            </div>
+
+            <div class="card">
+              <span class="card__label">Hero image</span>
+              <input type="file" id="heroImageInput" accept="image/jpeg,image/png,image/webp" hidden>
+              <label for="heroImageInput" class="dropzone" id="heroDropzone">
+                <img id="heroPreviewImg" alt="Hero preview" hidden>
+                <div class="placeholder" id="heroPreviewEmpty">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="34" height="34"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+                  <span>Choose a photo — will replace the hero on the live site</span>
                 </div>
-              </div>
-              <div class="form-field">
-                <label>Serves</label>
-                <input type="text" id="dServes" placeholder="Serves 2–3">
-              </div>
-              <div class="form-field">
-                <label>Allergens</label>
-                <input type="text" id="dAllergens" placeholder="Contains dairy, eggs">
-              </div>
-              <div class="form-field form-field--full">
-                <label>Pickup Note</label>
-                <input type="text" id="dPickup" placeholder="Pick up cold. Best enjoyed within 24 hours.">
-              </div>
-              <div class="form-field form-field--full">
-                <label>Image URL (or drag & drop below)</label>
-                <input type="text" id="dImage" placeholder="https://... or paste URL">
-                <input type="hidden" id="dFileId">
-              </div>
-              <div class="form-field form-field--full">
-                <div class="dropzone" id="dessertDropzone">
-                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-                  <p>Drag & drop image here or <strong>click to browse</strong></p>
-                  <span>Supports JPG, PNG, WebP (max 5MB)</span>
-                  <input type="file" id="dessertFile" accept="image/*" hidden>
-                </div>
+                <span class="dropzone__hint">Click to choose · JPG / PNG / WEBP</span>
+              </label>
+              <div class="img-actions">
+                <button type="button" class="btn btn--ghost" id="heroRemoveImageBtn">Remove image</button>
               </div>
             </div>
           </div>
 
-          <div class="form-card">
-            <h3 class="form-card__title">Inventory & Availability</h3>
-            <div class="form-grid">
-              <div class="form-field">
-                <label>Available Quantity</label>
-                <input type="number" id="dQty" min="1" max="5" value="5">
-              </div>
-              <div class="form-field">
-                <label>Remaining Pieces</label>
-                <input type="number" id="dRemaining" readonly value="5" title="Automatically computed from reservations">
-              </div>
-              <div class="form-field form-field--full">
-                <label>Status</label>
-                <div class="toggle-group">
-                  <button class="toggle-btn active" data-status="available" id="statusAvailable">Available</button>
-                  <button class="toggle-btn" data-status="soldout" id="statusSoldout">Sold Out</button>
-                  <button class="toggle-btn" data-status="hidden" id="statusHidden">Hidden</button>
+          <div class="col">
+            <div class="card">
+              <span class="card__label">Currently published</span>
+              <div class="pub">
+                <div class="pub__thumb" id="pubThumb">
+                  <div class="placeholder" id="pubThumbEmpty">No hero image</div>
+                </div>
+                <div class="pub__meta">
+                  <p class="pub__name" id="pubName">—</p>
+                  <p class="pub__time" id="pubUpdated">Not published yet</p>
                 </div>
               </div>
-              <div class="form-field form-field--full">
-                <label>Featured Badge</label>
-                <div class="toggle-group">
-                  <button class="toggle-btn" data-badge="" id="badgeNone">None</button>
-                  <button class="toggle-btn" data-badge="Featured" id="badgeFeatured">Featured</button>
-                  <button class="toggle-btn" data-badge="Seasonal" id="badgeSeasonal">Seasonal</button>
-                  <button class="toggle-btn" data-badge="Popular" id="badgePopular">Popular</button>
-                </div>
-              </div>
+              <p class="form-error" id="heroError"></p>
+              <button type="button" class="btn btn--solid btn--block" id="heroPublishBtn">Publish Changes</button>
+              <p class="btn-hint">Validates → uploads image → saves name + image together → updates from the server response.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================== WEBSITE PREVIEW ===================== -->
+      <section class="view" id="view-preview">
+        <header class="page-head">
+          <h1 class="page-title">Website Preview</h1>
+          <p class="page-sub">Live view of the public Domingo site. Give GitHub Pages a minute after publishing.</p>
+        </header>
+
+        <div class="status-row">
+          <div class="status-chip" id="previewApiStatus">Checking live data…</div>
+          <button type="button" class="btn" id="previewRefreshBtn">Reload preview</button>
+        </div>
+
+        <div class="card">
+          <div class="preview-hero">
+            <div class="preview-hero__side">
+              <span class="card__label">Hero (as rendered)</span>
+              <img id="previewHeroImg" alt="Hero image" hidden>
+              <div class="placeholder" id="previewHeroEmpty">No hero image</div>
+              <p class="preview-hero__name" id="previewHeroName">—</p>
             </div>
           </div>
         </div>
 
-        <div class="dessert-editor__preview">
-          <div class="form-card">
-            <h3 class="form-card__title">Live Preview</h3>
-            <div class="preview-card" id="dessertPreview">
-              <div class="preview-card__image" id="previewImage">
-                <span class="preview-card__emoji" id="previewEmoji">🧀</span>
-                <span class="preview-card__badge" id="previewBadge" style="display:none"></span>
-                <button class="btn btn--icon btn--xs preview-card__remove-img" id="removeDessertImage" title="Remove image" style="display:none">✕</button>
-              </div>
-              <div class="preview-card__body">
-                <h4 id="previewName">Dessert Name</h4>
-                <p id="previewDesc" class="preview-card__desc">Description goes here...</p>
-                <div class="preview-card__meta">
-                  <span class="preview-card__price" id="previewPrice">₹0</span>
-                  <span id="previewServes">Serves 2–3</span>
+        <div class="frame-wrap">
+          <iframe class="frame" id="siteFrame"
+            src="https://shamansuryavamshi.github.io/domingo/"
+            title="Domingo public site"
+            loading="lazy"></iframe>
+        </div>
+      </section>
+
+      <!-- ===================== PUBLISH CHANGES ===================== -->
+      <section class="view" id="view-publish">
+        <header class="page-head">
+          <h1 class="page-title">Publish Changes</h1>
+          <p class="page-sub">One click publishes the dessert name and hero image together. The server confirms what went live.</p>
+        </header>
+
+        <div class="two-col">
+          <div class="col">
+            <div class="card">
+              <span class="card__label">These changes will go live</span>
+              <div class="pending">
+                <div class="pending__row">
+                  <span>Dessert name</span>
+                  <strong id="pendingName">—</strong>
                 </div>
-                <div class="preview-card__stock">
-                  <div class="preview-card__stock-bar">
-                    <div class="preview-card__stock-fill" id="previewStockFill"></div>
+                <div class="pending__row">
+                  <span>Hero image</span>
+                  <strong id="pendingImageState">—</strong>
+                </div>
+                <div class="pending__row">
+                  <span>Published from</span>
+                  <strong>Admin → /api/domingo</strong>
+                </div>
+              </div>
+              <p class="form-error" id="publishError"></p>
+              <button type="button" class="btn btn--solid btn--block" id="publishBtn">Publish Changes</button>
+            </div>
+          </div>
+
+          <div class="col">
+            <div class="card" id="publishResultCard">
+              <span class="card__label">Last publish result</span>
+              <div id="publishResultIdle" class="pub--idle">
+                <div class="placeholder">Nothing published from this browser yet</div>
+              </div>
+              <div id="publishResultFill" hidden>
+                <div class="pub">
+                  <div class="pub__thumb" id="resultThumb">
+                    <div class="placeholder" id="resultThumbEmpty">No hero image</div>
                   </div>
-                  <span id="previewStockText">0 of 0 remaining</span>
+                  <div class="pub__meta">
+                    <p class="pub__name" id="resultName">—</p>
+                    <p class="pub__time" id="resultUpdated">—</p>
+                  </div>
                 </div>
-                <div class="preview-card__status" id="previewStatus">Available</div>
+                <p class="success-note">Server-confirmed. This is exactly what the live site now serves.</p>
               </div>
+              <pre class="feed" id="publishResultFeed" hidden></pre>
             </div>
           </div>
         </div>
-      </div>
+      </section>
 
-      <div class="form-actions">
-        <button class="btn btn--primary" id="saveDessert">Save Dessert</button>
-        <button class="btn btn--ghost" id="publishDessert">Publish to Website</button>
-      </div>
-    </section>
-
-    <!-- ===== PAGE: DESSERT HISTORY ===== -->
-    <section class="page" id="page-history">
-      <div class="page-toolbar">
-        <input type="text" class="search-input" id="historySearch" placeholder="Search desserts...">
-        <select class="filter-select" id="historyFilter">
-          <option value="all">All Status</option>
-          <option value="sold">Sold</option>
-          <option value="hidden">Hidden</option>
-        </select>
-      </div>
-      <div class="table-wrap">
-        <table class="data-table" id="historyTable">
-          <thead>
-            <tr>
-              <th>Dessert</th>
-              <th>Price</th>
-              <th>Date</th>
-              <th>Sold / Total</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody id="historyBody"></tbody>
-        </table>
-      </div>
-      <div class="empty-wrap" id="historyEmpty" style="display:none">
-        <p class="empty-state">No dessert history yet.</p>
-      </div>
-    </section>
-
-    <!-- ===== PAGE: LOCATION ===== -->
-    <section class="page" id="page-location">
-      <div class="location-editor">
-        <div class="form-card">
-          <h3 class="form-card__title">This Sunday's Location</h3>
-          <div class="form-grid">
-            <div class="form-field">
-              <label>Location Name</label>
-              <input type="text" id="locName" placeholder="e.g. Koramangala Social Grounds">
-            </div>
-            <div class="form-field form-field--full">
-              <label>Address</label>
-              <input type="text" id="locAddress" placeholder="Full address">
-            </div>
-            <div class="form-field form-field--full">
-              <label>Google Maps Embed URL</label>
-              <input type="url" id="locMap" placeholder="https://www.google.com/maps/embed?...">
-            </div>
-            <div class="form-field form-field--full">
-              <label>Directions URL</label>
-              <input type="url" id="locDirections" placeholder="https://www.google.com/maps/dir/...">
-            </div>
-            <div class="form-field form-field--full">
-              <label>Parking Information</label>
-              <input type="text" id="locParking" placeholder="Free parking available...">
-            </div>
-            <div class="form-field form-field--full">
-              <label>Opening Hours</label>
-              <input type="text" id="locHours" placeholder="Sunday: 10:00 AM – 8:00 PM">
-            </div>
-          </div>
-        </div>
-        <div class="form-card">
-          <h3 class="form-card__title">Map Preview</h3>
-          <div class="map-preview" id="mapPreview">
-            <iframe id="mapFrame" src="" width="100%" height="300" style="border:0; border-radius:12px;" allowfullscreen loading="lazy"></iframe>
-            <p class="empty-state" id="mapEmpty">Enter a map URL above to preview.</p>
-          </div>
-        </div>
-      </div>
-      <div class="form-actions">
-        <button class="btn btn--primary" id="saveLocation">Save Location</button>
-        <button class="btn btn--ghost" id="publishLocation">Publish to Website</button>
-      </div>
-    </section>
-
-    <!-- ===== PAGE: GALLERY ===== -->
-    <section class="page" id="page-gallery">
-      <div class="page-toolbar">
-        <select class="filter-select" id="galleryFilter">
-          <option value="all">All Categories</option>
-          <option value="desserts">Desserts</option>
-          <option value="kitchen">Kitchen</option>
-          <option value="events">Events</option>
-          <option value="family">Family</option>
-        </select>
-        <button class="btn btn--primary btn--sm" id="addGalleryImage">+ Add Image</button>
-      </div>
-      <div class="gallery-grid" id="galleryGrid"></div>
-      <div class="empty-wrap" id="galleryEmpty" style="display:none">
-        <p class="empty-state">No images in gallery yet.</p>
-      </div>
-      <input type="file" id="galleryFileInput" accept="image/*" hidden>
-    </section>
-
-    <!-- ===== PAGE: REVIEWS ===== -->
-    <section class="page" id="page-reviews">
-      <div class="page-toolbar">
-        <button class="btn btn--primary btn--sm" id="addReview">+ Add Review</button>
-      </div>
-      <div class="reviews-list" id="reviewsList"></div>
-      <div class="empty-wrap" id="reviewsEmpty" style="display:none">
-        <p class="empty-state">No reviews yet.</p>
-      </div>
-    </section>
-
-    <!-- ===== PAGE: ANNOUNCEMENTS ===== -->
-    <section class="page" id="page-announcements">
-      <div class="page-toolbar">
-        <button class="btn btn--primary btn--sm" id="addAnnouncement">+ New Announcement</button>
-      </div>
-      <div class="announcements-list" id="announcementsList"></div>
-      <div class="empty-wrap" id="announcementsEmpty" style="display:none">
-        <p class="empty-state">No announcements created yet.</p>
-      </div>
-    </section>
-
-    <!-- ===== PAGE: RESERVATIONS ===== -->
-    <section class="page" id="page-reservations">
-      <div class="page-toolbar">
-        <input type="text" class="search-input" id="reservationSearch" placeholder="Search by name, mobile or ID...">
-        <select class="filter-select" id="reservationFilter">
-          <option value="all">All Status</option>
-          <option value="pending">Pending</option>
-          <option value="confirmed">Confirmed</option>
-          <option value="cancelled">Cancelled</option>
-        </select>
-        <input type="date" class="filter-select" id="reservationDate" title="Filter by reservation date">
-        <select class="filter-select" id="reservationSort">
-          <option value="newest">Newest First</option>
-          <option value="oldest">Oldest First</option>
-        </select>
-      </div>
-      <div class="table-wrap">
-        <table class="data-table" id="reservationTable">
-          <thead>
-            <tr>
-              <th>Reservation ID</th>
-              <th>Customer Name</th>
-              <th>Mobile Number</th>
-              <th>Dessert</th>
-              <th>Qty</th>
-              <th>Notes</th>
-              <th>Date</th>
-              <th>Time</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody id="reservationBody"></tbody>
-        </table>
-      </div>
-      <div class="empty-wrap" id="reservationEmpty" style="display:none">
-        <p class="empty-state">No reservations yet. Share the website so customers can reserve this Sunday's dessert.</p>
-      </div>
-    </section>
-
-    <!-- ===== PAGE: WEBSITE SETTINGS ===== -->
-    <section class="page" id="page-website">
-      <div class="form-card">
-        <h3 class="form-card__title">Hero Section</h3>
-        <div class="form-grid">
-          <div class="form-field">
-            <label>Hero Title</label>
-            <input type="text" id="wsHeroTitle" placeholder="DOMINGO">
-          </div>
-          <div class="form-field form-field--full">
-            <label>Hero Description</label>
-            <textarea id="wsHeroDesc" rows="3" placeholder="Hero description..."></textarea>
-          </div>
-        </div>
-      </div>
-      <div class="form-card">
-        <h3 class="form-card__title">SEO</h3>
-        <div class="form-grid">
-          <div class="form-field form-field--full">
-            <label>SEO Title</label>
-            <input type="text" id="wsSeoTitle" placeholder="Domingo | Homemade Desserts — Bangalore">
-          </div>
-          <div class="form-field form-field--full">
-            <label>SEO Description</label>
-            <textarea id="wsSeoDesc" rows="2" placeholder="Meta description..."></textarea>
-          </div>
-          <div class="form-field form-field--full">
-            <label>Meta Keywords</label>
-            <input type="text" id="wsKeywords" placeholder="desserts, bangalore, homemade">
-          </div>
-        </div>
-      </div>
-      <div class="form-card">
-        <h3 class="form-card__title">Footer & Banner</h3>
-        <div class="form-grid">
-          <div class="form-field form-field--full">
-            <label>Footer Text</label>
-            <input type="text" id="wsFooter" placeholder="Made with ❤️ in Bangalore.">
-          </div>
-          <div class="form-field form-field--full">
-            <label>Announcement Banner Text</label>
-            <input type="text" id="wsBanner" placeholder="Leave empty to hide banner">
-          </div>
-          <div class="form-field">
-            <label>Banner Background</label>
-            <input type="color" id="wsBannerBg" value="#678D58">
-          </div>
-          <div class="form-field">
-            <label>Banner Text Color</label>
-            <input type="color" id="wsBannerColor" value="#FFFFFF">
-          </div>
-        </div>
-      </div>
-      <div class="form-actions">
-        <button class="btn btn--primary" id="saveWebsite">Save Website Settings</button>
-      </div>
-    </section>
-
-    <!-- ===== PAGE: BUSINESS SETTINGS ===== -->
-    <section class="page" id="page-business">
-      <div class="form-card">
-        <h3 class="form-card__title">Business Information</h3>
-        <div class="form-grid">
-          <div class="form-field">
-            <label>Business Name</label>
-            <input type="text" id="bsName" placeholder="Domingo">
-          </div>
-          <div class="form-field">
-            <label>Phone</label>
-            <input type="tel" id="bsPhone" placeholder="+91 98765 43210">
-          </div>
-          <div class="form-field">
-            <label>Email</label>
-            <input type="email" id="bsEmail" placeholder="shamaninbusiness@gmail.com">
-          </div>
-          <div class="form-field">
-            <label>Instagram</label>
-            <input type="text" id="bsInstagram" placeholder="domingo.five">
-          </div>
-          <div class="form-field">
-            <label>Operating Day</label>
-            <input type="text" id="bsDay" value="Sunday" readonly>
-          </div>
-          <div class="form-field">
-            <label>Operating Hours</label>
-            <input type="text" id="bsHours" placeholder="10:00 AM – 8:00 PM">
-          </div>
-          <div class="form-field">
-            <label>Max Pieces (Default)</label>
-            <input type="number" id="bsMax" min="1" max="100" value="5">
-          </div>
-          <div class="form-field form-field--full">
-            <label>Business Status</label>
-            <div class="toggle-group">
-              <button class="toggle-btn active" data-bsstatus="open" id="bsOpen">Open</button>
-              <button class="toggle-btn" data-bsstatus="closed" id="bsClosed">Closed</button>
-              <button class="toggle-btn" data-bsstatus="holiday" id="bsHoliday">Holiday</button>
-            </div>
-          </div>
-          <div class="form-field form-field--full" style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border)">
-            <label style="font-size:13px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px">Image Storage (Google Drive)</label>
-          </div>
-          <div class="form-field form-field--full">
-            <label>API Base URL</label>
-            <input type="text" id="bsApiUrl" placeholder="/api/gdrive (leave blank for default)">
-            <span style="font-size:12px;color:var(--text-muted)">Default: yoursite.vercel.app/api/gdrive</span>
-          </div>
-        </div>
-      </div>
-      <div class="form-actions">
-        <button class="btn btn--primary" id="saveBusiness">Save Business Settings</button>
-      </div>
-    </section>
-
-    <!-- ===== PAGE: DOMINGO HERO ===== -->
-    <section class="page" id="page-domingo">
-      <div class="form-card">
-        <h3 class="form-card__title">Domingo Hero Dessert</h3>
-        <p style="font-size:13px;color:var(--text-muted);margin-top:-8px;margin-bottom:20px;line-height:1.6">
-          Controls the dessert name and image shown on the <strong>Domingo homepage</strong> hero.
-          This is separate from the main website and never touches the current site's data.
-        </p>
-        <div class="form-grid">
-          <div class="form-field form-field--full">
-            <label>Dessert Name</label>
-            <input type="text" id="dhName" placeholder="e.g. Burnt Basque Cheesecake">
-          </div>
-          <div class="form-field form-field--full">
-            <label>Hero Image (or drag &amp; drop below)</label>
-            <input type="text" id="dhImage" placeholder="Google Drive URL (uploaded automatically)">
-            <input type="hidden" id="dhFileId">
-          </div>
-          <div class="form-field form-field--full">
-            <div class="dropzone" id="dhDropzone">
-              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-              <p>Drag &amp; drop image here or <strong>click to browse</strong></p>
-              <span>Uploaded to Google Drive · JPG, PNG, WebP</span>
-              <input type="file" id="dhFile" accept="image/*" hidden>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="form-card">
-        <h3 class="form-card__title">Hero Preview</h3>
-        <div id="domingoHeroPreview">
-          <div class="domingo-hero-preview">
-            <div class="domingo-hero-preview__art" id="dhPreviewArt">
-              <img id="dhPreviewImg" src="" alt="" style="display:none">
-              <span class="domingo-hero-preview__emoji" id="dhPreviewEmoji">🧁</span>
-            </div>
-            <div class="domingo-hero-preview__badge">
-              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#F97316" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-              This week&apos;s special
-            </div>
-            <h2 class="domingo-hero-preview__title" id="dhPreviewTitle">Creme<br>Brulee</h2>
-          </div>
-        </div>
-      </div>
-
-      <div class="form-actions">
-        <button class="btn btn--primary" id="saveDomingoHero">Save &amp; Publish Domingo Hero</button>
-      </div>
-    </section>
-  </main>
-
-  <!-- ========== TOAST ========== -->
-  <div class="toast-container" id="toastContainer"></div>
-
-  <!-- ========== MODAL ========== -->
-  <div class="modal-overlay" id="modalOverlay">
-    <div class="modal" id="modal">
-      <div class="modal__header">
-        <h3 class="modal__title" id="modalTitle"></h3>
-        <button class="modal__close" id="modalClose">&times;</button>
-      </div>
-      <div class="modal__body" id="modalBody"></div>
-      <div class="modal__footer" id="modalFooter"></div>
-    </div>
+    </main>
   </div>
 
-  <script src="config.js"></script>
-  <script src="api-service.js"></script>
-  <script src="storage-service.js"></script>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
   <script src="image-service.js"></script>
-  <script src="imageUpload.js"></script>
-  <script src="gallery-service.js"></script>
-  <script src="announcement-service.js"></script>
-  <script src="reservation-service.js"></script>
   <script src="domingo-service.js"></script>
   <script src="dashboard.js"></script>
 </body>

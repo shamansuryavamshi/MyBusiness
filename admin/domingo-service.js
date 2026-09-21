@@ -1,51 +1,49 @@
 /* ============================================
-   DOMINGO SERVICE — manage the Domingo homepage hero
+   DOMINGO SERVICE — DOMINGO-only CMS client
    Isolated from the existing website:
-     - hero data (name + image URL) is stored in
+     - hero data (name + image) is stored in
        domingo-data.json via /api/domingo
-     - hero images are uploaded to Google Drive via
-       the existing /api/gdrive
-   Nothing here touches the existing published-data
-   or reservations data used by the current site.
+     - hero images are compressed in-browser via
+       ImageService (the existing working image
+       mechanism) and saved inline with the hero.
+   Nothing here touches published-data.json,
+   reservations, or any other old website data.
+   All reads/writes are no-cache.
    ============================================ */
 
 const DomingoService = (() => {
   const URL = window.location.origin + '/api/domingo';
-  const GDRIVE_URL = window.location.origin + '/api/gdrive';
-  const FOLDER = 'DomingoHero';
 
   async function get() {
-    const res = await fetch(URL);
+    const res = await fetch(URL, { cache: 'no-store' });
     if (!res.ok) throw new Error('HTTP ' + res.status);
     const data = await res.json();
     if (data.error) throw new Error(data.error);
-    return { name: '', image: '', ...((data && data.hero) || {}) };
+    return { name: '', image: '', updatedAt: null, ...((data && data.hero) || {}) };
   }
 
   async function save(hero) {
     const res = await fetch(URL, {
       method: 'PUT',
-      headers: { 'Content-Type': 'text/plain' },
+      headers: { 'Content-Type': 'application/json' },
+      cache: 'no-store',
       body: JSON.stringify({ hero }),
     });
+    const data = await res.json().catch(() => ({}));
     if (!res.ok) {
-      const err = await res.json().catch(() => ({}));
-      throw new Error(err.error || 'Publish failed (HTTP ' + res.status + ')');
+      throw new Error(data.error || 'Publish failed (HTTP ' + res.status + ')');
     }
-    return true;
+    if (!data || !data.hero) {
+      throw new Error('Server did not return the saved hero.');
+    }
+    return { success: true, hero: data.hero };
   }
 
-  // Upload a hero image to Google Drive and return its public URL + fileId.
+  // Existing working image mechanism: ImageService compresses in-browser
+  // and returns a base64 data URL that gets stored inline with the hero.
   async function uploadImage(file) {
-    const compressed = await ImageService.upload(file, { maxDim: 1400, quality: 0.8 });
-    const res = await fetch(GDRIVE_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ image: compressed.url, mimeType: 'image/jpeg', folder: FOLDER }),
-    });
-    const data = await res.json().catch(() => ({}));
-    if (!res.ok || !data.publicImageUrl) throw new Error(data.error || 'Image upload failed. Please try again.');
-    return { url: data.publicImageUrl, fileId: data.fileId || '' };
+    const result = await ImageService.upload(file, { maxDim: 1400, quality: 0.8 });
+    return { url: result.url, fileId: result.fileId || '' };
   }
 
   return { get, save, uploadImage };

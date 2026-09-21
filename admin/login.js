@@ -46,7 +46,7 @@ const DEMO_USER = {
   // Forgot password
   forgotLink.addEventListener('click', (e) => {
     e.preventDefault();
-    showError('Reset the password in config.js or contact the developer.');
+    showError('Password reset is handled by the developer.');
   });
 
   // Form submit
