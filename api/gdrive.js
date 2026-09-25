@@ -43,15 +43,8 @@ async function findSharedDrive() {
   return (res.data.drives && res.data.drives[0] && res.data.drives[0].id) || null;
 }
 
-function isStorageQuotaError(e) {
-  return /storage quota|Service Accounts do not have/i.test(e.message || '');
-}
-
 /* ---------- Upload ---------- */
 async function uploadImage(base64Data, mimeType, folderName) {
-  const rootFolderId = process.env.GOOGLE_DRIVE_FOLDER_ID;
-  if (!rootFolderId) throw new Error('GOOGLE_DRIVE_FOLDER_ID not set');
-
   const buf = Buffer.from(base64Data.replace(/^data:image\/\w+;base64,/, ''), 'base64');
 
   // Preserve extension
@@ -89,18 +82,11 @@ async function uploadImage(base64Data, mimeType, folderName) {
   };
 
   let fileId;
-  try {
-    fileId = await uploadTo(rootFolderId);
-  } catch (e) {
-    if (!isStorageQuotaError(e)) throw e;
-    // Configured folder is in a location the service account cannot write to
-    // (e.g. My Drive with no service-account quota). Fall back to a shared drive.
-    const sharedDriveId = await findSharedDrive();
-    if (sharedDriveId) {
-      fileId = await uploadTo(sharedDriveId);
-    } else {
-      throw new Error('Google Drive storage is not available. Please configure a shared drive for this service account.');
-    }
+  const sharedDriveId = await findSharedDrive();
+  if (sharedDriveId) {
+    fileId = await uploadTo(sharedDriveId);
+  } else {
+    throw new Error('Google Drive storage is not available. Please configure a shared drive for this service account.');
   }
 
   const publicImageUrl = `https://drive.google.com/uc?export=view&id=${fileId}`;
